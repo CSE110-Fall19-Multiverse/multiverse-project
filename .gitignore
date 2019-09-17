@@ -6,3 +6,4 @@ npm-debug.*
 *.key
 *.mobileprovision
 .vscode/*
+.DS_Store
