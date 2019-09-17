@@ -1,5 +1,5 @@
 # Multiverse
-![alt text](./assets/splash.png)
+![alt text](./assets/icon.png)
 * Multiverse is a service on-demand app for UCSD people to provide and receive services from each other.
 * Service examples: rides, tutoring, mock interview practice, dining hall food or any food delivery, advice/consultation on something, workout training, hang out/accompany, etc.
 
