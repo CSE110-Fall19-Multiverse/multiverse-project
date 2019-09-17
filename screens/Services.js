@@ -86,6 +86,11 @@ class Services extends Component {
                     </Block>
                   </Block>
                   <Text style={{ marginTop: theme.sizes.base}}>"{item.content}"</Text>
+                  <Icon 
+                    name={'send-o'} 
+                    size={theme.sizes.base * 1.5}
+                    style={styles.send}
+                  />
                 </Card>
               </TouchableOpacity>
             ))}
@@ -151,5 +156,12 @@ const styles = StyleSheet.create({
     bottom: theme.sizes.base,
     right: theme.sizes.base * 2,
     color: theme.colors.lightBlue,
+  },
+  send: {
+    position: 'absolute',
+    bottom: theme.sizes.base * 2,
+    right: theme.sizes.base * 2,
+    color: theme.colors.lightBlue,
   }
+
 })
