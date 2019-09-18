@@ -3,9 +3,10 @@
 * Multiverse is a service on-demand app for UCSD people to provide and receive services from each other.
 * Service examples: rides, tutoring, mock interview practice, dining hall food or any food delivery, advice/consultation on something, workout training, hang out/accompany, etc.
 
-## Dev Environment SetUp (assuming you use MacOS)
+## Dev Environment Setup
 * Multiverse is a [React Native](https://facebook.github.io/react-native/docs/getting-started) project, using Expo.
 
+### MacOS
 1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
 2. Install Expo CLI command line interface
    - `npm install -g expo-cli`
@@ -14,6 +15,16 @@
    - `brew install yarn`
 5. Install Watchman
    - `brew install watchman`
+
+### Windows
+1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
+2. Install Expo CLI command line interface
+   - `npm install -g expo-cli`
+3. Install [Chocolatey](https://chocolatey.org/install#installing-chocolatey)
+4. Install Yarn
+   - `choco install yarn`
+5. Install [Watchman (not really supported for Windows, optional)](https://facebook.github.io/watchman/docs/install.html#download-for-windows-beta)
+
 
 ## Run App through Expo
 * iOS Simulator: run `expo start --ios` inside the project folder,
