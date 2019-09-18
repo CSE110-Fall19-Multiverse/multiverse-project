@@ -114,13 +114,13 @@ class Services extends Component {
                   </Block>
                   <Text style={{ marginTop: theme.sizes.base}}>"{item.content}"</Text>
                   <TouchableOpacity 
-                    onPress={() => alert('Send message')}
-                    style={styles.sendContainer}
+                    onPress={() => alert('Message sellers/buyers')}
+                    style={styles.messagingContainer}
                   > 
                     <Icon 
-                      name={'send-o'} 
-                      size={theme.sizes.base * 1.5}
-                      style={styles.send}
+                      name={'comment'} 
+                      size={theme.sizes.base * 1.7}
+                      style={styles.messaging}
                     />
                   </TouchableOpacity>
                 </Card>
@@ -198,10 +198,10 @@ const styles = StyleSheet.create({
   },
   textContainer: {
   }, 
-  send: {
+  messaging: {
     color: theme.colors.lightBlue,
   }, 
-  sendContainer: {
+  messagingContainer: {
     position: 'absolute', 
     bottom: theme.sizes.base * 2, 
     right: theme.sizes.base * 2,
