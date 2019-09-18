@@ -30,8 +30,8 @@ export default class Forgot extends Component {
 
     if (!errors.length) {
       Alert.alert(
-        'Password sent!',
-        'Please check you email.',
+        'Submitted', 
+        'Please check your email for instructions to reset your password.', 
         [
           {
             text: 'OK', onPress: () => {
@@ -44,7 +44,7 @@ export default class Forgot extends Component {
     } else {
       Alert.alert(
         'Error',
-        'Please check you Email address.',
+        'Please check that you entered you Email address correctly.',
         [
           { text: 'Try again', }
         ],
@@ -61,7 +61,7 @@ export default class Forgot extends Component {
     return (
       <KeyboardAvoidingView style={styles.forgot} behavior="padding">
         <Block padding={[0, theme.sizes.base * 2]}>
-          <Text h1 bold>Forgot</Text>
+          <Text h1 bold>Recover your account</Text>
           <Block middle>
             <Input
               label="Email"
@@ -73,7 +73,7 @@ export default class Forgot extends Component {
             <Button gradient onPress={() => this.handleForgot()}>
               {loading ?
                 <ActivityIndicator size="small" color="white" /> :
-                <Text bold white center>Forgot</Text>
+                <Text bold white center>Submit</Text>
               }
             </Button>
 
