@@ -91,7 +91,7 @@ class Services extends Component {
                         > 
                           <Text bold caption>{item.author}</Text>
                         </TouchableHighlight>
-                        <Text caption>{item.date}</Text>
+                        <Text caption gray>{item.date}</Text>
                       </Block>
                     </Block>
                     <Block>
@@ -112,9 +112,9 @@ class Services extends Component {
                       </TouchableHighlight>
                     </Block>
                   </Block>
-                  <Text style={{ marginTop: theme.sizes.base}}>"{item.content}"</Text>
+                  <Text style={{ marginTop: theme.sizes.base}}>{item.content}</Text>
                   <TouchableOpacity 
-                    onPress={() => alert('Message sellers/buyers')}
+                    onPress={() => alert('Send message')}
                     style={styles.messagingContainer}
                   > 
                     <Icon 

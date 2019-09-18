@@ -59,6 +59,15 @@ class Search extends Component {
           <Text h1 bold>Search</Text>
           {this.renderSearch()}
         </Block>
+        <Block style={styles.category}>
+          <Text bold lightBlue style={{ marginBottom: theme.sizes.base * 1.5}}>CATEGORY</Text>
+          <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Learning and Skills</Text>
+          <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Career</Text>
+          <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Food Delivery</Text>
+          <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Transportation</Text>
+          <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Social</Text>
+          <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Other</Text>
+        </Block>
       </Block>
     )
   }
@@ -95,5 +104,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: theme.sizes.base / 1.333,
     top: theme.sizes.base / 1.6,
+  },
+  category: {
+    paddingHorizontal: theme.sizes.base * 2,
   },
 })

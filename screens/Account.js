@@ -149,15 +149,4 @@ const styles = StyleSheet.create({
     marginTop: theme.sizes.base * 0.7,
     paddingHorizontal: theme.sizes.base * 2,
   },
-  thumb: {
-    width: theme.sizes.base,
-    height: theme.sizes.base,
-    borderRadius: theme.sizes.base,
-    borderColor: 'white',
-    borderWidth: 3,
-    backgroundColor: theme.colors.secondary,
-  },
-  toggles: {
-    paddingHorizontal: theme.sizes.base * 2,
-  }
 })
