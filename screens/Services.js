@@ -77,7 +77,7 @@ class Services extends Component {
                       <Image source={item.avi}/>
                       <Block style={{ margin: theme.sizes.base / 4}}>
                         <Text bold caption>{item.author}</Text>
-                        <Text caption>{item.date}</Text>
+                        <Text gray caption>{item.date}</Text>
                       </Block>
                     </Block>
                     <Block>
@@ -85,11 +85,11 @@ class Services extends Component {
                       <Text right semibold>${item.proposed_price}</Text>
                     </Block>
                   </Block>
-                  <Text style={{ marginTop: theme.sizes.base}}>"{item.content}"</Text>
+                  <Text style={{ marginTop: theme.sizes.base}}>{item.content}</Text>
                   <Icon 
-                    name={'send-o'} 
-                    size={theme.sizes.base * 1.5}
-                    style={styles.send}
+                    name={'comment'} 
+                    size={theme.sizes.base * 1.7}
+                    style={styles.messaging}
                   />
                 </Card>
               </TouchableOpacity>
@@ -157,11 +157,12 @@ const styles = StyleSheet.create({
     right: theme.sizes.base * 2,
     color: theme.colors.lightBlue,
   },
-  send: {
+  messaging: {
     position: 'absolute',
     bottom: theme.sizes.base * 2,
     right: theme.sizes.base * 2,
     color: theme.colors.lightBlue,
+    //transform: [{ rotateY: '180deg' }]
   }
 
 })
