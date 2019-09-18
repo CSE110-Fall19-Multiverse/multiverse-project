@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Card, Button, Block, Text } from '../components';
@@ -70,41 +70,77 @@ class Services extends Component {
               <TouchableOpacity
                 key={item.id}
                 //onPress={() => navigation.navigate('Services', { item })}
+                onPress={() => alert('Hi')}
               >
                 <Card shadow style={styles.item}>
                   <Block flex={false} row>
                     <Block row>
-                      <Image source={item.avi}/>
+                      <TouchableHighlight
+                        onPress={() => alert('Enter screen of person\'s pic')}
+                        underlayColor={'purple'}
+                        activeOpacity={0.69}
+                      > 
+                        <Image source={item.avi}/>
+                      </TouchableHighlight>
                       <Block style={{ margin: theme.sizes.base / 4}}>
-                        <Text bold caption>{item.author}</Text>
-                        <Text gray caption>{item.date}</Text>
+                        <TouchableHighlight
+                          onPress={() => alert('Enter person\'s profile')}
+                          underlayColor={'white'}
+                          activeOpacity={0.5}
+                          // style={styles.textContainer}
+                        > 
+                          <Text bold caption>{item.author}</Text>
+                        </TouchableHighlight>
+                        <Text caption>{item.date}</Text>
                       </Block>
                     </Block>
                     <Block>
-                      <Text right semibold secondary>{item.category}</Text>
-                      <Text right semibold>${item.proposed_price}</Text>
+                      <TouchableHighlight
+                        onPress={() => alert('Filter by this category')}
+                        underlayColor={'white'}
+                        activeOpacity={0.5}
+                        // style={styles.textContainer}
+                      > 
+                        <Text right semibold secondary>{item.category}</Text>
+                      </TouchableHighlight>
+                      <TouchableHighlight
+                        onPress={() => alert('item.price_negotiable ? {alert(\'price non-negotiable\')} : popup counteroffer screen')}
+                        underlayColor={'white'}
+                        activeOpacity={0.5}
+                      >
+                        <Text right semibold>${item.proposed_price}</Text>
+                      </TouchableHighlight>
                     </Block>
                   </Block>
-                  <Text style={{ marginTop: theme.sizes.base}}>{item.content}</Text>
-                  <Icon 
-                    name={'comment'} 
-                    size={theme.sizes.base * 1.7}
-                    style={styles.messaging}
-                  />
+                  <Text style={{ marginTop: theme.sizes.base}}>"{item.content}"</Text>
+                  <TouchableOpacity 
+                    onPress={() => alert('Message sellers/buyers')}
+                    style={styles.messagingContainer}
+                  > 
+                    <Icon 
+                      name={'comment'} 
+                      size={theme.sizes.base * 1.7}
+                      style={styles.messaging}
+                    />
+                  </TouchableOpacity>
                 </Card>
               </TouchableOpacity>
             ))}
           </Block>
-          
         </ScrollView>
         <Block>
-          <Icon 
+          <TouchableOpacity
+            onPress={() => alert('Create new listing')}
+            style={styles.plusCircleContainer}
+          > 
+            <Icon 
               name={'plus-circle'} 
               size={theme.sizes.base * 4}
               style={styles.plusCircle}
-          />
-          </Block>
-         <Block flex={false} row style={styles.tabs}>
+            />
+          </TouchableOpacity>
+        </Block>
+        <Block flex={false} row style={styles.tabs}>
           {tabs.map(tab => this.renderTab(tab))}
         </Block>
        
@@ -152,17 +188,23 @@ const styles = StyleSheet.create({
     //justifyContent: ''
   },
   plusCircle: {
+    color: theme.colors.lightBlue,
+  },
+  plusCircleContainer: {
     position: 'absolute',
     bottom: theme.sizes.base,
     right: theme.sizes.base * 2,
-    color: theme.colors.lightBlue,
+    alignItems: 'center',
   },
+  textContainer: {
+  }, 
   messaging: {
-    position: 'absolute',
-    bottom: theme.sizes.base * 2,
-    right: theme.sizes.base * 2,
     color: theme.colors.lightBlue,
-    //transform: [{ rotateY: '180deg' }]
+  }, 
+  messagingContainer: {
+    position: 'absolute', 
+    bottom: theme.sizes.base * 2, 
+    right: theme.sizes.base * 2,
   }
 
 })

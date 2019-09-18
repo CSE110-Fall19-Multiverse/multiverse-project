@@ -7,10 +7,21 @@
 * Multiverse is a [React Native](https://facebook.github.io/react-native/docs/getting-started) project, using [Expo (SDK33)](https://docs.expo.io/versions/v33.0.0/).
 * So far, Multiverse code base does not use any native iOS code (i.e it is fully React Native) so neither macOS nor Xcode is required. You can use any machine/OS or IDE/text editor of your choice.
 
+### MacOS
 1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
 2. Install Expo CLI command line interface
    - `npm install -g expo-cli`
-3. Install [Yarn](https://yarnpkg.com/en/docs/install)
+3. Install [Homebrew](https://brew.sh/)
+4. Install Yarn
+   - `brew install yarn`
+
+### Windows
+1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
+2. Install Expo CLI command line interface
+   - `npm install -g expo-cli`
+3. Install [Chocolatey](https://chocolatey.org/install#installing-chocolatey)
+4. Install Yarn
+   - `choco install yarn`
 
 ## Run Multiverse App through Expo
 * **iOS Simulator**: run `expo start --ios` inside the project folder,
@@ -24,3 +35,4 @@ This starts a Node server and you can keep the server running while developing.
 * **Physical Mobile Device**
   - Install the Expo client app on your iOS or Android phone and connect to the same wireless network as your computer. Scan the QR code generated from your terminal with the Expo app (Android) or the Camera app (iOS).
 * Note: When running app, if you see error message "Error: node_modules directory is missing...", run `yarn install`.
+
