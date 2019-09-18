@@ -25,19 +25,19 @@
 
 ## Run Multiverse App through Expo
 ### Option 1: Physical Mobile Device
-- Install the Expo client app on your iOS or Android phone and connect to the same wireless network as your computer. Scan the QR code generated from your terminal with the Expo app (Android) or the Camera app (iOS).
+- Install the **Expo client app** on your iOS or Android phone and connect to the same wireless network as your computer. Scan the QR code generated from your terminal with the Expo app (Android) or the Camera app (iOS).
 
 ### Option 2: iOS Simulator or Android Emulator
 - **iOS Simulator**
-  1. To use iOS Simulator (a tool part of Xcode), you need to have (**Xcode**)[https://apps.apple.com/us/app/xcode/id497799835?mt=12] **version 9.4 or newer** installed. This also means you need a **Mac** as Xcode only runs on macOS.
+  1. To use iOS Simulator (a tool part of Xcode), you need to have (Xcode)[https://apps.apple.com/us/app/xcode/id497799835?mt=12] **version 9.4 or newer** installed. This also means you need a **Mac** as Xcode only runs on macOS.
   2. Run `expo start --ios` inside the project folder, and you should see the app running in the iOS Simulator shortly. This starts a Node server and you can keep the server running while developing.
   3. On iOS Simulator, you can type
      - 'Command + D' to open developer window
        - Select * *Enable Live Reload* * to allow automatic app reloading whenver changes are saved in code
      - 'Command + R' to reload the app
 - **Android Emulator**
-  1. Similarly, you need to have **Android Studio** and **Android SDK** installed. Please refer to this (**page**)[https://facebook.github.io/react-native/docs/getting-started] **Android development environment** section for instruction.
+  1. Similarly, you need to have **Android Studio** and **Android SDK** installed. Please refer to this (page)[https://facebook.github.io/react-native/docs/getting-started] **Android development environment** section for instruction.
   2. Run `expo start --android` inside the project folder.
 
-### Note: When running app, if you see error message "Error: node_modules directory is missing...", run `yarn install`.
+* Note: When running app, if you see error message "Error: node_modules directory is missing...", run `yarn install`.
 
