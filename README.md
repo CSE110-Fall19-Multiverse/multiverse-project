@@ -23,6 +23,16 @@
 4. Install Yarn
    - `choco install yarn`
 
+### Linux
+1. Install Nodejs with the following command:
+   - `sudo apt install nodejs`
+2. Install npm with the following command:
+   - `sudo apt install npm`
+3. Install Expo CLI command line interface
+   - `sudo npm install -g expo-cli`
+4. Install Yarn (https://yarnpkg.com/en/docs/install#debian-stable)
+   - `sudo apt-get install yarn`
+
 ## Run Multiverse App through Expo
 * Note: When running app, if you see error message "Error: node_modules directory is missing...", run `yarn install`.
 
