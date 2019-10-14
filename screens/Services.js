@@ -20,15 +20,17 @@ class Services extends Component {
   handleTab = tab => {
     const { navigation } = this.props;
     const { items } = this.props;
-    const filtered = items.filter(
-      item => item.type.includes(tab.toLowerCase())
-    );
     if (tab === 'Account') {
       navigation.navigate('Account');
+      tab = 'Buying';
     }
     if (tab === 'Search') {
       navigation.navigate('Search');
+      tab = 'Buying';
     }
+    const filtered = items.filter(
+      item => item.type.includes(tab.toLowerCase())
+    );
     this.setState({ active: tab, items: filtered});
   }
 
