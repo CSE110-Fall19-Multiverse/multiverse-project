@@ -3,11 +3,12 @@ import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'r
 
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
+import { withFirebase } from "../components/Firebase";
 
 const VALID_EMAIL = "audimadeline@gmail.com";
 const VALID_PASSWORD = "CSE110isFun";
 
-export default class Login extends Component {
+class LoginBase extends Component {
   state = {
     email: VALID_EMAIL,
     password: VALID_PASSWORD,
@@ -82,6 +83,9 @@ export default class Login extends Component {
   }
 }
 
+// wrap login page in firebase context
+const Login = withFirebase(LoginBase);
+
 const styles = StyleSheet.create({
   login: {
     flex: 1,
@@ -97,3 +101,5 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.accent,
   }
 })
+
+export default Login;

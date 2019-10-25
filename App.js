@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 
 import Navigation from './navigation';
 import { Block } from './components';
+import Firebase, { FirebaseContext } from "./components/Firebase";
 
 // import all used images
 const images = [
@@ -20,6 +21,11 @@ export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   }
+
+  componentDidMount() {
+    console.log(this.context);
+  }
+
 
   handleResourcesAsync = async () => {
     // we're caching all the images
@@ -44,9 +50,11 @@ export default class App extends React.Component {
     }
 
     return (
-      <Block white>
-        <Navigation />
-      </Block>
+      <FirebaseContext.Provider value={new Firebase()}>
+        <Block white>
+          <Navigation />
+        </Block>
+      </FirebaseContext.Provider>
     );
   }
 }

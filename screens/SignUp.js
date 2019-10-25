@@ -3,14 +3,21 @@ import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } 
 
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
+import { withFirebase } from "../components/Firebase";
 
-export default class SignUp extends Component {
-  state = {
-    email: null,
-    username: null,
-    password: null,
-    errors: [],
-    loading: false,
+const INITIAL_STATE = {
+  email: null,
+  username: null,
+  password: null,
+  errors: [],
+  loading: false
+};
+
+class SignUpBase extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { ...INITIAL_STATE };
   }
 
   handleSignUp() {
@@ -26,6 +33,19 @@ export default class SignUp extends Component {
     if (!username) errors.push('username');
     if (!password) errors.push('password');
 
+    this.props.firebase
+        .doCreateUserWithEmailAndPassword(email, password)
+        .then(authUser => {
+          this.setState({ ...INITIAL_STATE });
+          navigation.navigate('Services');
+          console.log('success');
+        })
+        .catch(error => {
+          errors.push(error);
+          Alert.alert('Error!', error);
+        });
+
+    /*
     this.setState({ errors, loading: false });
 
     if (!errors.length) {
@@ -42,6 +62,7 @@ export default class SignUp extends Component {
         { cancelable: false }
       )
     }
+     */
   }
 
   render() {
@@ -96,6 +117,9 @@ export default class SignUp extends Component {
   }
 }
 
+// wrap signup in firebase context
+const SignUp = withFirebase(SignUpBase);
+
 const styles = StyleSheet.create({
   signup: {
     flex: 1,
@@ -111,3 +135,5 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.accent,
   }
 })
+
+export default SignUp;
