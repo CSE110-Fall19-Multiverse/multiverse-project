@@ -20,6 +20,26 @@ class SignUpBase extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
+  componentDidMount() {
+    this.setState({ loading: true });
+
+    this.props.firebase.users().on('value', snapshot => {
+      const usersObject = snapshot.val();
+
+      // we can fetch user list like this
+      /*
+      const userList = Object.keys(usersObject).map(key => ({
+        ...usersObject[key],
+        uid: key,
+      }));
+       */
+    })
+  }
+
+  componentWillUnmount() {
+    this.props.firebase.users().off();
+  }
+
   handleSignUp() {
     const { navigation } = this.props;
     const { email, username, password } = this.state;

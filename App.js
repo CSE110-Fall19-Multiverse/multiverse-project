@@ -22,11 +22,6 @@ export default class App extends React.Component {
     isLoadingComplete: false,
   }
 
-  componentDidMount() {
-    console.log(this.context);
-  }
-
-
   handleResourcesAsync = async () => {
     // we're caching all the images
     // for better performance on the app
