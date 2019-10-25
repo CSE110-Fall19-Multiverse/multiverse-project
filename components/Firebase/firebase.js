@@ -4,6 +4,7 @@
  */
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 // firebase database for development
 const devFirebaseConfig = {
@@ -22,6 +23,7 @@ class Firebase {
         app.initializeApp(devFirebaseConfig);
 
         this.auth = app.auth();
+        this.db = app.database();
     }
 
     // *** Auth API ***
@@ -37,6 +39,17 @@ class Firebase {
 
     doPasswordUpdate = password =>
         this.auth.currentUser.updatePassword(password);
+
+    // *** User API ***
+
+    // reference to a user by uid
+    user = uid => this.db.ref(`users/${uid}`);
+
+    // reference to all users
+    users = () => this.db.ref('users');
+
+    pumpkin = email => this.db.ref(`pumpkins/${email}`);
+
 }
 
 export default Firebase;

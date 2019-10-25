@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native'
+import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native'
 
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
@@ -8,12 +8,18 @@ import { withFirebase } from "../components/Firebase";
 const VALID_EMAIL = "audimadeline@gmail.com";
 const VALID_PASSWORD = "CSE110isFun";
 
+const INITIAL_STATE = {
+  email: VALID_EMAIL,
+  password: VALID_PASSWORD,
+  errors: [],
+  loading: false,
+};
+
 class LoginBase extends Component {
-  state = {
-    email: VALID_EMAIL,
-    password: VALID_PASSWORD,
-    errors: [],
-    loading: false,
+  constructor(props) {
+    super(props);
+
+    this.state = { ...INITIAL_STATE };
   }
 
   handleLogin() {
@@ -25,18 +31,34 @@ class LoginBase extends Component {
     this.setState({ loading: true });
 
     // check with backend API or with some static data
+    /*
     if (email !== VALID_EMAIL) {
       errors.push('email');
     }
     if (password !== VALID_PASSWORD) {
       errors.push('password');
     }
+     */
+
+    // Better to strip leading and trailing white spaces in email.
+    this.props.firebase
+        .doSignInWithEmailAndPassword(email, password)
+        .then( () => {
+          this.setState({ ...INITIAL_STATE });
+          navigation.navigate('Services');
+        })
+        .catch(error => {
+          errors.push(error);
+          Alert.alert("Error!", error.toString());
+        });
 
     this.setState({ errors, loading: false });
 
+    /*
     if (!errors.length) {
       navigation.navigate('Services');
     }
+     */
   }
 
   render() {
