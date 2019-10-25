@@ -1,14 +1,14 @@
 # Multiverse
 ![alt text](./assets/icon.png)
-* Multiverse is a service on-demand app for UCSD people to provide and receive services from each other.
-* Service examples: rides, tutoring, mock interview practice, dining hall food or any food delivery, advice/consultation on something, workout training, hang out/accompany, etc.
+* Multiverse is an app for UCSD people to provide and receive learning-related services from each other.
 
 ## Dev Environment SetUp 
 * Multiverse is a [React Native](https://facebook.github.io/react-native/docs/getting-started) project, using [Expo (SDK33)](https://docs.expo.io/versions/v33.0.0/).
 * So far, Multiverse code base does not use any native iOS code (i.e it is fully React Native) so neither macOS nor Xcode is required. You can use any machine/OS or IDE/text editor of your choice.
 
 ### MacOS
-1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
+1. Install [Node](https://nodejs.org/en/download/), preferably [Node Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/releases/)
+   - Note that Latest LTS Version is 12.xx 
 2. Install Expo CLI command line interface
    - `npm install -g expo-cli`
 3. Install [Homebrew](https://brew.sh/)
@@ -16,7 +16,8 @@
    - `brew install yarn`
 
 ### Windows
-1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
+1. Install [Node](https://nodejs.org/en/download/), preferably [Node Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/releases/)
+   - Note that Latest LTS Version is 12.xx 
 2. Install Expo CLI command line interface
    - `npm install -g expo-cli`
 3. Install [Chocolatey](https://chocolatey.org/install#installing-chocolatey)
