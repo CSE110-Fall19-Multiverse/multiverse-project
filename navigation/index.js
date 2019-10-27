@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
 
 import Welcome from '../screens/Welcome';
 import Login from '../screens/Login';
@@ -9,6 +11,7 @@ import Forgot from '../screens/Forgot';
 import Search from '../screens/Search';
 import Services from '../screens/Services';
 import Account from '../screens/Account';
+import ChatRoom from '../screens/ChatRoom';
 
 import { theme } from '../constants';
 
@@ -20,6 +23,7 @@ const screens = createStackNavigator({
   Search,
   Services,
   Account,
+  ChatRoom,
 }, {
   defaultNavigationOptions: {
     headerStyle: {
