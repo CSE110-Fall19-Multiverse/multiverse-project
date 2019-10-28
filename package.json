@@ -13,6 +13,9 @@
     "expo-linear-gradient": "~5.0.1",
     "react": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-dropdown-menu": "^2.0.0",
+    "react-native-material-dropdown": "^0.11.1",
     "react-native-slider": "^0.11.0",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^3.11.0"
