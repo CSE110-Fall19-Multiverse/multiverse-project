@@ -4,8 +4,13 @@ import DatePicker from 'react-native-datepicker'
 export default class PickDate extends Component {
     constructor(props){
         super(props)
-        this.state = {date:''}
+        this.state = {date: ''}
     }
+
+    handledate = (date) => {
+        this.props.parent.setState({serviceDate: date});
+        this.setState({date: date});
+    };
 
     render(){
         return (
@@ -30,7 +35,7 @@ export default class PickDate extends Component {
                         position: 'right',
                     }
                 }}
-                onDateChange={(date) => {this.setState({date: date})}}
+                onDateChange={this.handledate}
             />
         )
     }

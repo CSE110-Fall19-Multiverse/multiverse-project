@@ -10,7 +10,9 @@ class NewPost extends Component{
         Select1: '',
         Select2: '',
         Summary: '',
-        Description: ''
+        Description: '',
+        serviceDate: '',
+        servicePrice: '',
     };
 
     componentDidMount() {
@@ -24,9 +26,19 @@ class NewPost extends Component{
         this.setState({Description: text});
     };
 
+    servicePrice = (text) => {
+        text = text.replace('$','');
+        this.setState({servicePrice: text});
+    };
+
     upload(navigation){
         //TODO: send this post information to database
         alert('Upload successfully!');
+        navigation.navigate('Services');
+    }
+    saveAsDraft(navigation){
+        //TODO: save this post information to the draft box pf this user
+        alert('Saved as draft');
         navigation.navigate('Services');
     }
 
@@ -37,6 +49,7 @@ class NewPost extends Component{
                 <Block flex={false} row space="between" style={styles.header}>
                     <Text style={{fontSize: 25, fontWeight: 'bold'}}>New Post</Text>
                 </Block>
+                <KeyboardAvoidingView style={{ flex: 1 }} behavior={"position"} >
                 <ScrollView showsVerticalScrollIndicator={true}>
                     <Block style={styles.inputs}>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
@@ -54,26 +67,30 @@ class NewPost extends Component{
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
                                 <Text style={{ marginBottom: 14 }}>Summary</Text>
-                                <Block style={styles.border}>
+                                <Block>
+                                <View elevation={5} style={styles.container}>
                                 <TextInput
                                     placeholder='Summarize your service here...'
                                     style={styles.summary}
                                     onChangeText = {this.handleSummary}
                                     multiline={true}
                                 />
+                                </View>
                                 </Block>
-                            </Block>
                         </Block>
+                     </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
                                 <Text style={{ marginBottom: 14 }}>Description</Text>
-                                <Block style={styles.border}>
+                                <Block>
+                                 <View elevation={5} style={styles.container}>
                                 <TextInput
                                     placeholder='Describe your service here...'
                                     style={styles.description}
                                     onChangeText = {this.handleDescription}
                                     multiline={true}
                                 />
+                                 </View>
                                 </Block>
                             </Block>
                         </Block>
@@ -82,20 +99,30 @@ class NewPost extends Component{
                     <Divider margin={[theme.sizes.base, theme.sizes.base * 2]} />
 
                     <Block margin={[10, 0]} style={styles.history}>
-                        <Text gray style={{ marginBottom: 10 }}>Service Date</Text>
-                        <PickDate />
+                        <Text gray style={{ marginBottom: 13 }}>Service Date</Text>
+                        <PickDate parent={this} />
                     </Block>
                     <Block margin={[10, 0]} style={styles.messaging}>
-                        <Text gray style={{ marginBottom: 10 }}>Service Price</Text>
-                        <TextInput placeholder='$' />
+                        <Text gray style={{ marginBottom: 13 }}>Service Price</Text>
+                        <TextInput
+                            keyboardType='numeric'
+                            maxLength={5}
+                            placeholder='$'
+                            onChangeText={this.servicePrice}
+                            value={"$" + this.state.servicePrice}
+                        />
                     </Block>
                     <Block padding={[0, theme.sizes.base * 2]}>
                         <Button gradient onPress={() => this.upload(navigation)}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center'}}>Upload</Text>
+                            <Text style={{ color: 'white', fontWeight: '600', textAlign: 'center'}}>Upload</Text>
+                        </Button>
+                        <Button style={styles.border} onPress={() => this.saveAsDraft(navigation)}>
+                            <Text style={{ color: 'black', fontWeight: '600', textAlign: 'center'}}>Save as Draft</Text>
                         </Button>
                     </Block>
                     <Divider />
                 </ScrollView>
+                </KeyboardAvoidingView>
             </Block>
         );
     }
@@ -107,9 +134,17 @@ const styles = StyleSheet.create({
     header: {
         paddingHorizontal: theme.sizes.base * 2,
     },
-    avatar: {
-        height: theme.sizes.base * 2.2,
-        width: theme.sizes.base * 2.2,
+    container:{
+        padding: 7,
+        backgroundColor:'white',
+        borderColor: 'gray',
+        shadowColor: "gray",
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        shadowOffset: {
+            height: 1,
+            width: 1
+        }
     },
     inputs: {
         marginTop: theme.sizes.base * 0.7,
@@ -117,9 +152,9 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     border:{
-        borderColor: '#d296e3',
+        borderColor: '#e8e8e8',
         borderWidth: 1,
-        shadowColor: '#d296e3',
+        shadowColor: 'gray',
         shadowOffset: {
             width: 0,
             height: 1
@@ -129,11 +164,9 @@ const styles = StyleSheet.create({
     },
     summary: {
         height: 70,
-        padding: 7,
     },
     description:{
         height: 180,
-        padding: 7,
     },
     inputRow: {
         alignItems: 'flex-end',
