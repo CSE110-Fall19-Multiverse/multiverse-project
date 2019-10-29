@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
-import {Block, Button, Divider} from "../components";
-import {theme} from "../constants";
+import {Block, Button, Divider} from "../../components";
+import {theme} from "../../constants";
 import PickDate from "./PickDate";
 import {DropDownList} from "./DropDownList";
 
@@ -36,6 +36,7 @@ class NewPost extends Component{
         alert('Upload successfully!');
         navigation.navigate('Services');
     }
+
     saveAsDraft(navigation){
         //TODO: save this post information to the draft box pf this user
         alert('Saved as draft');
@@ -62,7 +63,8 @@ class NewPost extends Component{
                             <Block>
                                 <Text style={{ marginBottom: 13, fontWeight: 'bold', fontSize: 17 }}>Select 2</Text>
                             </Block>
-                            <DropDownList parent={this} label='Small Category' small={true} />
+                            <DropDownList parent={this}
+                                          label={this.state.Select1==='' ? 'Small Category' : this.state.Select1} small={true}/>
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
@@ -179,4 +181,4 @@ const styles = StyleSheet.create({
         marginTop: theme.sizes.base * 0.7,
         paddingHorizontal: theme.sizes.base * 2,
     },
-})
+});
