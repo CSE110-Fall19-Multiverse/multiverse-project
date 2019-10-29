@@ -8,49 +8,50 @@ export class DropDownList extends Component {
 
         this.onChangeText = this.onChangeText.bind(this);
 
-        this.typographyRef = this.updateRef.bind(this, 'typography');
-
         this.state = {
             select1: '',
+            contents: '',
         };
+
+        this.checkSelect1();
+    }
+
+    checkSelect1(){
+        if(this.props.small){
+            if(this.props.parent.state.Select1 === 'CSE Course Tutoring'){
+                this.state.contents = CSECourse;
+            }else if(this.props.parent.state.Select1 === 'Interview Preparation'){
+                this.state.contents = InterviewPrep;
+            }else{
+                this.state.contents = Languages;
+            }
+        }else{
+            this.state.contents = BigCate;
+        }
     }
 
     onChangeText(text) {
         this.setState({select1: text});
-        ['name', 'code', 'sample', 'typography']
-            .map((name) => ({ name, ref: this[name] }))
-            .filter(({ ref }) => ref && ref.isFocused())
-            .forEach(({ name, ref }) => {
-                this.setState({ [name]: text });
-            });
-    }
-
-    updateRef(name, ref) {
-        this[name] = ref;
+        this.props.parent.setState({Select1: text});
+        if (this.props.blockOnChange){
+            this.props.blockOnChange.checkSelect1();
+        }
     }
 
     render() {
-        let { typography, name, code, sample } = this.state;
-
-        let textStyle = [
-            styles.text,
-            styles[typography],
-            styles[name + code],
-        ];
-
         return (
             <View style={styles.container}>
                 <Dropdown
-                    ref={this.typographyRef}
-                    value={typography}
                     onChangeText={this.onChangeText}
                     label={this.props.label}
-                    data={BigCate}
+                    data={this.state.contents}
                 />
             </View>
         );
     }
 }
+
+
 
 const styles = {
     container: {
@@ -58,7 +59,6 @@ const styles = {
         marginHorizontal: 4,
         marginVertical: 8,
         paddingHorizontal: 8,
-        //backgroundColor: '#E8EAF6',
     },
 };
 
@@ -66,4 +66,38 @@ const BigCate = [
     { value: 'CSE Course Tutoring' },
     { value: 'Interview Preparation' },
     { value: 'Languages Tutoring' },
+];
+
+const CSECourse = [
+    { value: 'CSE 8A' },
+    { value: 'CSE 8B' },
+    { value: 'CSE 12' },
+    { value: 'CSE 15L' },
+    { value: 'CSE 21' },
+    { value: 'CSE 30' },
+    { value: 'CSE 100' },
+    { value: 'CSE 101' },
+    { value: 'CSE 110' },
+    { value: 'CSE 140' },
+    { value: 'CSE 158' },
+];
+
+const InterviewPrep = [
+    { value: 'Resume rewrite' },
+    { value: 'Mock interview' },
+    { value: 'Referral' },
+];
+
+const Languages = [
+    { value: 'Java' },
+    { value: 'Python' },
+    { value: 'C++' },
+    { value: 'C' },
+    { value: 'Javascript' },
+    { value: 'JQuery' },
+    { value: 'MySQL' },
+    { value: 'React' },
+    { value: 'R' },
+    { value: 'HTML' },
+    { value: 'CSS' },
 ];

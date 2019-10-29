@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {Block, Button, Divider} from "../components";
 import {theme} from "../constants";
 import PickDate from "./PickDate";
@@ -14,58 +14,68 @@ class NewPost extends Component{
     };
 
     componentDidMount() {
-
     }
 
-    handleSelect1 = () => {
-
+    handleSummary = (text) => {
+        this.setState({Summary: text});
     };
 
-    handleSelect2 = () => {
-
+    handleDescription = (text) => {
+        this.setState({Description: text});
     };
 
-    handleSummary = () => {
-
-    };
-
-    handleDescription = () => {
-
-    };
+    upload(navigation){
+        //TODO: send this post information to database
+        alert('Upload successfully!');
+        navigation.navigate('Services');
+    }
 
     render() {
+        const { navigation } = this.props;
         return (
             <Block>
                 <Block flex={false} row space="between" style={styles.header}>
                     <Text style={{fontSize: 25, fontWeight: 'bold'}}>New Post</Text>
                 </Block>
-
                 <ScrollView showsVerticalScrollIndicator={true}>
                     <Block style={styles.inputs}>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text style={{ marginBottom: 10, fontWeight: 'bold', fontSize: 16 }}>Select 1</Text>
+                                <Text style={{ marginBottom: 13, fontWeight: 'bold', fontSize: 17 }}>Select 1</Text>
                             </Block>
-                            const res1 = <DropDownList label='Big Category' />
-                            this.setState({Select1: res1.select1})
+                            <DropDownList parent={this}  label='Big Category' small={false}/>
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text h2 bold style={{ marginBottom: 10, fontWeight: 'bold', fontSize: 16 }}>Select 2</Text>
+                                <Text style={{ marginBottom: 13, fontWeight: 'bold', fontSize: 17 }}>Select 2</Text>
                             </Block>
-                            <DropDownList label={'Small Category'} />
+                            <DropDownList parent={this} label='Small Category' small={true} />
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text h2 bold style={{ marginBottom: 10 }}>Summary</Text>
+                                <Text style={{ marginBottom: 14 }}>Summary</Text>
+                                <Block style={styles.border}>
+                                <TextInput
+                                    placeholder='Summarize your service here...'
+                                    style={styles.summary}
+                                    onChangeText = {this.handleSummary}
+                                    multiline={true}
+                                />
+                                </Block>
                             </Block>
-                            <TextInput placeholder='Summarize your service here...' style={{borderColor: '#aaaaaa' , borderWidth: 1}} />
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text h3 bold style={{ marginBottom: 10 }}>Description</Text>
+                                <Text style={{ marginBottom: 14 }}>Description</Text>
+                                <Block style={styles.border}>
+                                <TextInput
+                                    placeholder='Describe your service here...'
+                                    style={styles.description}
+                                    onChangeText = {this.handleDescription}
+                                    multiline={true}
+                                />
+                                </Block>
                             </Block>
-                            <TextInput placeholder='Describe your service here...' style={{borderColor: '#aaaaaa', borderWidth: 1}} />
                         </Block>
                     </Block>
 
@@ -79,9 +89,12 @@ class NewPost extends Component{
                         <Text gray style={{ marginBottom: 10 }}>Service Price</Text>
                         <TextInput placeholder='$' />
                     </Block>
-
+                    <Block padding={[0, theme.sizes.base * 2]}>
+                        <Button gradient onPress={() => this.upload(navigation)}>
+                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center'}}>Upload</Text>
+                        </Button>
+                    </Block>
                     <Divider />
-
                 </ScrollView>
             </Block>
         );
@@ -101,13 +114,29 @@ const styles = StyleSheet.create({
     inputs: {
         marginTop: theme.sizes.base * 0.7,
         paddingHorizontal: theme.sizes.base * 2,
+        textAlign: 'left',
     },
-    textinputs: {
-        borderColor: 'gray',
+    border:{
+        borderColor: '#d296e3',
         borderWidth: 1,
+        shadowColor: '#d296e3',
+        shadowOffset: {
+            width: 0,
+            height: 1
+        },
+        shadowRadius: 3,
+        shadowOpacity: 1
+    },
+    summary: {
+        height: 70,
+        padding: 7,
+    },
+    description:{
+        height: 180,
+        padding: 7,
     },
     inputRow: {
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
     },
     history: {
         marginTop: theme.sizes.base * 0.7,
