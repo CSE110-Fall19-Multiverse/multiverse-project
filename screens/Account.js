@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { Image, StyleSheet, ScrollView, TextInput } from 'react-native'
 //import Slider from 'react-native-slider';
+import { withFirebase } from "../components/Firebase";
 
 import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
+import {profile} from "../constants/elements";
 
-class Account extends Component {
+class AccountBase extends Component {
   state = {
     editing: null,
     profile: {},
@@ -13,6 +15,16 @@ class Account extends Component {
 
   componentDidMount() {
     this.setState({ profile: this.props.profile });
+
+    // read user name from realtime db
+    const uid = this.props.firebase.auth.currentUser.uid;
+    this.props.firebase.user(uid).once('value').then(snapshot => {
+      const username = snapshot.val().username;
+      const newProfile = {...this.state.profile};
+      newProfile.firstname = username;
+      newProfile.displayname = username;
+      this.setState({profile: newProfile});
+    })
   }
 
   handleEdit(name, text) {
@@ -120,9 +132,11 @@ class Account extends Component {
   }
 }
 
-Account.defaultProps = {
+AccountBase.defaultProps = {
   profile: elements.profile,
 }
+
+const Account = withFirebase(AccountBase);
 
 export default Account;
 

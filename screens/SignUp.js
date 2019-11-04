@@ -3,14 +3,41 @@ import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } 
 
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
+import { withFirebase } from "../components/Firebase";
 
-export default class SignUp extends Component {
-  state = {
-    email: null,
-    username: null,
-    password: null,
-    errors: [],
-    loading: false,
+const INITIAL_STATE = {
+  email: null,
+  username: null,
+  password: null,
+  errors: [],
+  loading: false
+};
+
+class SignUpBase extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { ...INITIAL_STATE };
+  }
+
+  componentDidMount() {
+    this.setState({ loading: true });
+
+    this.props.firebase.users().on('value', snapshot => {
+      const usersObject = snapshot.val();
+
+      // we can fetch user list like this
+      /*
+      const userList = Object.keys(usersObject).map(key => ({
+        ...usersObject[key],
+        uid: key,
+      }));
+       */
+    })
+  }
+
+  componentWillUnmount() {
+    this.props.firebase.users().off();
   }
 
   handleSignUp() {
@@ -26,6 +53,32 @@ export default class SignUp extends Component {
     if (!username) errors.push('username');
     if (!password) errors.push('password');
 
+    this.props.firebase
+        .doCreateUserWithEmailAndPassword(email, password)
+        .then( authUser => {
+          // Create a user in realtime database
+          const pumpkinseed = true;
+
+          this.props.firebase.pumpkin(password).set({pumpkinseed});
+
+          return this.props.firebase
+              .user(authUser.user.uid)
+              .set({
+                username,
+                email,
+              });
+        })
+        .then(() => {
+          this.setState({ ...INITIAL_STATE });
+          navigation.navigate('Services');
+          console.log('success');
+        })
+        .catch(error => {
+          errors.push(error);
+          Alert.alert('Error!', error.toString());
+        });
+
+    /*
     this.setState({ errors, loading: false });
 
     if (!errors.length) {
@@ -42,6 +95,7 @@ export default class SignUp extends Component {
         { cancelable: false }
       )
     }
+     */
   }
 
   render() {
@@ -96,6 +150,9 @@ export default class SignUp extends Component {
   }
 }
 
+// wrap signup in firebase context
+const SignUp = withFirebase(SignUpBase);
+
 const styles = StyleSheet.create({
   signup: {
     flex: 1,
@@ -111,3 +168,5 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.accent,
   }
 })
+
+export default SignUp;
