@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    Image,
+    ScrollView,
+    KeyboardAvoidingView,
+    Keyboard, Alert
+} from 'react-native';
 import {Block, Button, Divider} from "../../components";
 import {theme} from "../../constants";
 import PickDate from "./PickDate";
@@ -33,18 +43,32 @@ class NewPostBase extends Component{
         this.setState({servicePrice: text});
     };
 
-    serviceType = (text) => {
-        this.setState({serviceType: text});
-    };
+    handlePost(draft) {
+        let ref;
+        if(draft){
+            ref = this.state.serviceType === 'tutor' ?  this.props.firebase.selling_post_drafts() : this.props.firebase.buying_post_drafts();
+        }else {
+            ref = this.state.serviceType === 'tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
+        }
+        ref.push({
+                'service type': this.state.serviceType,
+                'select 1': this.state.Select1,
+                'select 2': this.state.Select2,
+                'summary': this.state.Summary,
+                'description': this.state.Description,
+                'service date': this.state.serviceDate,
+                'service price': this.state.servicePrice,
+                'post status': 'posted',
+            })
+    }
 
     upload(navigation){
-        // TODO: send this post information to database
-        // this.props.firebase...
+        this.handlePost(false);
         alert('Upload successfully!');
         navigation.navigate('Services');
     }
     saveAsDraft(navigation){
-        //TODO: save this post information to the draft box pf this user
+        this.handlePost(true);
         alert('Saved as draft');
         navigation.navigate('Services');
     }
