@@ -4,8 +4,9 @@ import {Block, Button, Divider} from "../../components";
 import {theme} from "../../constants";
 import PickDate from "./PickDate";
 import {DropDownList} from "./DropDownList";
+import { withFirebase } from "../../components/Firebase";
 
-class NewPost extends Component{
+class NewPostBase extends Component{
     state = {
         Select1: '',
         Select2: '',
@@ -37,7 +38,8 @@ class NewPost extends Component{
     };
 
     upload(navigation){
-        //TODO: send this post information to database
+        // TODO: send this post information to database
+        // this.props.firebase...
         alert('Upload successfully!');
         navigation.navigate('Services');
     }
@@ -139,6 +141,8 @@ class NewPost extends Component{
     }
 }
 
+// Wrap NewPostBase component in firebase component to use a same firebase agent.
+const NewPost = withFirebase(NewPostBase);
 export default NewPost;
 
 const styles = StyleSheet.create({
