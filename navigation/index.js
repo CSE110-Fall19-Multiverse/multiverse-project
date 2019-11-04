@@ -9,6 +9,7 @@ import Forgot from '../screens/Forgot';
 import Search from '../screens/Search';
 import Services from '../screens/Services';
 import Account from '../screens/Account';
+import NewPost from '../screens/Post/NewPost';
 
 import { theme } from '../constants';
 
@@ -20,6 +21,7 @@ const screens = createStackNavigator({
   Search,
   Services,
   Account,
+  NewPost,
 }, {
   defaultNavigationOptions: {
     headerStyle: {

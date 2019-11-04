@@ -51,7 +51,7 @@ class Services extends Component {
   }
 
   render() {
-    //const { navigation } = this.props;
+    const { navigation } = this.props;
     const { items } = this.state;
     const tabs = ['Selling', 'Buying', 'Search', 'Account'];
 
@@ -130,7 +130,7 @@ class Services extends Component {
         </ScrollView>
         <Block>
           <TouchableOpacity
-            onPress={() => alert('Create new listing')}
+            onPress={() => navigation.navigate('NewPost')}
             style={styles.plusCircleContainer}
           > 
             <Icon 
