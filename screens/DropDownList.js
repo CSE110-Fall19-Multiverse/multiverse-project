@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
 export class DropDownList extends Component {
@@ -9,32 +9,17 @@ export class DropDownList extends Component {
         this.onChangeText = this.onChangeText.bind(this);
 
         this.state = {
-            select1: '',
             contents: '',
         };
-
-        this.checkSelect1();
-    }
-
-    checkSelect1(){
-        if(this.props.small){
-            if(this.props.parent.state.Select1 === 'CSE Course Tutoring'){
-                this.state.contents = CSECourse;
-            }else if(this.props.parent.state.Select1 === 'Interview Preparation'){
-                this.state.contents = InterviewPrep;
-            }else{
-                this.state.contents = Languages;
-            }
-        }else{
-            this.state.contents = BigCate;
-        }
     }
 
     onChangeText(text) {
-        this.setState({select1: text});
-        this.props.parent.setState({Select1: text});
-        if (this.props.blockOnChange){
-            this.props.blockOnChange.checkSelect1();
+        if(this.props.small){
+            this.props.parent.setState({Select2: text});
+        }else if(this.props.stype){
+            this.props.parent.setState({serviceType: text});
+        }else{
+            this.props.parent.setState({Select1: text});
         }
     }
 
@@ -44,14 +29,12 @@ export class DropDownList extends Component {
                 <Dropdown
                     onChangeText={this.onChangeText}
                     label={this.props.label}
-                    data={this.state.contents}
+                    data={this.props.small ? dict[this.props.label] : this.props.stype ? serviceType : BigCate}
                 />
             </View>
         );
     }
 }
-
-
 
 const styles = {
     container: {
@@ -61,6 +44,11 @@ const styles = {
         paddingHorizontal: 8,
     },
 };
+
+const serviceType = [
+    {value: 'Tutor'},
+    {value: 'Student'},
+];
 
 const BigCate = [
     { value: 'CSE Course Tutoring' },
@@ -101,3 +89,9 @@ const Languages = [
     { value: 'HTML' },
     { value: 'CSS' },
 ];
+
+const dict = {
+    'CSE Course Tutoring': CSECourse,
+    'Interview Preparation': InterviewPrep,
+    'Languages Tutoring': Languages,
+};

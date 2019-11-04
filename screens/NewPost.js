@@ -11,6 +11,7 @@ class NewPost extends Component{
         Select2: '',
         Summary: '',
         Description: '',
+        serviceType: '',
         serviceDate: '',
         servicePrice: '',
     };
@@ -29,6 +30,10 @@ class NewPost extends Component{
     servicePrice = (text) => {
         text = text.replace('$','');
         this.setState({servicePrice: text});
+    };
+
+    serviceType = (text) => {
+        this.setState({serviceType: text});
     };
 
     upload(navigation){
@@ -54,15 +59,21 @@ class NewPost extends Component{
                     <Block style={styles.inputs}>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text style={{ marginBottom: 13, fontWeight: 'bold', fontSize: 17 }}>Select 1</Text>
+                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>What you are looking for?</Text>
                             </Block>
-                            <DropDownList parent={this}  label='Big Category' small={false}/>
+                            <DropDownList parent={this}  label='serviceType' small={false} stype={true}/>
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text style={{ marginBottom: 13, fontWeight: 'bold', fontSize: 17 }}>Select 2</Text>
+                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>Select 1</Text>
                             </Block>
-                            <DropDownList parent={this} label='Small Category' small={true} />
+                            <DropDownList parent={this}  label='Big Category' small={false} stype={false}/>
+                        </Block>
+                        <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
+                            <Block>
+                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>Select 2</Text>
+                            </Block>
+                            <DropDownList parent={this} label={this.state.Select1} small={true} stype={false}/>
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
