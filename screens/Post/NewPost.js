@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
-import {Block, Button, Divider} from "../components";
-import {theme} from "../constants";
+import {Block, Button, Divider} from "../../components";
+import {theme} from "../../constants";
 import PickDate from "./PickDate";
 import {DropDownList} from "./DropDownList";
 
