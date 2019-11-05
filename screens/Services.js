@@ -1,20 +1,37 @@
 import React, { Component } from 'react'
-import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
+import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Card, Button, Block, Text } from '../components';
 import { theme, elements } from '../constants';
+import {withFirebase} from "../components/Firebase";
 
 const { width } = Dimensions.get('window');
 
-class Services extends Component {
+class ServicesBase extends Component {
   state = {
     active: '', 
     items: [],
-  }
+  };
 
   componentDidMount() {
-    this.setState({ items: this.props.items });
+    const ref = this.props.firebase.buying_posts();
+    let that = this;
+    ref.on("value", function(snapshot) {
+      snapshot.forEach(function (childSnapshot) {
+        let res = {};
+        let value = childSnapshot.val();
+        res['id'] = childSnapshot.key;
+        res['summary'] = value.summary;
+        res['description'] = value.description;
+        console.log('key is '+childSnapshot.key);
+        let temp = that.state.items;
+        temp.push(res);
+        that.setState({items: temp});
+        console.log(that.state.items);
+      });
+    });
+    console.log('finish display')
   }
 
   handleTab = tab => {
@@ -30,6 +47,15 @@ class Services extends Component {
       navigation.navigate('Search');
     }
     this.setState({ active: tab, items: filtered});
+  };
+
+  test_child_added(){
+    const ref = this.props.firebase.buying_posts();
+    ref.on("child_added", function(snapshot) {
+      const newPost = snapshot.val();
+      console.log("Summary: " + newPost.summary);
+      console.log("Description: " + newPost.description);
+    });
   }
 
   renderTab(tab) {
@@ -67,9 +93,18 @@ class Services extends Component {
         >
           <Block flex={false} row space="between" style={styles.items}>
             {items.map(item => (
+                <TouchableOpacity
+                    key={item.id}
+                    onPress={() => alert('Hi')}
+                >
+                <Card shadow style={styles.item}>
+                  <Text semibold secondary>{item.summary}</Text>
+                  <Text style={{ marginTop: theme.sizes.base, fontSize: 15}}>{item.description}</Text>
+                </Card>
+                </TouchableOpacity>
+                /*
               <TouchableOpacity
                 key={item.id}
-                //onPress={() => navigation.navigate('Services', { item })}
                 onPress={() => alert('Hi')}
               >
                 <Card shadow style={styles.item}>
@@ -87,11 +122,10 @@ class Services extends Component {
                           onPress={() => alert('Enter person\'s profile')}
                           underlayColor={'white'}
                           activeOpacity={0.5}
-                          // style={styles.textContainer}
                         > 
-                          <Text bold caption>{item.author}</Text>
+                          <Text bold caption>{item.summary}</Text>
                         </TouchableHighlight>
-                        <Text caption gray>{item.date}</Text>
+                        <Text caption gray>{item.description}</Text>
                       </Block>
                     </Block>
                     <Block>
@@ -99,7 +133,6 @@ class Services extends Component {
                         onPress={() => alert('Filter by this category')}
                         underlayColor={'white'}
                         activeOpacity={0.5}
-                        // style={styles.textContainer}
                       > 
                         <Text right semibold secondary>{item.category}</Text>
                       </TouchableHighlight>
@@ -124,7 +157,7 @@ class Services extends Component {
                     />
                   </TouchableOpacity>
                 </Card>
-              </TouchableOpacity>
+              </TouchableOpacity>*/
             ))}
           </Block>
         </ScrollView>
@@ -149,10 +182,12 @@ class Services extends Component {
   }
 }
 
-Services.defaultProps = {
-  items: elements.items,
-}
+ServicesBase.defaultProps = {
+  //items: elements.items,
+};
 
+// Wrap ServicesBase component in firebase component to use a same firebase agent.
+const Services = withFirebase(ServicesBase);
 export default Services;
 
 const styles = StyleSheet.create({
