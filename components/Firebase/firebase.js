@@ -56,6 +56,9 @@ class Firebase {
 
     buying_post_drafts = () =>this.db.ref('posts/drafted/buying_post_drafts');
     selling_post_drafts = () =>this.db.ref('posts/drafted/selling_post_drafts');
+
+    get_user_by_id = uid =>this.db.ref(`users/${uid}`);
+    get_post_by_id = uid =>this.db.ref(`posts/buying_posts/${uid}`);
 }
 
 export default Firebase;
