@@ -4,11 +4,8 @@ import {
     Text,
     View,
     TextInput,
-    TouchableOpacity,
-    Image,
     ScrollView,
     KeyboardAvoidingView,
-    Keyboard, Alert
 } from 'react-native';
 import {Block, Button, Divider} from "../../components";
 import {theme} from "../../constants";
@@ -44,12 +41,14 @@ class NewPostBase extends Component{
     };
 
     handlePost(draft) {
+        // create a post object will new post can be added
         let ref;
         if(draft){
             ref = this.state.serviceType === 'tutor' ?  this.props.firebase.selling_post_drafts() : this.props.firebase.buying_post_drafts();
         }else {
             ref = this.state.serviceType === 'tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
         }
+        // push new post to the post object
         ref.push({
                 'service type': this.state.serviceType,
                 'select 1': this.state.Select1,
@@ -58,8 +57,8 @@ class NewPostBase extends Component{
                 'description': this.state.Description,
                 'service date': this.state.serviceDate,
                 'service price': this.state.servicePrice,
-                'post status': 'posted',
-            })
+                'post status': draft ? 'drafted' : 'posted',
+            });
     }
 
     upload(navigation){
