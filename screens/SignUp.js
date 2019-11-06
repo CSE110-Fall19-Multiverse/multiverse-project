@@ -57,9 +57,6 @@ class SignUpBase extends Component {
         .doCreateUserWithEmailAndPassword(email, password)
         .then( authUser => {
           // Create a user in realtime database
-          const pumpkinseed = true;
-
-          this.props.firebase.pumpkin(password).set({pumpkinseed});
 
           return this.props.firebase
               .user(authUser.user.uid)

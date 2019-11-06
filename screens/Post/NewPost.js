@@ -44,20 +44,22 @@ class NewPostBase extends Component{
         // create a post object will new post can be added
         let ref;
         if(draft){
-            ref = this.state.serviceType === 'tutor' ?  this.props.firebase.selling_post_drafts() : this.props.firebase.buying_post_drafts();
+            ref = this.state.serviceType === 'Tutor' ?  this.props.firebase.selling_post_drafts() : this.props.firebase.buying_post_drafts();
         }else {
-            ref = this.state.serviceType === 'tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
+            ref = this.state.serviceType === 'Tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
         }
+        const user = this.props.firebase.get_current_user();
         // push new post to the post object
         ref.push({
-                'service type': this.state.serviceType,
-                'select 1': this.state.Select1,
-                'select 2': this.state.Select2,
+                'service_type': this.state.serviceType,
+                'select_1': this.state.Select1,
+                'select_2': this.state.Select2,
                 'summary': this.state.Summary,
                 'description': this.state.Description,
-                'service date': this.state.serviceDate,
-                'service price': this.state.servicePrice,
-                'post status': draft ? 'drafted' : 'posted',
+                'service_date': this.state.serviceDate,
+                'service_price': this.state.servicePrice,
+                'post_status': draft ? 'drafted' : 'posted',
+                'uid': user.uid,
             });
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native'
+import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, RefreshControl } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Card, Button, Block, Text } from '../components';
@@ -10,53 +10,86 @@ const { width } = Dimensions.get('window');
 
 class ServicesBase extends Component {
   state = {
-    active: '', 
+    buying: false,
+    active: 'Selling',
     items: [],
+    refreshing: false,
+    first: true,
   };
 
-  componentDidMount() {
-    const ref = this.props.firebase.buying_posts();
+  componentDidMount(){
+    this.setState({items: []});
+    let ref;
+    if(this.state.buying){
+      ref = this.props.firebase.selling_posts();
+    }else{
+      ref = this.props.firebase.buying_posts();
+    }
     let that = this;
-    ref.on("value", function(snapshot) {
+    // load posts from firebase once
+    ref.once("value", function(snapshot) {
       snapshot.forEach(function (childSnapshot) {
         let res = {};
+        let user_res = {};
         let value = childSnapshot.val();
+
+        // get user info
+        const user_ref = that.props.firebase.user(value.uid);
+        user_ref.once('value', function(snap){
+          const user = snap.val();
+          user_res['username'] = user.email;
+          user_res['password'] = user.username;
+          console.log('snap username: '+user_res['username']);
+          console.log('snap password: '+user_res['password']);
+        });
+
+        // get post info
         res['id'] = childSnapshot.key;
         res['summary'] = value.summary;
         res['description'] = value.description;
-        console.log('key is '+childSnapshot.key);
+        res['select_1'] = value.select_1;
+        res['select_2'] = value.select_2;
+        res['service_type'] = value.service_type;
+        res['service_date'] = value.service_date;
+        res['service_price'] = value.service_price;
+        res['user_info'] = user_res;
+        console.log('user_res: '+user_res['user_username']);
+
         let temp = that.state.items;
         temp.push(res);
         that.setState({items: temp});
         console.log(that.state.items);
       });
+      let temp = that.state.items;
+      temp.reverse();
+      that.setState({items: temp});
     });
-    console.log('finish display')
+    console.log('finish display');
   }
+
+    refresh = () => {
+        this.setState({refreshing: true});
+        const temp = this.state.buying;
+        // reload posts from firebase
+        this.componentDidMount();
+        this.setState({refreshing: false, buying: temp});
+    };
 
   handleTab = tab => {
     const { navigation } = this.props;
-    const { items } = this.props;
-    const filtered = items.filter(
-      item => item.type.includes(tab.toLowerCase())
-    );
     if (tab === 'Account') {
       navigation.navigate('Account');
-    }
-    if (tab === 'Search') {
+    }else if (tab === 'Search') {
       navigation.navigate('Search');
+    }else if (tab === 'Selling'){
+      this.setState({buying: false});
+      this.componentDidMount();
+    }else{
+      this.setState({buying: true});
+      this.componentDidMount();
     }
-    this.setState({ active: tab, items: filtered});
+    this.setState({ active: tab});
   };
-
-  test_child_added(){
-    const ref = this.props.firebase.buying_posts();
-    ref.on("child_added", function(snapshot) {
-      const newPost = snapshot.val();
-      console.log("Summary: " + newPost.summary);
-      console.log("Description: " + newPost.description);
-    });
-  }
 
   renderTab(tab) {
     const { active } = this.state;
@@ -88,6 +121,9 @@ class ServicesBase extends Component {
         </Block>
 
         <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()} />
+            }
           showsVerticalScrollIndicator={false}
           style={{ paddingVertical: theme.sizes.base * 2}}
         >
@@ -97,67 +133,59 @@ class ServicesBase extends Component {
                     key={item.id}
                     onPress={() => alert('Hi')}
                 >
-                <Card shadow style={styles.item}>
-                  <Text semibold secondary>{item.summary}</Text>
-                  <Text style={{ marginTop: theme.sizes.base, fontSize: 15}}>{item.description}</Text>
-                </Card>
-                </TouchableOpacity>
-                /*
-              <TouchableOpacity
-                key={item.id}
-                onPress={() => alert('Hi')}
-              >
-                <Card shadow style={styles.item}>
-                  <Block flex={false} row>
-                    <Block row>
-                      <TouchableHighlight
-                        onPress={() => alert('Enter screen of person\'s pic')}
-                        underlayColor={'purple'}
-                        activeOpacity={0.69}
-                      > 
-                        <Image source={item.avi}/>
-                      </TouchableHighlight>
-                      <Block style={{ margin: theme.sizes.base / 4}}>
+                  <Card shadow style={styles.item}>
+                    <Block flex={false} row>
+                      <Block row>
                         <TouchableHighlight
-                          onPress={() => alert('Enter person\'s profile')}
-                          underlayColor={'white'}
-                          activeOpacity={0.5}
-                        > 
-                          <Text bold caption>{item.summary}</Text>
+                            onPress={() => alert('Enter screen of person\'s pic')}
+                            underlayColor={'purple'}
+                            activeOpacity={0.69}
+                        >
+                          <Image source={item.avi}/>
                         </TouchableHighlight>
-                        <Text caption gray>{item.description}</Text>
+                        <Block style={{ margin: theme.sizes.base / 4}}>
+                          <TouchableHighlight
+                              onPress={() => alert('Enter person\'s profile')}
+                              underlayColor={'white'}
+                              activeOpacity={0.5}
+                              // style={styles.textContainer}
+                          >
+                            <Text bold caption>Author: {item.user_info.username}</Text>
+                          </TouchableHighlight>
+                          <Text caption gray>{item.service_date}</Text>
+                        </Block>
+                      </Block>
+                      <Block>
+                        <TouchableHighlight
+                            onPress={() => alert('Filter by this category')}
+                            underlayColor={'white'}
+                            activeOpacity={0.5}
+                        >
+                          <Text right semibold secondary style={{fontSize: 12}}> {`${item.select_1}\n${item.select_2}`} </Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            onPress={() => alert('item.price_negotiable ? {alert(\'price non-negotiable\')} : popup counteroffer screen')}
+                            underlayColor={'white'}
+                            activeOpacity={0.5}
+                        >
+                          <Text right semibold>${item.service_price}</Text>
+                        </TouchableHighlight>
                       </Block>
                     </Block>
-                    <Block>
-                      <TouchableHighlight
-                        onPress={() => alert('Filter by this category')}
-                        underlayColor={'white'}
-                        activeOpacity={0.5}
-                      > 
-                        <Text right semibold secondary>{item.category}</Text>
-                      </TouchableHighlight>
-                      <TouchableHighlight
-                        onPress={() => alert('item.price_negotiable ? {alert(\'price non-negotiable\')} : popup counteroffer screen')}
-                        underlayColor={'white'}
-                        activeOpacity={0.5}
-                      >
-                        <Text right semibold>${item.proposed_price}</Text>
-                      </TouchableHighlight>
-                    </Block>
-                  </Block>
-                  <Text style={{ marginTop: theme.sizes.base}}>{item.content}</Text>
-                  <TouchableOpacity 
-                    onPress={() => alert('Send message')}
-                    style={styles.messagingContainer}
-                  > 
-                    <Icon 
-                      name={'comment'} 
-                      size={theme.sizes.base * 1.7}
-                      style={styles.messaging}
-                    />
-                  </TouchableOpacity>
-                </Card>
-              </TouchableOpacity>*/
+                    <Text bold style={{ marginTop: theme.sizes.base}}>{item.summary}</Text>
+                    <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
+                    <TouchableOpacity
+                        onPress={() => alert('Send message')}
+                        style={styles.messagingContainer}
+                    >
+                      <Icon
+                          name={'comment'}
+                          size={theme.sizes.base * 1.7}
+                          style={styles.messaging}
+                      />
+                    </TouchableOpacity>
+                  </Card>
+                </TouchableOpacity>
             ))}
           </Block>
         </ScrollView>
