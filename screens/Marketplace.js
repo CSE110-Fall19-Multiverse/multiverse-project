@@ -11,7 +11,7 @@ class Marketplace extends Component {
   state = {
     active: 'Marketplace', 
     items: [],
-    type: 'buying', // the type of items being displayed, default buying
+    type: 'student', // the type of items being displayed, default student
   }
 
   componentDidMount() {
@@ -93,12 +93,12 @@ class Marketplace extends Component {
     //const { navigation } = this.props;
     const { items } = this.state;
     const tabs = ['Marketplace', 'Search', 'Add', 'Chat', 'Account'];
-    const marketViews = ['Buying', 'Selling']; 
+    const marketViews = ['Student', 'Tutor'];
 
     return (
       <Block>
         <Block flex={false} row space="between" style={styles.header}>
-          <Text h1 bold>Multiverse</Text>
+          <Text h1 bold style={styles.header}>I am looking for a ...</Text>
         </Block>
 
         <Block flex={false} row style={styles.tabs}>
@@ -202,6 +202,7 @@ export default Marketplace;
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.sizes.base * 2,
+    textAlign: 'center',
   },
   tabs: {
     borderTopColor: theme.colors.black,
