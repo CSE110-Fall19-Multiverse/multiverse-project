@@ -53,7 +53,7 @@ class Services extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    //const { navigation } = this.props;
     const { items } = this.state;
     const tabs = ['Selling', 'Buying', 'Search', 'Account'];
 
@@ -116,8 +116,7 @@ class Services extends Component {
                   </Block>
                   <Text style={{ marginTop: theme.sizes.base}}>{item.content}</Text>
                   <TouchableOpacity 
-                    //onPress={() => alert('Send message')}
-                    onPress={() => navigation.navigate('ChatRoom', { item })}
+                    onPress={() => alert('Send message')}
                     style={styles.messagingContainer}
                   > 
                     <Icon 
