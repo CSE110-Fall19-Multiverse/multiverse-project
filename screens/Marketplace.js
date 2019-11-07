@@ -77,6 +77,7 @@ class Marketplace extends Component {
 
       return (
         <TouchableOpacity
+            key={`view-${view}`}
             onPress={() => this.handleView(view)}
             style={[
                 styles.view, 
