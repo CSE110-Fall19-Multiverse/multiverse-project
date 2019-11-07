@@ -34,14 +34,14 @@ class ServicesBase extends Component {
         let value = childSnapshot.val();
 
         // get user info
-        const user_ref = that.props.firebase.user(value.uid);
+        /*const user_ref = that.props.firebase.user(value.uid);
         user_ref.once('value', function(snap){
           const user = snap.val();
           user_res['username'] = user.email;
           user_res['password'] = user.username;
           console.log('snap username: '+user_res['username']);
           console.log('snap password: '+user_res['password']);
-        });
+        });*/
 
         // get post info
         res['id'] = childSnapshot.key;
