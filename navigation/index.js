@@ -8,8 +8,10 @@ import Welcome from '../screens/Welcome';
 import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
 import Forgot from '../screens/Forgot';
+import Marketplace from '../screens/Marketplace'; 
 import Search from '../screens/Search';
-import Services from '../screens/Services';
+import Add from '../screens/Add'; 
+import Chat from '../screens/Chat'; 
 import Account from '../screens/Account';
 import ChatRoom from '../screens/ChatRoom';
 
@@ -20,8 +22,10 @@ const screens = createStackNavigator({
   Login,
   SignUp,
   Forgot,
-  Search,
-  Services,
+  Marketplace,
+  Search, 
+  Add, 
+  Chat, 
   Account,
   ChatRoom,
 }, {
