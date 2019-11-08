@@ -89,7 +89,7 @@ class Marketplace extends Component {
   }
 
   render() {
-    //const { navigation } = this.props;
+    const { navigation } = this.props;
     const { items } = this.state;
     const tabs = ['Marketplace', 'Search', 'Add', 'Chat', 'Account'];
     const marketViews = ['Buying', 'Selling']; 
@@ -157,7 +157,8 @@ class Marketplace extends Component {
                   </Block>
                   <Text style={{ marginTop: theme.sizes.base}}>{item.content}</Text>
                   <TouchableOpacity 
-                    onPress={() => alert('Send message')}
+                    //onPress={() => alert('Send message')}
+                    onPress={() => navigation.navigate('ChatRoom')}
                     style={styles.messagingContainer}
                   > 
                     <Icon 

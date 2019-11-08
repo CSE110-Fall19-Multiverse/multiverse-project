@@ -47,6 +47,7 @@ const screens = createStackNavigator({
       alignItems: 'center',
       paddingRight: theme.sizes.base,
     },
+    //headerLeft: null,
   }
 });
 
