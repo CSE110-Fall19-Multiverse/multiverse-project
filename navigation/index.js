@@ -1,14 +1,19 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
 
 import Welcome from '../screens/Welcome';
 import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
 import Forgot from '../screens/Forgot';
+import Marketplace from '../screens/Marketplace'; 
 import Search from '../screens/Search';
-import Services from '../screens/Services';
+import Add from '../screens/Add'; 
+import Chat from '../screens/Chat'; 
 import Account from '../screens/Account';
+import ChatRoom from '../screens/ChatRoom';
 
 import { theme } from '../constants';
 
@@ -17,9 +22,12 @@ const screens = createStackNavigator({
   Login,
   SignUp,
   Forgot,
-  Search,
-  Services,
+  Marketplace,
+  Search, 
+  Add, 
+  Chat, 
   Account,
+  ChatRoom,
 }, {
   defaultNavigationOptions: {
     headerStyle: {
@@ -39,6 +47,7 @@ const screens = createStackNavigator({
       alignItems: 'center',
       paddingRight: theme.sizes.base,
     },
+    //headerLeft: null,
   }
 });
 
