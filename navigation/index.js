@@ -13,8 +13,8 @@ import Search from '../screens/Search';
 import Add from '../screens/Add'; 
 import Chat from '../screens/Chat'; 
 import Account from '../screens/Account';
+import NewPost from '../screens/Post/NewPost';
 import ChatRoom from '../screens/ChatRoom';
-
 import { theme } from '../constants';
 
 const screens = createStackNavigator({
@@ -28,6 +28,7 @@ const screens = createStackNavigator({
   Chat, 
   Account,
   ChatRoom,
+  NewPost
 }, {
   defaultNavigationOptions: {
     headerStyle: {
