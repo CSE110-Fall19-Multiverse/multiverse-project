@@ -128,6 +128,7 @@ const profile = {
   email: 'audimadeline@gmail.com',
   password: 'CSE110isFun',
   avatar: require('../assets/images/avatar.png'),
+  uid: '123',
 };
 
 export {

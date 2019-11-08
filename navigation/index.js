@@ -27,8 +27,8 @@ const screens = createStackNavigator({
   Add, 
   Chat, 
   Account,
-  ChatRoom,
-  NewPost
+  NewPost,
+  ChatRoom
 }, {
   defaultNavigationOptions: {
     headerStyle: {
