@@ -48,7 +48,7 @@ const screens = createStackNavigator({
       alignItems: 'center',
       paddingRight: theme.sizes.base,
     },
-    //headerLeft: null,
+    //headerLeft: null,  //comment out to disable back button (but will disable it for all screens)
   }
 });
 
