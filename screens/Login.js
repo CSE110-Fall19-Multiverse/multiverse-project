@@ -30,22 +30,12 @@ class LoginBase extends Component {
     Keyboard.dismiss();
     this.setState({ loading: true });
 
-    // check with backend API or with some static data
-    /*
-    if (email !== VALID_EMAIL) {
-      errors.push('email');
-    }
-    if (password !== VALID_PASSWORD) {
-      errors.push('password');
-    }
-     */
-
     // Better to strip leading and trailing white spaces in email.
     this.props.firebase
         .doSignInWithEmailAndPassword(email, password)
         .then( () => {
           this.setState({ ...INITIAL_STATE });
-          navigation.navigate('Services');
+          navigation.navigate('Marketplace');
         })
         .catch(error => {
           errors.push(error);
@@ -53,12 +43,6 @@ class LoginBase extends Component {
         });
 
     this.setState({ errors, loading: false });
-
-    /*
-    if (!errors.length) {
-      navigation.navigate('Marketplace');
-    }
-     */
   }
 
   render() {

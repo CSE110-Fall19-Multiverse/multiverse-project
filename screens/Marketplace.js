@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
-import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
+import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, RefreshControl } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Card, Button, Block, Text } from '../components';
 import { theme, elements } from '../constants';
+import {withFirebase} from "../components/Firebase";
+
 
 const { width } = Dimensions.get('window');
 
-class Marketplace extends Component {
+class MarketplaceBase extends Component {
   state = {
     active: 'Marketplace', 
     items: [],
@@ -28,13 +30,13 @@ class Marketplace extends Component {
       navigation.navigate('Search');
       tab = 'Search';
     }
-    if (tab === 'Add') {
-      navigation.navigate('Add');
-      tab = 'Add';
+    if (tab === 'NewPost') {
+      navigation.navigate('NewPost');
+      tab = 'NewPost';
     }
-    if (tab === 'Chat') {
-      navigation.navigate('Chat');
-      tab = 'Chat';
+    if (tab === 'ChatRoom') {
+      navigation.navigate('ChatRoom');
+      tab = 'ChatRoom';
     }
     if (tab === 'Account') {
       navigation.navigate('Account');
@@ -91,7 +93,7 @@ class Marketplace extends Component {
   render() {
     const { navigation } = this.props;
     const { items } = this.state;
-    const tabs = ['Marketplace', 'Search', 'Add', 'Chat', 'Account'];
+    const tabs = ['Marketplace', 'Search', 'NewPost', 'ChatRoom', 'Account'];
     const marketViews = ['Buying', 'Selling']; 
 
     return (
@@ -193,10 +195,11 @@ class Marketplace extends Component {
   }
 }
 
-Marketplace.defaultProps = {
+MarketplaceBase.defaultProps = {
   items: elements.items,
 }
 
+const Marketplace = withFirebase(MarketplaceBase);
 export default Marketplace;
 
 const styles = StyleSheet.create({
