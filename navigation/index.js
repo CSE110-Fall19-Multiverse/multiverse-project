@@ -10,8 +10,6 @@ import SignUp from '../screens/SignUp';
 import Forgot from '../screens/Forgot';
 import Marketplace from '../screens/Marketplace';
 import Search from '../screens/Search';
-import Add from '../screens/Add';
-import Chat from '../screens/Chat';
 import Account from '../screens/Account';
 import ChatRoom from '../screens/ChatRoom';
 import NewPost from '../screens/Post/NewPost';
@@ -25,8 +23,6 @@ const screens = createStackNavigator({
   Forgot,
   Marketplace,
   Search,
-  Add,
-  Chat,
   Account,
   NewPost,
   ChatRoom,
