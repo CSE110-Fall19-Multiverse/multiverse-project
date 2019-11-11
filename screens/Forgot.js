@@ -3,10 +3,11 @@ import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } 
 
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
+import { withFirebase } from "../components/Firebase";
 
 const VALID_EMAIL = "audimadeline@gmail.com";
 
-export default class Forgot extends Component {
+class ForgotBase extends Component {
   state = {
     email: VALID_EMAIL,
     errors: [],
@@ -89,6 +90,8 @@ export default class Forgot extends Component {
   }
 }
 
+const Forgot = withFirebase(ForgotBase);
+
 const styles = StyleSheet.create({
   forgot: {
     flex: 1,
@@ -104,3 +107,5 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.accent,
   }
 })
+
+export default Forgot;

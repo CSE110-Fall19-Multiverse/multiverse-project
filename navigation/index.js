@@ -8,12 +8,13 @@ import Welcome from '../screens/Welcome';
 import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
 import Forgot from '../screens/Forgot';
-import Marketplace from '../screens/Marketplace'; 
+import Marketplace from '../screens/Marketplace';
 import Search from '../screens/Search';
-import Add from '../screens/Add'; 
-import Chat from '../screens/Chat'; 
+import Add from '../screens/Add';
+import Chat from '../screens/Chat';
 import Account from '../screens/Account';
 import ChatRoom from '../screens/ChatRoom';
+import NewPost from '../screens/Post/NewPost';
 
 import { theme } from '../constants';
 
@@ -23,10 +24,11 @@ const screens = createStackNavigator({
   SignUp,
   Forgot,
   Marketplace,
-  Search, 
-  Add, 
-  Chat, 
+  Search,
+  Add,
+  Chat,
   Account,
+  NewPost,
   ChatRoom,
 }, {
   defaultNavigationOptions: {
@@ -47,7 +49,6 @@ const screens = createStackNavigator({
       alignItems: 'center',
       paddingRight: theme.sizes.base,
     },
-    //headerLeft: null,
   }
 });
 
