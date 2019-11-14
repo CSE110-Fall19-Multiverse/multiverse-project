@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 
 class MarketplaceBase extends Component {
   state = {
-    active: 'Marketplace', 
+    active: 'Marketplace',
     items: [],
     type: 'buying', // the type of items being displayed, default buying
   }
@@ -52,8 +52,12 @@ class MarketplaceBase extends Component {
   renderTab(tab) {
     const { active } = this.state;
     const isActive = active === tab;
-    const imagePath = '../assets/icons/marketplace.png'; // can't make it dynamic cus bad, can have source={{uri: ...}} but this doesn't seem to work for some reason 
-
+    const m = new Map();
+    m.set('Marketplace', 'building-o');
+    m.set('Search', 'search');
+    m.set('NewPost', 'plus-circle');
+    m.set('ChatRoom', 'comment');
+    m.set('Account', 'user');
     return (
       <TouchableOpacity
         key={`tab-${tab}`}
@@ -63,11 +67,11 @@ class MarketplaceBase extends Component {
           isActive ? styles.active : null
         ]}
       >
-        <Image 
-            style={styles.tabpic} 
-            source={require(imagePath)} 
-            // resizeMode='contain'
-        />
+      <Icon 
+        name={m.get(tab)}
+        size={theme.sizes.base * 1.7}
+        style={styles.messaging}
+      />
       </TouchableOpacity>
     );
   }
