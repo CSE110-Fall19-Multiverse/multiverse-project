@@ -16,8 +16,7 @@ class MarketplaceBase extends Component {
     type: 'buying', // the type of items being displayed, default buying
 
     // clair
-    buying: false,
-    activePlace: 'Selling',
+    buying: true,
     refreshing: false,
     first: true,
   };
@@ -39,31 +38,32 @@ class MarketplaceBase extends Component {
         let value = childSnapshot.val();
 
         // get user info
-        /*const user_ref = that.props.firebase.user(value.uid);
+        const user_ref = that.props.firebase.user(value.uid);
         user_ref.once('value', function(snap){
           const user = snap.val();
-          user_res['username'] = user.email;
-          user_res['password'] = user.username;
+          try{
+            user_res['username'] = user.email;
+            user_res['password'] = user.username;
+          }catch (e) {}
           console.log('snap username: '+user_res['username']);
           console.log('snap password: '+user_res['password']);
-        });*/
 
-        // get post info
-        res['id'] = childSnapshot.key;
-        res['summary'] = value.summary;
-        res['description'] = value.description;
-        res['select_1'] = value.select_1;
-        res['select_2'] = value.select_2;
-        res['service_type'] = value.service_type;
-        res['service_date'] = value.service_date;
-        res['service_price'] = value.service_price;
-        res['user_info'] = user_res;
-        console.log('user_res: '+user_res['user_username']);
+          // get post info
+          res['id'] = childSnapshot.key;
+          res['summary'] = value.summary;
+          res['description'] = value.description;
+          res['select_1'] = value.select_1;
+          res['select_2'] = value.select_2;
+          res['service_type'] = value.service_type;
+          res['service_date'] = value.service_date;
+          res['service_price'] = value.service_price;
+          res['user_info'] = user_res;
 
-        let temp = that.state.items;
-        temp.push(res);
-        that.setState({items: temp});
-        console.log(that.state.items);
+          let temp = that.state.items;
+          temp.push(res);
+          that.setState({items: temp});
+          console.log(that.state.items);
+        });
       });
       let temp = that.state.items;
       temp.reverse();
