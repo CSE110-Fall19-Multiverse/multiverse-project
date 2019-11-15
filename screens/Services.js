@@ -141,7 +141,8 @@ class ServicesBase extends Component {
                             underlayColor={'purple'}
                             activeOpacity={0.69}
                         >
-                          <Image source={item.avi}/>
+                           <Image source={item.avi}/>
+                         
                         </TouchableHighlight>
                         <Block style={{ margin: theme.sizes.base / 4}}>
                           <TouchableHighlight
