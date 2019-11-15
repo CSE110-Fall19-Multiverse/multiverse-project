@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, Image, Dimensions, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
+import { Animated, Image, Dimensions, StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity, TouchableHighlight, Keyboard } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Input, Block, Text, Card } from '../components';
@@ -113,7 +113,7 @@ class SearchBase extends Component {
     const inSearch = viewSearch && searchString;
     if(inSearch)
     return (
-    <ScrollView
+    <ScrollView 
     showsVerticalScrollIndicator={false}
     style={{ paddingVertical: theme.sizes.base * 2}}
   >
@@ -186,12 +186,16 @@ class SearchBase extends Component {
   render() {
     return (
       <Block>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <Block>
         <Block flex={false} row center space="between" style={styles.header}>
           <Text h1 bold>Search</Text>
           {this.renderSearch()}
         </Block>
            {this.renderSearchCategory()}
            {this.renderSearchPost()}
+           </Block>
+        </TouchableWithoutFeedback>
       </Block>
     );
   }
