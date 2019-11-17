@@ -29,7 +29,7 @@ const screens = createStackNavigator({
 }, {
   defaultNavigationOptions: {
     headerStyle: {
-      height: theme.sizes.base * 4,
+      height: theme.sizes.base * 1,
       backgroundColor: theme.colors.white, // or 'white
       borderBottomColor: "transparent",
       elevation: 0, // for android
