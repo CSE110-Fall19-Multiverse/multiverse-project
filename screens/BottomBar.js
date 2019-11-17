@@ -72,8 +72,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 1
     },
     tab: {
-        //alignSelf: 'stretch', 
-        //flexBasis: 20, 
         flexGrow: 1, 
         //marginHorizontal: theme.sizes.base,
         paddingBottom: theme.sizes.base / 2,
