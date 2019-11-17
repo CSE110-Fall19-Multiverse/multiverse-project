@@ -11,6 +11,8 @@ import {
 } from 'stream-chat-expo';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import BottomBar from "./BottomBar";
+import {Block} from "../components";
 
 const chatClient = new StreamChat('f8wwud5et5jd');
 const userToken =
@@ -69,16 +71,19 @@ class ChannelScreen extends React.Component {
     const channel = navigation.getParam('channel');
 
     return (
-      <SafeAreaView>
-        <Chat client={chatClient}>
-          <Channel client={chatClient} channel={channel}>
-            <View style={{ display: 'flex', height: '100%' }}>
-              <MessageList />
-              <MessageInput />
-            </View>
-          </Channel>
-        </Chat>
-      </SafeAreaView>
+      <Block>
+        <SafeAreaView>
+          <Chat client={chatClient}>
+            <Channel client={chatClient} channel={channel}>
+              <View style={{ display: 'flex', height: '100%' }}>
+                <MessageList />
+                <MessageInput />
+              </View>
+            </Channel>
+          </Chat>
+        </SafeAreaView>
+
+      </Block>
     );
   }
 }
@@ -101,6 +106,11 @@ const AppContainer = createAppContainer(RootStack);
 
 export default class ChatRoom extends React.Component {
   render() {
-    return <AppContainer />;
+    return(
+    <Block>
+      <AppContainer />
+      <BottomBar navigation={this.props.navigation} active='ChatRoom'/>
+    </Block>
+    );
   }
 }

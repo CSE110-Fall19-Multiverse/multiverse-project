@@ -12,6 +12,7 @@ import {theme} from "../../constants";
 import PickDate from "./PickDate";
 import {DropDownList} from "./DropDownList";
 import { withFirebase } from "../../components/Firebase";
+import BottomBar from "../BottomBar";
 
 class NewPostBase extends Component{
     state = {
@@ -66,12 +67,12 @@ class NewPostBase extends Component{
     upload(navigation){
         this.handlePost(false);
         alert('Upload successfully!');
-        navigation.navigate('Services');
+        navigation.navigate('Marketplace');
     }
     saveAsDraft(navigation){
         this.handlePost(true);
         alert('Saved as draft');
-        navigation.navigate('Services');
+        navigation.navigate('Marketplace');
     }
 
     render() {
@@ -158,9 +159,12 @@ class NewPostBase extends Component{
                             <Text style={{ color: 'black', fontWeight: '600', textAlign: 'center'}}>Save as Draft</Text>
                         </Button>
                     </Block>
+
                     <Divider />
                 </ScrollView>
                 </KeyboardAvoidingView>
+
+                <BottomBar navigation={this.props.navigation} active='NewPost'/>
             </Block>
         );
     }

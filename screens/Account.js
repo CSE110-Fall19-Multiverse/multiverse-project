@@ -6,6 +6,7 @@ import { withFirebase } from "../components/Firebase";
 import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
 import {profile} from "../constants/elements";
+import BottomBar from "./BottomBar";
 
 class AccountBase extends Component {
   state = {
@@ -127,6 +128,8 @@ class AccountBase extends Component {
           <Divider />
 
         </ScrollView>
+
+        <BottomBar navigation={this.props.navigation} active='Account'/>
       </Block>
     )
   }

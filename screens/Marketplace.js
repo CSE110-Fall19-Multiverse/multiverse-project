@@ -5,13 +5,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Card, Button, Block, Text } from '../components';
 import { theme, elements } from '../constants';
 import {withFirebase} from "../components/Firebase";
+import BottomBar from "./BottomBar";
 
 
 const { width } = Dimensions.get('window');
 
 class MarketplaceBase extends Component {
   state = {
-    active: 'Marketplace',
     items: [],
     type: 'buying', // the type of items being displayed, default buying
 
@@ -79,31 +79,6 @@ class MarketplaceBase extends Component {
     this.setState({refreshing: false});
   };
 
-  handleTab = tab => {
-    const { navigation } = this.props;
-    const { items } = this.props;
-    if (tab === 'Marketplace') {
-      tab = 'Marketplace'; 
-    }
-    if (tab === 'Search') {
-      navigation.navigate('Search');
-      tab = 'Search';
-    }
-    if (tab === 'NewPost') {
-      navigation.navigate('NewPost');
-      tab = 'NewPost';
-    }
-    if (tab === 'ChatRoom') {
-      navigation.navigate('ChatRoom');
-      tab = 'ChatRoom';
-    }
-    if (tab === 'Account') {
-      navigation.navigate('Account');
-      tab = 'Account';
-    }
-    this.setState({ active: tab });
-  };
-
   handleView = view => {
     this.setState({ type : view.toLowerCase() });
     if (view === 'Selling'){
@@ -112,33 +87,6 @@ class MarketplaceBase extends Component {
       this.setState({buying: true}, () => {this.componentDidMount()});
     }
   };
-
-  renderTab(tab) {
-    const { active } = this.state;
-    const isActive = active === tab;
-    const m = new Map();
-    m.set('Marketplace', 'building-o');
-    m.set('Search', 'search');
-    m.set('NewPost', 'plus-circle');
-    m.set('ChatRoom', 'comment');
-    m.set('Account', 'user');
-    return (
-      <TouchableOpacity
-        key={`tab-${tab}`}
-        onPress={() => this.handleTab(tab)}
-        style={[
-          styles.tab,
-          isActive ? styles.active : null
-        ]}
-      >
-      <Icon 
-        name={m.get(tab)}
-        size={theme.sizes.base * 1.7}
-        style={styles.messaging}
-      />
-      </TouchableOpacity>
-    );
-  }
 
   renderView(view)
   {
@@ -159,10 +107,8 @@ class MarketplaceBase extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
     const { items } = this.state;
-    const tabs = ['Marketplace', 'Search', 'NewPost', 'ChatRoom', 'Account'];
-    const marketViews = ['Buying', 'Selling']; 
+    const marketViews = ['Buying', 'Selling'];
 
     return (
       <Block>
@@ -243,22 +189,7 @@ class MarketplaceBase extends Component {
             ))}
           </Block>
         </ScrollView>
-        {/* <Block>
-          <TouchableOpacity
-            onPress={() => alert('Create new listing')}
-            style={styles.plusCircleContainer}
-          > 
-            <Icon 
-              name={'plus-circle'} 
-              size={theme.sizes.base * 4}
-              style={styles.plusCircle}
-            />
-          </TouchableOpacity>
-        </Block> */}
-        <Block flex={false} row style={styles.tabs}>
-          {tabs.map(tab => this.renderTab(tab))}
-        </Block>
-       
+        <BottomBar  navigation={this.props.navigation} active='Marketplace'/>
       </Block>
     )
   }
@@ -282,10 +213,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: theme.sizes.base * 1.5,
   },
-  tab: {
-    marginHorizontal: theme.sizes.base,
-    paddingBottom: theme.sizes.base / 2,
-  },
   view: {
     marginHorizontal: theme.sizes.base,
     paddingBottom: theme.sizes.base / 2,
@@ -296,10 +223,6 @@ const styles = StyleSheet.create({
     // width: undefined,  
     height: 20, 
     width: 20,
-  }, 
-  active: {
-    borderBottomColor: theme.colors.secondary,
-    borderBottomWidth: 3,
   },
   items: {
     flexWrap: 'wrap',
