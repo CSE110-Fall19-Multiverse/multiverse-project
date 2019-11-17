@@ -45,6 +45,16 @@ const screens = createStackNavigator({
       alignItems: 'center',
       paddingRight: theme.sizes.base,
     },
+    headerLeft: null,
+  },
+  // Removed screen transition animation
+  transitionConfig : () => {
+    return {
+      transitionSpec: {
+        duration: 0
+      },
+      screenInterpolator: (sceneProps) => {}
+    }
   }
 });
 

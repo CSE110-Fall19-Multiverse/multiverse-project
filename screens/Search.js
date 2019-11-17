@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Input, Block, Text } from '../components';
 import { theme } from '../constants';
+import BottomBar from "./BottomBar";
 
 const { width, height } = Dimensions.get('window');
 
@@ -68,6 +69,8 @@ class Search extends Component {
           <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Social</Text>
           <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Other</Text>
         </Block>
+
+        <BottomBar navigation={this.props.navigation} active='Search'/>
       </Block>
     )
   }

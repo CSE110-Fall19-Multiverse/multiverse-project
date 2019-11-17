@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import DatePicker from 'react-native-datepicker'
+import moment from 'moment';
 
 export default class PickDate extends Component {
     constructor(props){
@@ -20,7 +21,7 @@ export default class PickDate extends Component {
                 mode="date"
                 placeholder="select date"
                 format="YYYY-MM-DD"
-                minDate="2019-10-30"
+                minDate={moment().format("YYYY-MM-DD")}
                 maxDate="2050-06-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -32,7 +33,9 @@ export default class PickDate extends Component {
                         marginLeft: 0
                     },
                     dateInput: {
-                        position: 'right',
+                        position: 'absolute',
+                        top: 4,
+                        marginRight: 0
                     }
                 }}
                 onDateChange={this.handledate}
