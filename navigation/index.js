@@ -8,13 +8,12 @@ import Welcome from '../screens/Welcome';
 import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
 import Forgot from '../screens/Forgot';
-import Marketplace from '../screens/Marketplace'; 
+import Marketplace from '../screens/Marketplace';
 import Search from '../screens/Search';
-import Add from '../screens/Add'; 
-import Chat from '../screens/Chat'; 
 import Account from '../screens/Account';
-import NewPost from '../screens/Post/NewPost';
 import ChatRoom from '../screens/ChatRoom';
+import NewPost from '../screens/Post/NewPost';
+
 import { theme } from '../constants';
 
 const screens = createStackNavigator({
@@ -23,12 +22,10 @@ const screens = createStackNavigator({
   SignUp,
   Forgot,
   Marketplace,
-  Search, 
-  Add, 
-  Chat, 
+  Search,
   Account,
   NewPost,
-  ChatRoom
+  ChatRoom,
 }, {
   defaultNavigationOptions: {
     headerStyle: {
@@ -48,7 +45,16 @@ const screens = createStackNavigator({
       alignItems: 'center',
       paddingRight: theme.sizes.base,
     },
-    //headerLeft: null,  //comment out to disable back button (but will disable it for all screens)
+    headerLeft: null,
+  },
+  // Removed screen transition animation
+  transitionConfig : () => {
+    return {
+      transitionSpec: {
+        duration: 0
+      },
+      screenInterpolator: (sceneProps) => {}
+    }
   }
 });
 
