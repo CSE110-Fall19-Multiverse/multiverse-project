@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Block } from '../components';
@@ -46,9 +46,13 @@ class BottomBarBase extends Component{
     render() {
         const tabs = ['Marketplace', 'Search', 'NewPost', 'ChatRoom', 'Account'];
         return (
-            <Block flex={false} row style={styles.tabs}>
+            <View 
+                style={[
+                    styles.tabs
+                ]}
+            >
                 {tabs.map(tab => this.renderTab(tab))}
-            </Block>
+            </View>
         );
     }
 }
@@ -58,10 +62,10 @@ export default BottomBar;
 
 const styles = StyleSheet.create({
     tabs: {
-        borderTopColor: theme.colors.black,
-        borderTopWidth: StyleSheet.hairlineWidth,
-        justifyContent: 'center',
-        paddingVertical: theme.sizes.base * 1.5,
+        flexDirection: 'row', 
+        height: theme.sizes.base * 2.5, 
+        justifyContent: 'space-around', 
+        alignItems: 'center'
     },
     tab: {
         marginHorizontal: theme.sizes.base,
