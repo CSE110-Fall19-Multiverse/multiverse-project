@@ -30,14 +30,16 @@ class BottomBarBase extends Component{
                 key={`tab-${tab}`}
                 onPress={() => this.handleTab(tab)}
                 style={[
-                    styles.tab,
-                    isActive ? styles.active : null
+                    styles.tab
                 ]}
             >
                 <Icon
                     name={m.get(tab)}
                     size={theme.sizes.base * 1.7}
-                    style={styles.icons}
+                    style={[
+                        styles.icons,
+                        isActive ? styles.active : null
+                    ]}
                 />
             </TouchableOpacity>
         );
@@ -65,17 +67,23 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         height: theme.sizes.base * 2.5, 
         justifyContent: 'space-around', 
-        alignItems: 'center'
+        alignItems: 'flex-end', 
+        borderTopColor: theme.colors.secondary, 
+        borderTopWidth: 1
     },
     tab: {
-        marginHorizontal: theme.sizes.base,
+        //alignSelf: 'stretch', 
+        //flexBasis: 20, 
+        flexGrow: 1, 
+        //marginHorizontal: theme.sizes.base,
         paddingBottom: theme.sizes.base / 2,
     },
-    active: {
+    active: { 
         borderBottomColor: theme.colors.secondary,
-        borderBottomWidth: 3,
+        borderBottomWidth: 2,
     },
     icons: {
+        alignSelf: 'center', 
         color: theme.colors.secondary,
     }
 });
