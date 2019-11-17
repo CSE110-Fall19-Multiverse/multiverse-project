@@ -20,7 +20,7 @@ class BottomBarBase extends Component{
         const { active } = this.state;
         const isActive = active === tab;
         const m = new Map();
-        m.set('Marketplace', 'building-o');
+        m.set('Marketplace', 'home');
         m.set('Search', 'search');
         m.set('NewPost', 'plus-circle');
         m.set('ChatRoom', 'comment');
@@ -37,7 +37,7 @@ class BottomBarBase extends Component{
                 <Icon
                     name={m.get(tab)}
                     size={theme.sizes.base * 1.7}
-                    style={styles.messaging}
+                    style={styles.icons}
                 />
             </TouchableOpacity>
         );
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         borderBottomColor: theme.colors.secondary,
         borderBottomWidth: 3,
     },
-    messaging: {
-        color: theme.colors.lightBlue,
+    icons: {
+        color: theme.colors.secondary,
     }
 });

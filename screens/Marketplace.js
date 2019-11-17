@@ -113,7 +113,7 @@ class MarketplaceBase extends Component {
     return (
       <Block>
         <Block flex={false} row space="between" style={styles.header}>
-          <Text h1 bold>Multiverse</Text>
+          <Text h1 bold>Marketplace</Text>
         </Block>
 
         <Block flex={false} row style={styles.tabs}>
@@ -208,10 +208,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.sizes.base * 2,
   },
   tabs: {
-    borderTopColor: theme.colors.black,
-    borderTopWidth: StyleSheet.hairlineWidth,
     justifyContent: 'center',
-    paddingVertical: theme.sizes.base * 1.5,
+    marginTop: theme.sizes.base * 1.5,
   },
   view: {
     marginHorizontal: theme.sizes.base,
@@ -237,15 +235,6 @@ const styles = StyleSheet.create({
   },
   item_avi: {
     //justifyContent: ''
-  },
-  plusCircle: {
-    color: theme.colors.lightBlue,
-  },
-  plusCircleContainer: {
-    position: 'absolute',
-    bottom: theme.sizes.base,
-    right: theme.sizes.base * 2,
-    alignItems: 'center',
   },
   textContainer: {
   }, 
