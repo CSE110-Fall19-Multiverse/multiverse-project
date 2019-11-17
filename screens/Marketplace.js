@@ -13,12 +13,7 @@ const { width } = Dimensions.get('window');
 class MarketplaceBase extends Component {
   state = {
     items: [],
-<<<<<<< HEAD
-    type: 'student', // the type of items being displayed, default student
-  }
-=======
     type: 'buying', // the type of items being displayed, default buying
->>>>>>> 475b11b5fc709e9f08d8a44b888ad962222d2ff8
 
     // clair
     buying: true,
@@ -97,7 +92,7 @@ class MarketplaceBase extends Component {
   {
       const { type } = this.state; 
       const isActive = type===view.toLowerCase(); 
-      const displayTab = view==='Buying' ? 'Tutors' : 'Students';
+      const displayTab = view==='Buying' ? 'Tutor' : 'Student';
       return (
         <TouchableOpacity
             key={`view-${view}`}
@@ -114,22 +109,14 @@ class MarketplaceBase extends Component {
 
   render() {
     const { items } = this.state;
-<<<<<<< HEAD
     const tabs = ['Marketplace', 'Search', 'Add', 'Chat', 'Account'];
-    const marketViews = ['Student', 'Tutor'];
-=======
     const marketViews = ['Buying', 'Selling'];
     const { navigation } = this.props;
->>>>>>> 475b11b5fc709e9f08d8a44b888ad962222d2ff8
 
     return (
       <Block>
         <Block flex={false} row space="between" style={styles.header}>
-<<<<<<< HEAD
           <Text h1 bold style={styles.header}>I am looking for a ...</Text>
-=======
-          <Text h1 bold>Marketplace</Text>
->>>>>>> 475b11b5fc709e9f08d8a44b888ad962222d2ff8
         </Block>
 
         <Block flex={false} row style={styles.tabs}>
