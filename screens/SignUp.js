@@ -67,7 +67,7 @@ class SignUpBase extends Component {
         })
         .then(() => {
           this.setState({ ...INITIAL_STATE });
-          navigation.navigate('Services');
+          navigation.navigate('Marketplace');
           console.log('success');
         })
         .catch(error => {
