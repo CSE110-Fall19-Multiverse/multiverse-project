@@ -82,7 +82,7 @@ class MarketplaceBase extends Component {
   handleView = view => {
     this.setState({ type : view.toLowerCase() });
     if (view === 'Selling'){
-      this.setState({buying: false}, () => {this.componentDidMount()});
+      this.setState({buying: false},() => {this.componentDidMount()});
     }else{
       this.setState({buying: true}, () => {this.componentDidMount()});
     }
@@ -92,7 +92,7 @@ class MarketplaceBase extends Component {
   {
       const { type } = this.state; 
       const isActive = type===view.toLowerCase(); 
-
+      const displayTab = view==='Buying' ? 'Tutors' : 'Students';
       return (
         <TouchableOpacity
             onPress={() => this.handleView(view)}
@@ -101,7 +101,7 @@ class MarketplaceBase extends Component {
                 isActive ? styles.active : null
             ]}
         > 
-            <Text size={14} bold={!isActive} bold secondary={isActive}>{view}</Text>
+            <Text size={14} bold={!isActive} bold secondary={isActive}>{displayTab}</Text>
         </TouchableOpacity>
       );
   }
