@@ -15,7 +15,7 @@ class AccountBase extends Component {
   }
 
   componentDidMount() {
-    this.setState({ profile: this.props.profile });
+    // this.setState({ profile: this.props.profile });
 
     // read user name from realtime db
     const uid = this.props.firebase.auth.currentUser.uid;
