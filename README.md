@@ -1,7 +1,6 @@
 # Multiverse
 ![alt text](./assets/icon.png)
-* Multiverse is a service on-demand app for UCSD people to provide and receive services from each other.
-* Service examples: rides, tutoring, mock interview practice, dining hall food or any food delivery, advice/consultation on something, workout training, hang out/accompany, etc.
+* Multiverse is a tutoring service on-demand app for UCSD people to provide and receive tutoring services from each other.
 
 ## Dev Environment SetUp 
 * Multiverse is a [React Native](https://facebook.github.io/react-native/docs/getting-started) project, using [Expo (SDK33)](https://docs.expo.io/versions/v33.0.0/).
