@@ -79,7 +79,7 @@ class ViewPostBase extends Component {
                                         underlayColor={'purple'}
                                         activeOpacity={0.69}
                                     >
-                                        <Image source={elements.items[1].avi}/>
+                                        <Image source={elements.profile.avatar}/>
                                     </TouchableHighlight>
                                     <Block style={{ margin: theme.sizes.base / 4}}>
                                         <TouchableHighlight

@@ -3,7 +3,7 @@ import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableH
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Card, Button, Block, Text } from '../components';
-import { theme, elements } from '../constants';
+import { theme } from '../constants';
 import {withFirebase} from "../components/Firebase";
 import BottomBar from "./BottomBar";
 
@@ -195,10 +195,6 @@ class MarketplaceBase extends Component {
   }
 }
 
-/*
-MarketplaceBase.defaultProps = {
-  items: elements.items,
-}*/
 
 const Marketplace = withFirebase(MarketplaceBase);
 export default Marketplace;
