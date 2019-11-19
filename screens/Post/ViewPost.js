@@ -112,7 +112,7 @@ class ViewPostBase extends Component {
                             </Block>
                             <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                                 <Block>
-                                    <Text style={{marginTop: 14, marginBottom: 14, fontSize:22, fontWeight: 800}}>{this.state.Summary}</Text>
+                                    <Text style={{marginTop: 14, marginBottom: 14, fontSize:22, fontWeight: "800"}}>{this.state.Summary}</Text>
                                 </Block>
                             </Block>
                             <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
