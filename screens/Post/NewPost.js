@@ -87,7 +87,7 @@ class NewPostBase extends Component{
                     <Block style={styles.inputs}>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>What you are looking for?</Text>
+                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>I am a</Text>
                             </Block>
                             <DropDownList parent={this}  label='serviceType' small={false} stype={true}/>
                         </Block>
