@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 
-import { Button, Block, Input, Text } from '../components';
-import { theme } from '../constants';
-import { withFirebase } from "../components/Firebase";
+import { Button, Block, Input, Text } from '../../components';
+import { theme } from '../../constants';
+import { withFirebase } from "../../components/Firebase";
 
 const VALID_EMAIL = "audimadeline@gmail.com";
 

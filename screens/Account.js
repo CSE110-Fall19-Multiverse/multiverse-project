@@ -10,19 +10,18 @@ class AccountBase extends Component {
   state = {
     editing: null,
     profile: {},
-  }
+  };
 
   componentDidMount() {
     // read user name from realtime db
     const uid = this.props.firebase.auth.currentUser.uid;
     this.props.firebase.user(uid).once('value').then(snapshot => {
-      const username = snapshot.val().username;
-      const displayname = snapshot.val().displayname; 
-      const email = snapshot.val().email; 
       const newProfile = {...this.state.profile};
-      newProfile.firstname = username;
-      newProfile.displayname = displayname;
-      newProfile.email = email; 
+      newProfile.uid = uid;
+      newProfile.firstname = snapshot.val().firstname;
+      newProfile.lastname  = snapshot.val().lastname;
+      newProfile.displayname = snapshot.val().displayname;
+      newProfile.email = snapshot.val().email;
       this.setState({profile: newProfile});
     })
   }
@@ -31,7 +30,7 @@ class AccountBase extends Component {
   updateDatabase(name, updateObject)
   {
     const uid = this.props.firebase.auth.currentUser.uid;
-    var user = this.props.firebase.user(uid);
+    const user = this.props.firebase.user(uid);
     user.update(updateObject)
     .then(function() {
       alert(`Updated ${name} to ${updateObject[name]}.`);
@@ -44,35 +43,35 @@ class AccountBase extends Component {
   updateConfirmation(name, oldValue, newValue)
   {
     Alert.alert(
-      `Confirm change of ${name}`, 
+      `Confirm change of ${name}`,
       `Are you sure you want to update your ${name}?`,
       [
         {
           text: 'Change', onPress: () => this.updateField(name, newValue)
-        }, 
+        },
         {
           text: "Don't change", onPress: () =>  this.restoreField(name, oldValue)
         }
       ],
       { cancelable: true }
     )
-    
-    this.toggleEdit(name);  
+
+    this.toggleEdit(name);
   }
 
   updateField(name, newValue)
   {
     var updateObj = {}
-    updateObj[name] = newValue; 
+    updateObj[name] = newValue;
     this.updateDatabase(name, updateObj);
   }
 
   restoreField(name, oldValue)
   {
-    const { profile } = this.state; 
-    profile[name] = oldValue; 
+    const { profile } = this.state;
+    profile[name] = oldValue;
 
-    this.setState({profile}); 
+    this.setState({profile});
   }
 
   handleEdit(name, text) {
@@ -169,16 +168,25 @@ class AccountBase extends Component {
           <Divider margin={[theme.sizes.base, theme.sizes.base * 2]} />
 
           <Block margin={[10, 0]} style={styles.history}>
-            <Text gray style={{ marginBottom: 10 }}>Transaction History</Text>
+            <Text darkBlue bold style={{ marginBottom: 10 }}
+                  onPress={() => this.props.navigation.navigate('PostHistory', {uid : profile['uid'], isDraft : false})}>
+              My History Posts
+            </Text>
+          </Block>
+          <Block margin={[10, 0]} style={styles.history}>
+            <Text darkBlue bold style={{ marginBottom: 10 }}
+                  onPress={() => this.props.navigation.navigate('Drafts', {uid : profile['uid'], isDraft : true})}>
+              My Drafts
+            </Text>
           </Block>
           <Block margin={[10, 0]} style={styles.messaging}>
-            <Text gray style={{ marginBottom: 10 }}>Messaging</Text>
+              <Text darkBlue bold style={{ marginBottom: 10 }} onPress={() => this.props.navigation.navigate('ChatRoom')}>
+                My Messages
+              </Text>
           </Block>
           <Block middle flex={0.6} margin={[0, theme.sizes.padding * 2]}>
-            <Button color={theme.colors.darkRed} onPress={() => this.props.navigation.navigate('Login')}>
-              <Text bold white center>
-                Log Out
-              </Text>
+            <Button shadow onPress={() => this.props.navigation.navigate('Welcome')}>
+              <Text center semibold>Log Out</Text>
             </Button>
           </Block>
           <Divider />
@@ -193,10 +201,9 @@ class AccountBase extends Component {
 
 AccountBase.defaultProps = {
   profile: elements.profile,
-}
+};
 
 const Account = withFirebase(AccountBase);
-
 export default Account;
 
 const styles = StyleSheet.create({
