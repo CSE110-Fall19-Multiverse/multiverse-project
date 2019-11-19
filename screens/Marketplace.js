@@ -44,6 +44,7 @@ class MarketplaceBase extends Component {
           try{
             user_res['username'] = user.email;
             user_res['password'] = user.username;
+            user_res['displayname'] = user.displayname; 
           }catch (e) {}
 
           // get post info
@@ -149,7 +150,7 @@ class MarketplaceBase extends Component {
                               activeOpacity={0.5}
                               // style={styles.textContainer}
                           >
-                            <Text bold caption>Author: {item.user_info.username}</Text>
+                            <Text bold caption>Author: {item.user_info.displayname}</Text>
                           </TouchableHighlight>
                           <Text caption gray>{item.service_date}</Text>
                         </Block>

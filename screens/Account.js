@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, StyleSheet, ScrollView, TextInput } from 'react-native'
+import { Alert, Image, StyleSheet, ScrollView, TextInput } from 'react-native'
 //import Slider from 'react-native-slider';
 import { withFirebase } from "../components/Firebase";
 
@@ -15,17 +15,91 @@ class AccountBase extends Component {
   }
 
   componentDidMount() {
-    this.setState({ profile: this.props.profile });
+    // this.setState({ profile: this.props.profile });
 
     // read user name from realtime db
     const uid = this.props.firebase.auth.currentUser.uid;
     this.props.firebase.user(uid).once('value').then(snapshot => {
       const username = snapshot.val().username;
+      const displayname = snapshot.val().displayname; 
+      const email = snapshot.val().email; 
       const newProfile = {...this.state.profile};
       newProfile.firstname = username;
-      newProfile.displayname = username;
+      newProfile.displayname = displayname;
+      newProfile.email = email; 
       this.setState({profile: newProfile});
     })
+  }
+
+  // in the real time database
+  updateDatabase(name, updateObject)
+  {
+    const uid = this.props.firebase.auth.currentUser.uid;
+    var user = this.props.firebase.user(uid);
+    user.update(updateObject)
+    .then(function() {
+      alert(`Updated ${name} to ${updateObject[name]}.`);
+    })
+    .catch(function(error) {
+      alert(`Failed to update ${name}.`);
+    });
+  }
+
+  // in the auth system, for displayName and/or photoURL
+  updateProfile(updateObject)
+  {
+    var user = this.firebase.auth.currentUser; 
+    user.updateProfile(updateObject)
+    .then(function() {
+      alert(`Successfully updated!`)
+    }).catch(function(error) {
+      alert(`Failed to update.`)
+    });
+  }
+
+  updateConfirmation(name, oldValue, newValue)
+  {
+    Alert.alert(
+      `Confirm change of ${name}`, 
+      `Are you sure you want to update your ${name}?`,
+      [
+        {
+          text: 'Change', onPress: () => this.updateField(name, newValue)
+        }, 
+        {
+          text: "Don't change", onPress: () =>  this.restoreField(name, oldValue)
+        }
+      ],
+      { cancelable: true }
+    )
+    
+    this.toggleEdit(name);  
+  }
+
+  updateField(name, newValue)
+  {
+    var updateObj = {}
+    updateObj[name] = newValue; 
+    this.updateDatabase(name, updateObj);
+  }
+
+  restoreField(name, oldValue)
+  {
+    const { profile } = this.state; 
+    profile[name] = oldValue; 
+
+    this.setState({profile}); 
+  }
+
+  updateEmail(newEmail)
+  {
+    this.updateDatabase('email', {email: newEmail}); 
+    this.props.firebase.auth.currentUser.updateEmail(newEmail).then(function() {
+      alert(`Successfully updated Profile.`)
+    }).catch(function(error) {
+      alert(`Failed to update Profile.`)
+    });
+    
   }
 
   handleEdit(name, text) {
@@ -77,7 +151,7 @@ class AccountBase extends Component {
                 <Text gray style={{ marginBottom: 10 }}>First Name</Text>
                 {this.renderEdit('firstname')}
               </Block>
-              <Text medium secondary onPress={() => this.toggleEdit('firstname')}>
+              <Text medium secondary onPress={() => (editing === 'firstname' ? this.updateConfirmation('firstname', profile['firstname'], profile['firstname']) : this.toggleEdit('firstname'))}>
                 {editing === 'firstname' ? 'Save' : 'Edit'}
               </Text>
             </Block>
@@ -86,7 +160,7 @@ class AccountBase extends Component {
                 <Text gray style={{ marginBottom: 10 }}>Last Name</Text>
                 {this.renderEdit('lastname')}
               </Block>
-              <Text medium secondary onPress={() => this.toggleEdit('lastname')}>
+              <Text medium secondary onPress={() =>(editing === 'lastname' ? this.updateConfirmation('lastname', profile['lastname'], profile['lastname']) :  this.toggleEdit('lastname'))}>
                 {editing === 'lastname' ? 'Save' : 'Edit'}
               </Text>
             </Block>
@@ -95,15 +169,18 @@ class AccountBase extends Component {
                 <Text gray style={{ marginBottom: 10 }}>Display Name</Text>
                 {this.renderEdit('displayname')}
               </Block>
-              <Text medium secondary onPress={() => this.toggleEdit('displayname')}>
+              <Text medium secondary onPress={() => (editing === 'displayname' ? this.updateConfirmation('displayname', profile['displayname'], profile['displayname']) : this.toggleEdit('displayname'))}>
                 {editing === 'displayname' ? 'Save' : 'Edit'}
               </Text>
             </Block>
             <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
               <Block>
                 <Text gray style={{ marginBottom: 10 }}>Email</Text>
-                <Text bold>{profile.email}</Text>
+                {this.renderEdit('email')}
               </Block>
+              <Text medium secondary onPress={() => (editing === 'email' ? this.updateConfirmation('email', profile['email'], profile['email']) : this.toggleEdit('email'))}>
+                {editing === 'email' ? 'Save' : 'Edit'}
+              </Text>
             </Block>
             <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
               <Block>
