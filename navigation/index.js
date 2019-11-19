@@ -13,6 +13,7 @@ import Search from '../screens/Search';
 import Account from '../screens/Account';
 import ChatRoom from '../screens/ChatRoom';
 import NewPost from '../screens/Post/NewPost';
+import ViewPost from '../screens/Post/ViewPost';
 
 import { theme } from '../constants';
 
@@ -26,6 +27,7 @@ const screens = createStackNavigator({
   Account,
   NewPost,
   ChatRoom,
+  ViewPost,
 }, {
   defaultNavigationOptions: {
     headerStyle: {

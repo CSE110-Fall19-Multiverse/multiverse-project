@@ -45,8 +45,6 @@ class MarketplaceBase extends Component {
             user_res['username'] = user.email;
             user_res['password'] = user.username;
           }catch (e) {}
-          console.log('snap username: '+user_res['username']);
-          console.log('snap password: '+user_res['password']);
 
           // get post info
           res['id'] = childSnapshot.key;
@@ -62,14 +60,12 @@ class MarketplaceBase extends Component {
           let temp = that.state.items;
           temp.push(res);
           that.setState({items: temp});
-          console.log(that.state.items);
         });
       });
       let temp = that.state.items;
       temp.reverse();
       that.setState({items: temp});
     });
-    console.log('finish display');
   }
 
   refresh = () => {
@@ -134,7 +130,7 @@ class MarketplaceBase extends Component {
             {items.map(item => (
                 <TouchableOpacity
                     key={item.id}
-                    onPress={() => alert('Hi')}
+                    onPress={() => navigation.navigate('ViewPost', {pid: item.id, service_type: this.state.type})}
                 >
                   <Card shadow style={styles.item}>
                     <Block flex={false} row>
