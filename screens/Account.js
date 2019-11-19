@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { Alert, Image, StyleSheet, ScrollView, TextInput } from 'react-native'
-//import Slider from 'react-native-slider';
+import {Alert, Image, StyleSheet, ScrollView, TextInput, ActivityIndicator} from 'react-native'
 import { withFirebase } from "../components/Firebase";
 
 import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
-import {profile} from "../constants/elements";
 import BottomBar from "./BottomBar";
 
 class AccountBase extends Component {
@@ -15,8 +13,6 @@ class AccountBase extends Component {
   }
 
   componentDidMount() {
-    // this.setState({ profile: this.props.profile });
-
     // read user name from realtime db
     const uid = this.props.firebase.auth.currentUser.uid;
     this.props.firebase.user(uid).once('value').then(snapshot => {
@@ -42,18 +38,6 @@ class AccountBase extends Component {
     })
     .catch(function(error) {
       alert(`Failed to update ${name}.`);
-    });
-  }
-
-  // in the auth system, for displayName and/or photoURL
-  updateProfile(updateObject)
-  {
-    var user = this.firebase.auth.currentUser; 
-    user.updateProfile(updateObject)
-    .then(function() {
-      alert(`Successfully updated!`)
-    }).catch(function(error) {
-      alert(`Failed to update.`)
     });
   }
 
@@ -89,17 +73,6 @@ class AccountBase extends Component {
     profile[name] = oldValue; 
 
     this.setState({profile}); 
-  }
-
-  updateEmail(newEmail)
-  {
-    this.updateDatabase('email', {email: newEmail}); 
-    this.props.firebase.auth.currentUser.updateEmail(newEmail).then(function() {
-      alert(`Successfully updated Profile.`)
-    }).catch(function(error) {
-      alert(`Failed to update Profile.`)
-    });
-    
   }
 
   handleEdit(name, text) {
@@ -201,7 +174,13 @@ class AccountBase extends Component {
           <Block margin={[10, 0]} style={styles.messaging}>
             <Text gray style={{ marginBottom: 10 }}>Messaging</Text>
           </Block>
-
+          <Block middle flex={0.6} margin={[0, theme.sizes.padding * 2]}>
+            <Button color={theme.colors.darkRed} onPress={() => this.props.navigation.navigate('Login')}>
+              <Text bold white center>
+                Log Out
+              </Text>
+            </Button>
+          </Block>
           <Divider />
 
         </ScrollView>
@@ -243,4 +222,4 @@ const styles = StyleSheet.create({
     marginTop: theme.sizes.base * 0.7,
     paddingHorizontal: theme.sizes.base * 2,
   },
-})
+});
