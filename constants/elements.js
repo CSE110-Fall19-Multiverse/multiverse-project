@@ -30,16 +30,6 @@ const items = [
     proposed_price: 50, 
   },
   {
-    id: 4,
-    author: 'Jessica',
-    date: 'Oct 25, 2019',
-    avi: require('../assets/images/jessica.png'),
-    category: 'Career',
-    type: 'tutor',
-    content: 'CES is providing mock interview sessions aiming for the Big Four, 10/1 11am ~ 3pm, at Geisel Library 7th floor',
-    proposed_price: 20, 
-  },
-  {
     id: 5,
     author: 'Cheng',
     date: 'Oct 25, 2019',
@@ -88,16 +78,6 @@ const items = [
     type: 'student',
     content: 'Hello everyone, I am looking for a personal trainer every Sunday at 5pm. Each workout session willing to pay $50.',
     proposed_price: 50, 
-  },
-  {
-    id: 10,
-    author: 'Jessica',
-    date: 'Oct 25, 2019',
-    avi: require('../assets/images/jessica.png'),
-    category: 'Career',
-    type: 'tutor',
-    content: 'CES is providing mock interview sessions aiming for the Big Four at this 10/1 11am ~ 3pm at Geisel Library 7th floor',
-    proposed_price: 20, 
   },
   {
     id: 11,

@@ -84,7 +84,7 @@ class Welcome extends Component {
           <Image
             source={item.source}
             resizeMode="contain"
-            style={{ width, height: height / 5.5, overflow: 'visible' }}
+            style={{ width, height: height /3, overflow: 'visible' }}
           />
         )}
         onScroll={
@@ -134,7 +134,7 @@ class Welcome extends Component {
             <Text h1 lightBlue> Faster.</Text>
           </Text>
           <Text gray style={{ marginTop: theme.sizes.padding}}>
-            Service on-demand @ UCSD
+            Tutoring Service on-demand @ UCSD
           </Text>
           <Text gray style={{ marginTop: theme.sizes.padding / 4}}>
             A way to empower you and your community.
