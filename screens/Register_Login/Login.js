@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native'
 
-import { Button, Block, Input, Text } from '../components';
-import { theme } from '../constants';
-import { withFirebase } from "../components/Firebase";
+import { Button, Block, Input, Text } from '../../components';
+import { theme } from '../../constants';
+import { withFirebase } from "../../components/Firebase";
 
 const VALID_EMAIL = "cutefairy@aufish.com";
 const VALID_PASSWORD = "cfaufish";
@@ -53,7 +53,7 @@ class LoginBase extends Component {
     return (
       <KeyboardAvoidingView style={styles.login} behavior="padding">
         <Block padding={[0, theme.sizes.base * 2]}>
-          <Text h1 bold>Login</Text>
+          <Text h1 bold style={{textAlign: 'center', verticalAlign: 'center'}}>Login</Text>
           <Block middle>
             <Input
               label="Email"

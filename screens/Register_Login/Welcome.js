@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Animated, Dimensions, Image, FlatList, Modal, StyleSheet, ScrollView } from 'react-native';
 
-import { Button, Block, Text } from '../components';
-import { theme } from '../constants';
+import { Button, Block, Text } from '../../components';
+import { theme } from '../../constants';
 
 const { width, height } = Dimensions.get('window');
 
@@ -163,9 +163,9 @@ class Welcome extends Component {
 
 Welcome.defaultProps = {
   illustrations: [
-    { id: 1, source: require('../assets/images/illustration_1.png') },
-    { id: 2, source: require('../assets/images/illustration_2.png') },
-    { id: 3, source: require('../assets/images/illustration_3.png') },
+    { id: 1, source: require('../../assets/images/illustration_1.png') },
+    { id: 2, source: require('../../assets/images/illustration_2.png') },
+    { id: 3, source: require('../../assets/images/illustration_3.png') },
   ],
 };
 export default Welcome;

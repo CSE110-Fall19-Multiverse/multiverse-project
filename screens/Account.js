@@ -1,32 +1,27 @@
 import React, { Component } from 'react'
-import { Alert, Image, StyleSheet, ScrollView, TextInput } from 'react-native'
-//import Slider from 'react-native-slider';
+import {Alert, Image, StyleSheet, ScrollView, TextInput, ActivityIndicator} from 'react-native'
 import { withFirebase } from "../components/Firebase";
 
 import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
-import {profile} from "../constants/elements";
 import BottomBar from "./BottomBar";
 
 class AccountBase extends Component {
   state = {
     editing: null,
     profile: {},
-  }
+  };
 
   componentDidMount() {
-    // this.setState({ profile: this.props.profile });
-
     // read user name from realtime db
     const uid = this.props.firebase.auth.currentUser.uid;
     this.props.firebase.user(uid).once('value').then(snapshot => {
-      const username = snapshot.val().username;
-      const displayname = snapshot.val().displayname; 
-      const email = snapshot.val().email; 
       const newProfile = {...this.state.profile};
-      newProfile.firstname = username;
-      newProfile.displayname = displayname;
-      newProfile.email = email; 
+      newProfile.uid = uid;
+      newProfile.firstname = snapshot.val().firstname;
+      newProfile.lastname  = snapshot.val().lastname;
+      newProfile.displayname = snapshot.val().displayname;
+      newProfile.email = snapshot.val().email;
       this.setState({profile: newProfile});
     })
   }
@@ -35,7 +30,7 @@ class AccountBase extends Component {
   updateDatabase(name, updateObject)
   {
     const uid = this.props.firebase.auth.currentUser.uid;
-    var user = this.props.firebase.user(uid);
+    const user = this.props.firebase.user(uid);
     user.update(updateObject)
     .then(function() {
       alert(`Updated ${name} to ${updateObject[name]}.`);
@@ -45,61 +40,38 @@ class AccountBase extends Component {
     });
   }
 
-  // in the auth system, for displayName and/or photoURL
-  updateProfile(updateObject)
-  {
-    var user = this.firebase.auth.currentUser; 
-    user.updateProfile(updateObject)
-    .then(function() {
-      alert(`Successfully updated!`)
-    }).catch(function(error) {
-      alert(`Failed to update.`)
-    });
-  }
-
   updateConfirmation(name, oldValue, newValue)
   {
     Alert.alert(
-      `Confirm change of ${name}`, 
+      `Confirm change of ${name}`,
       `Are you sure you want to update your ${name}?`,
       [
         {
           text: 'Change', onPress: () => this.updateField(name, newValue)
-        }, 
+        },
         {
           text: "Don't change", onPress: () =>  this.restoreField(name, oldValue)
         }
       ],
       { cancelable: true }
     )
-    
-    this.toggleEdit(name);  
+
+    this.toggleEdit(name);
   }
 
   updateField(name, newValue)
   {
     var updateObj = {}
-    updateObj[name] = newValue; 
+    updateObj[name] = newValue;
     this.updateDatabase(name, updateObj);
   }
 
   restoreField(name, oldValue)
   {
-    const { profile } = this.state; 
-    profile[name] = oldValue; 
+    const { profile } = this.state;
+    profile[name] = oldValue;
 
-    this.setState({profile}); 
-  }
-
-  updateEmail(newEmail)
-  {
-    this.updateDatabase('email', {email: newEmail}); 
-    this.props.firebase.auth.currentUser.updateEmail(newEmail).then(function() {
-      alert(`Successfully updated Profile.`)
-    }).catch(function(error) {
-      alert(`Failed to update Profile.`)
-    });
-    
+    this.setState({profile});
   }
 
   handleEdit(name, text) {
@@ -196,12 +168,27 @@ class AccountBase extends Component {
           <Divider margin={[theme.sizes.base, theme.sizes.base * 2]} />
 
           <Block margin={[10, 0]} style={styles.history}>
-            <Text gray style={{ marginBottom: 10 }}>Transaction History</Text>
+            <Text darkBlue bold style={{ marginBottom: 10 }}
+                  onPress={() => this.props.navigation.navigate('PostHistory', {uid : profile['uid'], isDraft : false})}>
+              My History Posts
+            </Text>
+          </Block>
+          <Block margin={[10, 0]} style={styles.history}>
+            <Text darkBlue bold style={{ marginBottom: 10 }}
+                  onPress={() => this.props.navigation.navigate('Drafts', {uid : profile['uid'], isDraft : true})}>
+              My Drafts
+            </Text>
           </Block>
           <Block margin={[10, 0]} style={styles.messaging}>
-            <Text gray style={{ marginBottom: 10 }}>Messaging</Text>
+              <Text darkBlue bold style={{ marginBottom: 10 }} onPress={() => this.props.navigation.navigate('ChatRoom')}>
+                My Messages
+              </Text>
           </Block>
-
+          <Block middle flex={0.6} margin={[0, theme.sizes.padding * 2]}>
+            <Button shadow onPress={() => this.props.navigation.navigate('Welcome')}>
+              <Text center semibold>Log Out</Text>
+            </Button>
+          </Block>
           <Divider />
 
         </ScrollView>
@@ -214,10 +201,9 @@ class AccountBase extends Component {
 
 AccountBase.defaultProps = {
   profile: elements.profile,
-}
+};
 
 const Account = withFirebase(AccountBase);
-
 export default Account;
 
 const styles = StyleSheet.create({
@@ -243,4 +229,4 @@ const styles = StyleSheet.create({
     marginTop: theme.sizes.base * 0.7,
     paddingHorizontal: theme.sizes.base * 2,
   },
-})
+});

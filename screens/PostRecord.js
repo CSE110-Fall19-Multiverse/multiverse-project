@@ -10,26 +10,36 @@ import BottomBar from "./BottomBar";
 
 const { width } = Dimensions.get('window');
 
-class MarketplaceBase extends Component {
+class PostRecordBase extends Component {
   state = {
     items: [],
     type: 'buying', // the type of items being displayed, default buying
 
-    // clair
     buying: true,
     refreshing: false,
     first: true,
+
+    isDraft: false,
+    pageName: 'PostRecord'
   };
 
   componentDidMount(){
     this.setState({items: []});
     let ref;
-    if(this.state.buying){
-      ref = this.props.firebase.buying_posts();
-    }else{
-      ref = this.props.firebase.selling_posts();
+    if (this.props.navigation.getParam('isDraft')){
+      if(this.state.buying){
+        ref = this.props.firebase.buying_post_drafts();
+      }else{
+        ref = this.props.firebase.selling_post_drafts();
+      }
+    } else{
+      if(this.state.buying){
+        ref = this.props.firebase.buying_posts();
+      }else{
+        ref = this.props.firebase.selling_posts();
+      }
     }
-    let that = this;
+    let thisComponent = this;
     // load posts from firebase once
     ref.once("value", function(snapshot) {
       snapshot.forEach(function (childSnapshot) {
@@ -38,14 +48,9 @@ class MarketplaceBase extends Component {
         let value = childSnapshot.val();
 
         // get user info
-        const user_ref = that.props.firebase.user(value.uid);
+        const user_ref = thisComponent.props.firebase.user(value.uid);
         user_ref.once('value', function(snap){
           const user = snap.val();
-          try{
-            user_res['username'] = user.email;
-            user_res['displayname'] = user.displayname;
-            user_res['uid'] = value.uid;
-          }catch (e) {}
 
           // get post info
           res['id'] = childSnapshot.key;
@@ -56,17 +61,26 @@ class MarketplaceBase extends Component {
           res['service_type'] = value.service_type;
           res['service_date'] = value.service_date;
           res['service_price'] = value.service_price;
-          res['user_info'] = user_res;
 
-          let temp = that.state.items;
-          temp.push(res);
-          that.setState({items: temp});
-          console.log(that.state.items);
+          let temp = thisComponent.state.items;
+          try{
+            // Update only if uid is the same as current one
+            user_res['username'] = user.email;
+            user_res['displayname'] = user.displayname;
+            user_res['uid'] = value.uid;
+            res['user_info'] = user_res;
+
+            if (user_res['uid'] === thisComponent.props.navigation.getParam('uid')) {
+              temp.push(res);
+            }
+          }catch (e) {}
+
+          thisComponent.setState({items: temp});
         });
       });
-      let temp = that.state.items;
+      let temp = thisComponent.state.items;
       temp.reverse();
-      that.setState({items: temp});
+      thisComponent.setState({items: temp});
     });
     console.log('finish display');
   }
@@ -89,18 +103,18 @@ class MarketplaceBase extends Component {
 
   renderView(view)
   {
-      const { type } = this.state; 
-      const isActive = type===view.toLowerCase(); 
-      const displayTab = view==='Selling' ? 'Tutor' : 'Student';
+      const { type } = this.state;
+      const isActive = type===view.toLowerCase();
+      const displayTab = view==='Selling' ? 'As a Tutor' : 'As a Student';
       return (
         <TouchableOpacity
             key={`view-${view}`}
             onPress={() => this.handleView(view)}
             style={[
-                styles.view, 
+                styles.view,
                 isActive ? styles.active : null
             ]}
-        > 
+        >
             <Text size={14} bold={!isActive} bold secondary={isActive}>{displayTab}</Text>
         </TouchableOpacity>
       );
@@ -108,15 +122,10 @@ class MarketplaceBase extends Component {
 
   render() {
     const { items } = this.state;
-    const tabs = ['Marketplace', 'Search', 'Add', 'Chat', 'Account'];
-    const marketViews = ['Buying', 'Selling'];
     const { navigation } = this.props;
+    const marketViews = ['Buying', 'Selling'];
     return (
       <Block>
-        <Block flex={false} row space="between">
-          <Text h1 bold style={styles.header}>I am a ...</Text>
-        </Block>
-
         <Block flex={false} row style={styles.tabs}>
           {marketViews.map(view => this.renderView(view))}
         </Block>
@@ -191,19 +200,16 @@ class MarketplaceBase extends Component {
             ))}
           </Block>
         </ScrollView>
-        <BottomBar  navigation={this.props.navigation} active='Marketplace'/>
+        <BottomBar  navigation={this.props.navigation} active={ this.state.pageName }/>
       </Block>
     )
   }
 }
 
-/*
-MarketplaceBase.defaultProps = {
-  items: elements.items,
-}*/
+const PostHistory = withFirebase(PostRecordBase);
+const Drafts = withFirebase(PostRecordBase);
 
-const Marketplace = withFirebase(MarketplaceBase);
-export default Marketplace;
+export {PostHistory, Drafts};
 
 const styles = StyleSheet.create({
   header: {
