@@ -25,9 +25,9 @@ class MarketplaceBase extends Component {
     this.setState({items: []});
     let ref;
     if(this.state.buying){
-      ref = this.props.firebase.selling_posts();
-    }else{
       ref = this.props.firebase.buying_posts();
+    }else{
+      ref = this.props.firebase.selling_posts();
     }
     let that = this;
     // load posts from firebase once
@@ -46,8 +46,6 @@ class MarketplaceBase extends Component {
             user_res['displayname'] = user.displayname;
             user_res['uid'] = value.uid;
           }catch (e) {}
-          console.log('snap username: '+user_res['username']);
-          console.log('snap password: '+user_res['password']);
 
           // get post info
           res['id'] = childSnapshot.key;
@@ -63,14 +61,12 @@ class MarketplaceBase extends Component {
           let temp = that.state.items;
           temp.push(res);
           that.setState({items: temp});
-          console.log(that.state.items);
         });
       });
       let temp = that.state.items;
       temp.reverse();
       that.setState({items: temp});
     });
-    console.log('finish display');
   }
 
   refresh = () => {
@@ -115,7 +111,7 @@ class MarketplaceBase extends Component {
     const { navigation } = this.props;
     return (
       <Block>
-        <Block flex={false} row space="between">
+        <Block flex={false} row space="between" style={styles.header}>
           <Text h1 bold style={styles.header}>I am a ...</Text>
         </Block>
 
@@ -252,5 +248,4 @@ const styles = StyleSheet.create({
     bottom: theme.sizes.base * 2, 
     right: theme.sizes.base * 2,
   }
-
-})
+});

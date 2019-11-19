@@ -21,18 +21,10 @@ class SignUpBase extends Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
+    this.setState({ loading: false });
 
     this.props.firebase.users().on('value', snapshot => {
       const usersObject = snapshot.val();
-
-      // we can fetch user list like this
-      /*
-      const userList = Object.keys(usersObject).map(key => ({
-        ...usersObject[key],
-        uid: key,
-      }));
-       */
     })
   }
 
@@ -49,53 +41,34 @@ class SignUpBase extends Component {
     this.setState({ loading: true });
 
     // check with backend API or with some static data
-    if (!email) errors.push('email');
-    if (!username) errors.push('username');
-    if (!password) errors.push('password');
+    if (!email || !username || !password)    {
+      Alert.alert('Sorry', 'Information Uncompleted...');
+    } else {
+      const displayname = username;
 
-    const displayname = username; 
-
-    this.props.firebase
-        .doCreateUserWithEmailAndPassword(email, password)
-        .then( authUser => {
-          // Create a user in realtime database
-
-          return this.props.firebase
-              .user(authUser.user.uid)
-              .set({
-                username,
-                email,
-                displayname, 
-              });
-        })
-        .then(() => {
-          this.setState({ ...INITIAL_STATE });
-          navigation.navigate('Marketplace');
-          console.log('success');
-        })
-        .catch(error => {
-          errors.push(error);
-          Alert.alert('Error!', error.toString());
-        });
-
-    /*
-    this.setState({ errors, loading: false });
-
-    if (!errors.length) {
-      Alert.alert(
-        'Success!',
-        'Your account has been created',
-        [
-          {
-            text: 'Continue', onPress: () => {
-              navigation.navigate('Services')
-            }
-          }
-        ],
-        { cancelable: false }
-      )
+      this.props.firebase
+          .doCreateUserWithEmailAndPassword(email, password)
+          .then(authUser => {
+            return this.props.firebase
+                .user(authUser.user.uid)
+                .set({
+                  username,
+                  email,
+                  displayname,
+                });
+          })
+          .then(() => {
+            this.setState({...INITIAL_STATE});
+            navigation.navigate('Marketplace');
+            console.log('success');
+          })
+          .catch(error => {
+            errors.push(error);
+            Alert.alert('Error!', error.toString());
+          });
     }
-     */
+
+    this.setState({ loading: false });
   }
 
   render() {

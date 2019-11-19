@@ -31,12 +31,12 @@ const screens = createStackNavigator({
   ChatRoom,
   OtherAccount,
   PostHistory,
-  Drafts
+  Drafts,
   ViewPost,
 }, {
   defaultNavigationOptions: {
     headerStyle: {
-      height: theme.sizes.base * 1,
+      height: theme.sizes.base,
       backgroundColor: theme.colors.white, // or 'white
       borderBottomColor: "transparent",
       elevation: 0, // for android
