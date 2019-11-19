@@ -53,7 +53,7 @@ class LoginBase extends Component {
     return (
       <KeyboardAvoidingView style={styles.login} behavior="padding">
         <Block padding={[0, theme.sizes.base * 2]}>
-          <Text h1 bold style={{textAlign: 'center', verticalAlign: 'center'}}>Login</Text>
+          <Text h1 bold style={{textAlign: 'center'}}>Login</Text>
           <Block middle>
             <Input
               label="Email"
@@ -75,6 +75,12 @@ class LoginBase extends Component {
                 <ActivityIndicator size="small" color="white" /> : 
                 <Text bold white center>Login</Text>
               }
+            </Button>
+
+            <Button onPress={() => navigation.navigate('SignUp')}>
+              <Text gray caption center style={{ textDecorationLine: 'underline' }}>
+                Back to Sign Up
+              </Text>
             </Button>
 
             <Button onPress={() => navigation.navigate('Forgot')}>

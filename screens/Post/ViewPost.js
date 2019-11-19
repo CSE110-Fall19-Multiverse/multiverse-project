@@ -39,7 +39,7 @@ class ViewPostBase extends Component {
 
     process_info(){
         const that = this;
-        const type = this.state.actor === 'buying' ? 'selling_posts' : 'buying_posts';
+        const type = this.state.actor === 'buying' ? 'buying_posts' : 'selling_posts';
         console.log('actor: '+type);
         console.log('pid: '+this.state.pid);
         const ref = this.props.firebase.post(type, this.state.pid);
@@ -135,9 +135,7 @@ class ViewPostBase extends Component {
                         <Block padding={[0, theme.sizes.base * 2]}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                                 <TouchableOpacity
-                                    style={{width: 10}}
                                     onPress={() => alert('Comment')}
-                                    style={styles.messagingContainer}
                                 >
                                     <Icon
                                         name={'comment'}
@@ -146,9 +144,7 @@ class ViewPostBase extends Component {
                                     />
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    //onPress={() => alert('Send message')}
                                     onPress={() => alert('Add to favorite')}
-                                    style={styles.messagingContainer}
                                 >
                                     <Icon
                                         name={'star'}
@@ -157,9 +153,7 @@ class ViewPostBase extends Component {
                                     />
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    //onPress={() => alert('Send message')}
-                                    onPress={() => alert('Message the poster')}
-                                    style={styles.messagingContainer}
+                                    onPress={() => alert('Message the post maker')}
                                 >
                                     <Icon
                                         name={'user'}
@@ -176,7 +170,7 @@ class ViewPostBase extends Component {
                     </ScrollView>
                 </KeyboardAvoidingView>
 
-                <BottomBar navigation={this.props.navigation} active='NewPost'/>
+                <BottomBar navigation={this.props.navigation} active='ViewPost'/>
             </Block>
         )
     }
