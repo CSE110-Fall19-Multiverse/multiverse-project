@@ -21,6 +21,7 @@ class BottomBarBase extends Component{
         const isActive = active === tab;
         const m = new Map();
         const screenWidth = Dimensions.get('window').width;
+        const screenHeight = Dimensions.get('window').height;
         m.set('Marketplace', 'home');
         m.set('Search', 'search');
         m.set('NewPost', 'plus-circle');
@@ -62,12 +63,13 @@ class BottomBarBase extends Component{
 
 const BottomBar = withFirebase(BottomBarBase);
 const WIDTH_DIVISOR = 13;
+const HEIGHT_DIVISOR = 13; 
 export default BottomBar;
 
 const styles = StyleSheet.create({
     tabs: {
         flexDirection: 'row', 
-        height: Dimensions.get('window').width/WIDTH_DIVISOR + 20, 
+        height: Math.max(Dimensions.get('window').width/WIDTH_DIVISOR + 20, Dimensions.get('window').height/HEIGHT_DIVISOR), 
         justifyContent: 'space-around', 
         alignItems: 'flex-end', 
         borderTopColor: theme.colors.secondary, 
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
     tab: {
         flexGrow: 1, 
         //marginHorizontal: theme.sizes.base,
-        paddingBottom: theme.sizes.base / 2,
+        paddingBottom: theme.sizes.base/1.25,
     },
     active: { 
         borderBottomColor: theme.colors.secondary,
