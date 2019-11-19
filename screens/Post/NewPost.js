@@ -60,8 +60,18 @@ class NewPostBase extends Component{
                 'service_date': this.state.serviceDate,
                 'service_price': this.state.servicePrice,
                 'post_status': draft ? 'drafted' : 'posted',
+                'post_date': this.ShowCurrentDate(),
                 'uid': user.uid,
             });
+        console.log('today is ' + this.ShowCurrentDate())
+    }
+
+    ShowCurrentDate(){
+        const date = new Date().getDate();
+        const month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+
+        return year + '-' + month + '-' + date
     }
 
     upload(navigation){
