@@ -93,7 +93,7 @@ class MarketplaceBase extends Component {
   {
       const { type } = this.state; 
       const isActive = type===view.toLowerCase(); 
-      const displayTab = view==='Buying' ? 'Tutor' : 'Student';
+      const displayTab = view!='Buying' ? 'Tutor' : 'Student';
       return (
         <TouchableOpacity
             key={`view-${view}`}
@@ -117,7 +117,7 @@ class MarketplaceBase extends Component {
     return (
       <Block>
         <Block flex={false} row space="between" style={styles.header}>
-          <Text h1 bold style={styles.header}>I am looking for a ...</Text>
+          <Text h1 bold style={styles.header}>I am a ...</Text>
         </Block>
 
         <Block flex={false} row style={styles.tabs}>
@@ -211,6 +211,7 @@ export default Marketplace;
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.sizes.base * 2,
+    justifyContent: 'center', 
     textAlign: 'center',
   },
   tabs: {
