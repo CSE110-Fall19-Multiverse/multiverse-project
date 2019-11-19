@@ -46,6 +46,9 @@ class Firebase {
     // reference to a user by uid
     user = uid => this.db.ref(`users/${uid}`);
 
+    // reference to a post by uid
+    post = (type, pid) => this.db.ref(`posts/posted/${type}/${pid}`);
+
     // reference to all users
     users = () => this.db.ref('users');
 

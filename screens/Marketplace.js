@@ -25,9 +25,9 @@ class MarketplaceBase extends Component {
     this.setState({items: []});
     let ref;
     if(this.state.buying){
-      ref = this.props.firebase.buying_posts();
-    }else{
       ref = this.props.firebase.selling_posts();
+    }else{
+      ref = this.props.firebase.buying_posts();
     }
     let that = this;
     // load posts from firebase once
@@ -46,6 +46,8 @@ class MarketplaceBase extends Component {
             user_res['displayname'] = user.displayname;
             user_res['uid'] = value.uid;
           }catch (e) {}
+          console.log('snap username: '+user_res['username']);
+          console.log('snap password: '+user_res['password']);
 
           // get post info
           res['id'] = childSnapshot.key;
@@ -132,7 +134,7 @@ class MarketplaceBase extends Component {
             {items.map(item => (
                 <TouchableOpacity
                     key={item.id}
-                    onPress={() => alert('Hi')}
+                    onPress={() => navigation.navigate('ViewPost', {pid: item.id, service_type: this.state.type})}
                 >
                   <Card shadow style={styles.item}>
                     <Block flex={false} row>
@@ -208,7 +210,8 @@ export default Marketplace;
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.sizes.base * 2,
-    textAlign: 'center'
+    justifyContent: 'center',
+    textAlign: 'center',
   },
   tabs: {
     justifyContent: 'center',

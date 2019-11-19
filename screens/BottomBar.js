@@ -20,6 +20,7 @@ class BottomBarBase extends Component{
         const { active } = this.state;
         const isActive = active === tab;
         const m = new Map();
+        const screenWidth = Dimensions.get('window').width;
         m.set('Marketplace', 'home');
         m.set('Search', 'search');
         m.set('NewPost', 'plus-circle');
@@ -35,7 +36,7 @@ class BottomBarBase extends Component{
             >
                 <Icon
                     name={m.get(tab)}
-                    size={theme.sizes.base * 1.7}
+                    size={screenWidth/WIDTH_DIVISOR}
                     style={[
                         styles.icons,
                         isActive ? styles.active : null
@@ -60,12 +61,13 @@ class BottomBarBase extends Component{
 }
 
 const BottomBar = withFirebase(BottomBarBase);
+const WIDTH_DIVISOR = 13;
 export default BottomBar;
 
 const styles = StyleSheet.create({
     tabs: {
         flexDirection: 'row', 
-        height: theme.sizes.base * 2.5, 
+        height: Dimensions.get('window').width/WIDTH_DIVISOR + 20, 
         justifyContent: 'space-around', 
         alignItems: 'flex-end', 
         borderTopColor: theme.colors.secondary, 

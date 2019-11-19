@@ -15,6 +15,7 @@ import ChatRoom from '../screens/ChatRoom';
 import NewPost from '../screens/Post/NewPost';
 import OtherAccount from "../screens/OtherAccount";
 import {Drafts, PostHistory} from "../screens/PostRecord";
+import ViewPost from '../screens/Post/ViewPost';
 
 import { theme } from '../constants';
 
@@ -31,6 +32,7 @@ const screens = createStackNavigator({
   OtherAccount,
   PostHistory,
   Drafts
+  ViewPost,
 }, {
   defaultNavigationOptions: {
     headerStyle: {
