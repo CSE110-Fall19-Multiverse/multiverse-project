@@ -53,6 +53,8 @@ class SignUpBase extends Component {
     if (!username) errors.push('username');
     if (!password) errors.push('password');
 
+    const displayname = username; 
+
     this.props.firebase
         .doCreateUserWithEmailAndPassword(email, password)
         .then( authUser => {
@@ -63,11 +65,12 @@ class SignUpBase extends Component {
               .set({
                 username,
                 email,
+                displayname, 
               });
         })
         .then(() => {
           this.setState({ ...INITIAL_STATE });
-          navigation.navigate('Services');
+          navigation.navigate('Marketplace');
           console.log('success');
         })
         .catch(error => {
