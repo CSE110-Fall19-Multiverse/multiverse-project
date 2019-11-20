@@ -20,8 +20,6 @@ class BottomBarBase extends Component{
         const { active } = this.state;
         const isActive = active === tab;
         const m = new Map();
-        const screenWidth = Dimensions.get('window').width;
-        const screenHeight = Dimensions.get('window').height;
         m.set('Marketplace', 'home');
         m.set('Search', 'search');
         m.set('NewPost', 'plus-circle');
@@ -38,7 +36,7 @@ class BottomBarBase extends Component{
             >
                 <Icon
                     name={m.get(tab)}
-                    size={screenWidth/WIDTH_DIVISOR}
+                    size={iconSize}
                     style={[
                         styles.icons,
                         isActive ? styles.active : null
@@ -63,14 +61,16 @@ class BottomBarBase extends Component{
 }
 
 const BottomBar = withFirebase(BottomBarBase);
-const WIDTH_DIVISOR = 13;
+const WIDTH_DIVISOR = 15;
 const HEIGHT_DIVISOR = 45;
+const iconSize = Dimensions.get('window').width/WIDTH_DIVISOR;
+const iconPadding = Dimensions.get('window').height/HEIGHT_DIVISOR;
 export default BottomBar;
 
 const styles = StyleSheet.create({
     tabs: {
         flexDirection: 'row',
-        height: Dimensions.get('window').width/WIDTH_DIVISOR + 2*Dimensions.get('window').height/HEIGHT_DIVISOR,
+        height: iconSize + 2*iconPadding,
         justifyContent: 'space-around',
         alignItems: 'flex-end',
         borderTopColor: theme.colors.secondary,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     },
     tab: {
         flexGrow: 1,
-        paddingBottom: Dimensions.get('window').height/HEIGHT_DIVISOR
+        paddingBottom: iconPadding
     },
     active: {
         borderBottomColor: theme.colors.secondary,
