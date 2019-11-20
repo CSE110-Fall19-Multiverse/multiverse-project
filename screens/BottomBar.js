@@ -27,6 +27,7 @@ class BottomBarBase extends Component{
         m.set('NewPost', 'plus-circle');
         m.set('ChatRoom', 'comment');
         m.set('Account', 'user');
+
         return (
             <TouchableOpacity
                 key={`tab-${tab}`}
@@ -50,7 +51,7 @@ class BottomBarBase extends Component{
     render() {
         const tabs = ['Marketplace', 'Search', 'NewPost', 'ChatRoom', 'Account'];
         return (
-            <View 
+            <View
                 style={[
                     styles.tabs
                 ]}
@@ -63,29 +64,28 @@ class BottomBarBase extends Component{
 
 const BottomBar = withFirebase(BottomBarBase);
 const WIDTH_DIVISOR = 13;
-const HEIGHT_DIVISOR = 13; 
+const HEIGHT_DIVISOR = 45;
 export default BottomBar;
 
 const styles = StyleSheet.create({
     tabs: {
-        flexDirection: 'row', 
-        height: Math.max(Dimensions.get('window').width/WIDTH_DIVISOR + 20, Dimensions.get('window').height/HEIGHT_DIVISOR), 
-        justifyContent: 'space-around', 
-        alignItems: 'flex-end', 
-        borderTopColor: theme.colors.secondary, 
+        flexDirection: 'row',
+        height: Dimensions.get('window').width/WIDTH_DIVISOR + 2*Dimensions.get('window').height/HEIGHT_DIVISOR,
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        borderTopColor: theme.colors.secondary,
         borderTopWidth: 0.75
-    
     },
     tab: {
-        flexGrow: 1, 
-        paddingBottom: theme.sizes.base * 1.5
+        flexGrow: 1,
+        paddingBottom: Dimensions.get('window').height/HEIGHT_DIVISOR
     },
-    active: { 
+    active: {
         borderBottomColor: theme.colors.secondary,
         borderBottomWidth: 2,
     },
     icons: {
-        alignSelf: 'center', 
+        alignSelf: 'center',
         color: theme.colors.secondary,
     }
 });
