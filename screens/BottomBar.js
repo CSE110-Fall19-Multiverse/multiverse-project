@@ -73,12 +73,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around', 
         alignItems: 'flex-end', 
         borderTopColor: theme.colors.secondary, 
-        borderTopWidth: 1
+        borderTopWidth: 0.75
+    
     },
     tab: {
         flexGrow: 1, 
-        //marginHorizontal: theme.sizes.base,
-        paddingBottom: theme.sizes.base/1.25,
+        paddingBottom: theme.sizes.base * 1.5
     },
     active: { 
         borderBottomColor: theme.colors.secondary,
