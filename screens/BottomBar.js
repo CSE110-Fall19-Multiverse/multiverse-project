@@ -31,7 +31,8 @@ class BottomBarBase extends Component{
                 key={`tab-${tab}`}
                 onPress={() => this.handleTab(tab)}
                 style={[
-                    styles.tab
+                    styles.tab,
+                    isActive ? styles.active : null
                 ]}
             >
                 <Icon
@@ -39,7 +40,6 @@ class BottomBarBase extends Component{
                     size={iconSize}
                     style={[
                         styles.icons,
-                        isActive ? styles.active : null
                     ]}
                 />
             </TouchableOpacity>
