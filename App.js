@@ -31,9 +31,11 @@ export default class App extends React.Component {
     });
 
     return Promise.all(cacheImages);
-  }
+  };
 
   render() {
+    console.disableYellowBox = true;
+
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
