@@ -15,6 +15,7 @@ import { withFirebase } from "../../components/Firebase";
 import BottomBar from "../BottomBar";
 
 class NewPostBase extends Component{
+
     state = {
         Select1: '',
         Select2: '',
@@ -26,7 +27,7 @@ class NewPostBase extends Component{
     };
 
     componentDidMount() {
-        this.setState({}, ()=>this.checkExistedFields())
+        this.checkExistedFields();
     }
 
     checkExistedFields() {
@@ -42,11 +43,15 @@ class NewPostBase extends Component{
                 function select_non_null(field) {return field ? field : ''};
 
                 thisPost.setState(
-                    {Select1: post.select_1, Select2: post.select_2, Summary: post.summary, Description: post.description, date: post.service_date, price: post.service_price, uid: post.uid, post_date: post.post_date}, () => {
+                    {Select1: post.select_1, Select2: post.select_2, Summary: post.summary,
+                        Description: post.description, date: post.service_date, price: post.service_price,
+                        uid: post.uid, post_date: post.post_date},
+                    () => {
                     console.log('Summary: ' + thisPost.state.Summary);
                     console.log('date: ' + thisPost.state.date);
                     const user_ref = thisPost.props.firebase.user(thisPost.state.uid);
                     console.log('user is '+thisPost.state.uid);
+
                     user_ref.once('value', function(snap){
                         const user = snap.val();
                         let user_info = {};

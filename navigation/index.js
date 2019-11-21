@@ -14,7 +14,7 @@ import Account from '../screens/Account';
 import ChatRoom from '../screens/ChatRoom';
 import NewPost from '../screens/Post/NewPost';
 import OtherAccount from "../screens/OtherAccount";
-import {Drafts, PostHistory} from "../screens/PostRecord";
+import {Drafts, PostHistory} from "../screens/Post/PostRecord";
 import ViewPost from '../screens/Post/ViewPost';
 
 import { theme } from '../constants';

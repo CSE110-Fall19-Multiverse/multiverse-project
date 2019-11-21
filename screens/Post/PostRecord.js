@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, RefreshControl } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Card, Button, Block, Text } from '../components';
-import { theme } from '../constants';
-import {withFirebase} from "../components/Firebase";
-import BottomBar from "./BottomBar";
+import { Card, Button, Block, Text } from '../../components';
+import { theme } from '../../constants';
+import {withFirebase} from "../../components/Firebase";
+import BottomBar from "../BottomBar";
 
 
 const { width } = Dimensions.get('window');
