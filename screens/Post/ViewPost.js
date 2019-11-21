@@ -138,7 +138,7 @@ class ViewPostBase extends Component {
                                     onPress={() => alert('Comment')}
                                 >
                                     <Icon
-                                        name={'comment'}
+                                        name={'comments'}
                                         size={theme.sizes.base * 1.7}
                                         style={styles.messaging}
                                     />
@@ -156,7 +156,7 @@ class ViewPostBase extends Component {
                                     onPress={() => alert('Message the post maker')}
                                 >
                                     <Icon
-                                        name={'user'}
+                                        name={'comment'}
                                         size={theme.sizes.base * 1.7}
                                         style={styles.messaging}
                                     />
