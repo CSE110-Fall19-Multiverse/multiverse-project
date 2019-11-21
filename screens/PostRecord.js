@@ -141,7 +141,13 @@ class PostRecordBase extends Component {
             {items.map(item => (
                 <TouchableOpacity
                     key={item.id}
-                    onPress={() => alert('Hi')}
+                    onPress= {
+                      this.props.navigation.getParam('isDraft')
+                          ?
+                          () => this.props.navigation.navigate('NewPost', {pid: item.id, service_type: this.state.type})
+                          :
+                          () => navigation.navigate('ViewPost', {pid: item.id, service_type: this.state.type})
+                    }
                 >
                   <Card shadow style={styles.item}>
                     <Block flex={false} row>

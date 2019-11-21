@@ -26,6 +26,41 @@ class NewPostBase extends Component{
     };
 
     componentDidMount() {
+        this.setState({}, ()=>this.checkExistedFields())
+    }
+
+    checkExistedFields() {
+        if (this.props.navigation.getParam('pid')){
+            const type = this.props.navigation.getParam('service_type') === 'buying' ? 'buying_post_drafts' : 'selling_post_drafts';
+            console.log('pid: '+this.props.navigation.getParam('pid'));
+            const ref = this.props.firebase.draft(type, this.props.navigation.getParam('pid'));
+
+            const thisPost = this;
+            ref.once('value', function(snap){
+                const post = snap.val();
+                console.log(post);
+                function select_non_null(field) {return field ? field : ''};
+
+                thisPost.setState(
+                    {Select1: post.select_1, Select2: post.select_2, Summary: post.summary, Description: post.description, date: post.service_date, price: post.service_price, uid: post.uid, post_date: post.post_date}, () => {
+                    console.log('Summary: ' + thisPost.state.Summary);
+                    console.log('date: ' + thisPost.state.date);
+                    const user_ref = thisPost.props.firebase.user(thisPost.state.uid);
+                    console.log('user is '+thisPost.state.uid);
+                    user_ref.once('value', function(snap){
+                        const user = snap.val();
+                        let user_info = {};
+                        user_info['username'] = user.username;
+                        user_info['displayName'] = user.displayname;
+                        user_info['email'] = user.email;
+                        thisPost.setState({user_info: user_info}, () => {
+                            console.log('email: ' + user_info['email']);
+                            console.log('display name: ' + user_info['displayName']);
+                        });
+                    });
+                });
+            });
+        }
     }
 
     handleSummary = (text) => {
@@ -233,4 +268,4 @@ const styles = StyleSheet.create({
         marginTop: theme.sizes.base * 0.7,
         paddingHorizontal: theme.sizes.base * 2,
     },
-})
+});
