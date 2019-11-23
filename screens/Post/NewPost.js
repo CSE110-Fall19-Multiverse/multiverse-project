@@ -50,6 +50,7 @@ class NewPostBase extends Component{
             ref = this.state.serviceType === 'Tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
         }
         const user = this.props.firebase.get_current_user();
+        const posts = this.props.firebase.post_dir(this.state.serviceType === 'Student' ? 'buying' : 'selling', draft ? 'drafted' : 'posted', user.uid);
         // push new post to the post object
         ref.push({
                 'service_type': this.state.serviceType,
@@ -62,6 +63,9 @@ class NewPostBase extends Component{
                 'post_status': draft ? 'drafted' : 'posted',
                 'post_date': this.ShowCurrentDate(),
                 'uid': user.uid,
+            })
+            .then((snap) => {
+                posts.push(snap.key);
             });
         console.log('today is ' + this.ShowCurrentDate())
     }
