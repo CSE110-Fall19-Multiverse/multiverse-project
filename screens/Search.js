@@ -93,10 +93,6 @@ class SearchBase extends Component {
     if(!inSearch){
     return (
       <Block>
-        <Block flex={false} row center space="between" style={styles.header}>
-          <Text h1 bold>Search</Text>
-          {this.renderSearch()}
-        </Block>
         <Block style={styles.category}>
           <Text bold lightBlue style={{ marginBottom: theme.sizes.base * 1.5}}>CATEGORY</Text>
           <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Learning and Skills</Text>
