@@ -128,7 +128,7 @@ class NewPostBase extends Component{
     render() {
         const { navigation } = this.props;
         return (
-            <Block>
+            <Block >
                 <Block flex={false} row space="between" style={styles.header}>
                     <Text style={{fontSize: 25, fontWeight: 'bold'}}>New Post</Text>
                 </Block>
