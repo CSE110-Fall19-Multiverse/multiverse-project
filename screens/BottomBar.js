@@ -20,26 +20,26 @@ class BottomBarBase extends Component{
         const { active } = this.state;
         const isActive = active === tab;
         const m = new Map();
-        const screenWidth = Dimensions.get('window').width;
         m.set('Marketplace', 'home');
         m.set('Search', 'search');
         m.set('NewPost', 'plus-circle');
         m.set('ChatRoom', 'comment');
         m.set('Account', 'user');
+
         return (
             <TouchableOpacity
                 key={`tab-${tab}`}
                 onPress={() => this.handleTab(tab)}
                 style={[
-                    styles.tab
+                    styles.tab,
+                    isActive ? styles.active : null
                 ]}
             >
                 <Icon
                     name={m.get(tab)}
-                    size={screenWidth/WIDTH_DIVISOR}
+                    size={iconSize}
                     style={[
                         styles.icons,
-                        isActive ? styles.active : null
                     ]}
                 />
             </TouchableOpacity>
@@ -49,7 +49,7 @@ class BottomBarBase extends Component{
     render() {
         const tabs = ['Marketplace', 'Search', 'NewPost', 'ChatRoom', 'Account'];
         return (
-            <View 
+            <View
                 style={[
                     styles.tabs
                 ]}
@@ -61,29 +61,31 @@ class BottomBarBase extends Component{
 }
 
 const BottomBar = withFirebase(BottomBarBase);
-const WIDTH_DIVISOR = 13;
+const WIDTH_DIVISOR = 15;
+const HEIGHT_DIVISOR = 45;
+const iconSize = Dimensions.get('window').width/WIDTH_DIVISOR;
+const iconPadding = Dimensions.get('window').height/HEIGHT_DIVISOR;
 export default BottomBar;
 
 const styles = StyleSheet.create({
     tabs: {
-        flexDirection: 'row', 
-        height: Dimensions.get('window').width/WIDTH_DIVISOR + 20, 
-        justifyContent: 'space-around', 
-        alignItems: 'flex-end', 
-        borderTopColor: theme.colors.secondary, 
-        borderTopWidth: 1
+        flexDirection: 'row',
+        height: iconSize + 2*iconPadding,
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        borderTopColor: theme.colors.secondary,
+        borderTopWidth: 0.75
     },
     tab: {
-        flexGrow: 1, 
-        //marginHorizontal: theme.sizes.base,
-        paddingBottom: theme.sizes.base / 2,
+        flexGrow: 1,
+        paddingBottom: iconPadding
     },
-    active: { 
+    active: {
         borderBottomColor: theme.colors.secondary,
         borderBottomWidth: 2,
     },
     icons: {
-        alignSelf: 'center', 
+        alignSelf: 'center',
         color: theme.colors.secondary,
     }
 });

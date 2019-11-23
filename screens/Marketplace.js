@@ -111,10 +111,6 @@ class MarketplaceBase extends Component {
     const { navigation } = this.props;
     return (
       <Block>
-        <Block flex={false} row space="between" style={styles.header}>
-          <Text h1 bold style={styles.header}>I am a ...</Text>
-        </Block>
-
         <Block flex={false} row style={styles.tabs}>
           {marketViews.map(view => this.renderView(view))}
         </Block>
@@ -140,7 +136,8 @@ class MarketplaceBase extends Component {
                             underlayColor={'purple'}
                             activeOpacity={0.69}
                         >
-                          <Image source={item.avi}/>
+                           <Image source={item.avi}/>
+                         
                         </TouchableHighlight>
                         <Block style={{ margin: theme.sizes.base / 4}}>
                           <TouchableHighlight

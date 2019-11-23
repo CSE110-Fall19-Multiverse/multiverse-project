@@ -83,7 +83,7 @@ class ViewPostBase extends Component {
                                     </TouchableHighlight>
                                     <Block style={{ margin: theme.sizes.base / 4}}>
                                         <TouchableHighlight
-                                            onPress={() => alert('Enter person\'s profile')}
+                                            onPress={() => this.props.navigation.navigate('OtherAccount', {uid : this.state.uid})}
                                             underlayColor={'white'}
                                             activeOpacity={0.5}
                                             // style={styles.textContainer}
@@ -138,7 +138,7 @@ class ViewPostBase extends Component {
                                     onPress={() => alert('Comment')}
                                 >
                                     <Icon
-                                        name={'comment'}
+                                        name={'comments'}
                                         size={theme.sizes.base * 1.7}
                                         style={styles.messaging}
                                     />
@@ -156,7 +156,7 @@ class ViewPostBase extends Component {
                                     onPress={() => alert('Message the post maker')}
                                 >
                                     <Icon
-                                        name={'user'}
+                                        name={'comment'}
                                         size={theme.sizes.base * 1.7}
                                         style={styles.messaging}
                                     />
