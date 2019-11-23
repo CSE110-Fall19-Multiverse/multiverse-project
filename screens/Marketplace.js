@@ -111,10 +111,6 @@ class MarketplaceBase extends Component {
     const { navigation } = this.props;
     return (
       <Block>
-        <Block flex={false} row space="between" style={styles.header}>
-          <Text h1 bold style={styles.header}>I am a ...</Text>
-        </Block>
-
         <Block flex={false} row style={styles.tabs}>
           {marketViews.map(view => this.renderView(view))}
         </Block>

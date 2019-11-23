@@ -9,13 +9,13 @@ const { width, height } = Dimensions.get('window');
 class Welcome extends Component {
   static navigationOptions = {
     header: null,
-  }
+  };
 
   scrollX = new Animated.Value(0);
 
   state = {
     showTerms: false,
-  }
+  };
 
   renderTermsService() {
     return (
