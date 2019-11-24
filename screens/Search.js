@@ -72,7 +72,7 @@ class SearchBase extends Component {
           value={searchString}
           onRightPress={() => isEditing ? (this.setState({ searchString: null }),
                         this.setState({viewSearch:false}), this.setState({items :[]})) : null }
-          onSubmitEditing={ () => isEditing ? (this.handleSearchPost(searchString),this.setState({viewSearch:true})) : null}
+          onSubmitEditing={ () => isEditing ? (this.handleSearchPost(searchString),this.setState({viewSearch:true}), this.setState({items:[]})) : null}
           rightStyle={styles.searchRight}
           rightLabel={
             <Icon
