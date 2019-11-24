@@ -31,28 +31,30 @@ class NewPostBase extends Component{
     }
 
     checkExistedFields() {
-        if (this.props.navigation.getParam('pid')){
-            const type = this.props.navigation.getParam('service_type') === 'buying' ? 'buying_post_drafts' : 'selling_post_drafts';
-            console.log('pid: '+this.props.navigation.getParam('pid'));
-            const ref = this.props.firebase.draft(type, this.props.navigation.getParam('pid'));
+        if (!this.props.navigation.getParam('pid')) {
+            return;
+        }
+        const type = this.props.navigation.getParam('service_type') === 'buying' ? 'buying_post_drafts' : 'selling_post_drafts';
+        console.log('pid: ' + this.props.navigation.getParam('pid'));
+        const ref = this.props.firebase.draft(type, this.props.navigation.getParam('pid'));
+        const thisPost = this;
+        ref.once('value', function (snap) {
+            const post = snap.val();
+            console.log(post);
 
-            const thisPost = this;
-            ref.once('value', function(snap){
-                const post = snap.val();
-                console.log(post);
-                function select_non_null(field) {return field ? field : ''};
-
-                thisPost.setState(
-                    {Select1: post.select_1, Select2: post.select_2, Summary: post.summary,
-                        Description: post.description, date: post.service_date, price: post.service_price,
-                        uid: post.uid, post_date: post.post_date},
-                    () => {
+            thisPost.setState(
+                {
+                    Select1: post.select_1, Select2: post.select_2, Summary: post.summary,
+                    Description: post.description, date: post.service_date, price: post.service_price,
+                    uid: post.uid, post_date: post.post_date
+                },
+                () => {
                     console.log('Summary: ' + thisPost.state.Summary);
                     console.log('date: ' + thisPost.state.date);
                     const user_ref = thisPost.props.firebase.user(thisPost.state.uid);
-                    console.log('user is '+thisPost.state.uid);
+                    console.log('user is ' + thisPost.state.uid);
 
-                    user_ref.once('value', function(snap){
+                    user_ref.once('value', function (snap) {
                         const user = snap.val();
                         let user_info = {};
                         user_info['username'] = user.username;
@@ -64,8 +66,7 @@ class NewPostBase extends Component{
                         });
                     });
                 });
-            });
-        }
+        });
     }
 
     handleSummary = (text) => {
@@ -90,6 +91,7 @@ class NewPostBase extends Component{
             ref = this.state.serviceType === 'Tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
         }
         const user = this.props.firebase.get_current_user();
+        const posts = this.props.firebase.post_dir(this.state.serviceType === 'Student' ? 'buying' : 'selling', draft ? 'drafted' : 'posted', user.uid);
         // push new post to the post object
         ref.push({
                 'service_type': this.state.serviceType,
@@ -102,8 +104,10 @@ class NewPostBase extends Component{
                 'post_status': draft ? 'drafted' : 'posted',
                 'post_date': this.ShowCurrentDate(),
                 'uid': user.uid,
+            })
+            .then((snap) => {
+                posts.push( snap.key );
             });
-        console.log('today is ' + this.ShowCurrentDate())
     }
 
     ShowCurrentDate(){

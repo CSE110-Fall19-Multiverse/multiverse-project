@@ -46,9 +46,18 @@ class Firebase {
     // reference to a user by uid
     user = uid => this.db.ref(`users/${uid}`);
 
-    // reference to a post by uid
-    post = (type, pid) => this.db.ref(`posts/posted/${type}/${pid}`);
-    draft = (type, pid) => this.db.ref(`posts/drafted/${type}/${pid}`);
+    // reference to a post by pid
+    post  = (isBuying, pid) => {
+        const type = isBuying ? 'buying_posts' : 'selling_posts';
+        return this.db.ref(`posts/posted/${type}/${pid}`)
+    };
+    draft = (isBuying, pid) => {
+        const type = isBuying ? 'buying_post_drafts' : 'selling_post_drafts';
+        return this.db.ref(`posts/drafted/${type}/${pid}`);
+    };
+
+    // reference to a post dir by uid
+    post_dir = (type, status, uid) => this.db.ref(`users/${uid}/history_posts/${status}/${type}`);
 
     // reference to all users
     users = () => this.db.ref('users');
@@ -59,9 +68,6 @@ class Firebase {
 
     buying_post_drafts = () =>this.db.ref('posts/drafted/buying_post_drafts');
     selling_post_drafts = () =>this.db.ref('posts/drafted/selling_post_drafts');
-
-    get_user_by_id = uid =>this.db.ref(`users/${uid}`);
-    get_post_by_id = uid =>this.db.ref(`posts/buying_posts/${uid}`);
 }
 
 export default Firebase;

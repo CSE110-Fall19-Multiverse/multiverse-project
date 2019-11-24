@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, RefreshControl } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Card, Button, Block, Text } from '../../components';
+import { Card, Block, Text } from '../../components';
 import { theme } from '../../constants';
 import {withFirebase} from "../../components/Firebase";
 import BottomBar from "../BottomBar";
@@ -25,64 +25,60 @@ class PostRecordBase extends Component {
 
   componentDidMount(){
     this.setState({items: []});
-    let ref;
-    if (this.props.navigation.getParam('isDraft')){
-      if(this.state.buying){
-        ref = this.props.firebase.buying_post_drafts();
-      }else{
-        ref = this.props.firebase.selling_post_drafts();
-      }
-    } else{
-      if(this.state.buying){
-        ref = this.props.firebase.buying_posts();
-      }else{
-        ref = this.props.firebase.selling_posts();
-      }
-    }
+    let ref = this.props.firebase.post_dir(this.state.buying ? 'buying' : 'selling',
+        this.props.navigation.getParam('isDraft') ? 'drafted' : 'posted',
+        this.props.navigation.getParam('uid'));
     let thisComponent = this;
+
     // load posts from firebase once
     ref.once("value", function(snapshot) {
+      // get user info
+      const user_ref = thisComponent.props.firebase.user(thisComponent.props.navigation.getParam('uid'));
+      let user_res = {};
+      user_ref.once('value', function(snap) {
+        const user = snap.val();
+        try{
+          user_res['username'] = user.email;
+          user_res['displayname'] = user.displayname;
+          user_res['uid'] = value.uid;
+        }catch (e) { }
+      });
+
+      const post_ref_generator = thisComponent.props.navigation.getParam('isDraft') ?
+          thisComponent.props.firebase.draft : thisComponent.props.firebase.post;
       snapshot.forEach(function (childSnapshot) {
         let res = {};
-        let user_res = {};
-        let value = childSnapshot.val();
-
-        // get user info
-        const user_ref = thisComponent.props.firebase.user(value.uid);
-        user_ref.once('value', function(snap){
-          const user = snap.val();
-
-          // get post info
-          res['id'] = childSnapshot.key;
-          res['summary'] = value.summary;
-          res['description'] = value.description;
-          res['select_1'] = value.select_1;
-          res['select_2'] = value.select_2;
-          res['service_type'] = value.service_type;
-          res['service_date'] = value.service_date;
-          res['service_price'] = value.service_price;
-
-          let temp = thisComponent.state.items;
-          try{
-            // Update only if uid is the same as current one
-            user_res['username'] = user.email;
-            user_res['displayname'] = user.displayname;
-            user_res['uid'] = value.uid;
+        let pid = childSnapshot.val();
+        if(pid != '0'){
+          const post_ref = post_ref_generator(thisComponent.state.buying, pid);
+          post_ref.once("value", function(snap){
+            // get post info
+            const value = snap.val();
+            res['id'] = snap.key;
+            try{
+              res['summary'] = value.summary;
+              res['description'] = value.description;
+              res['select_1'] = value.select_1;
+              res['select_2'] = value.select_2;
+              res['service_type'] = value.service_type;
+              res['service_date'] = value.service_date;
+              res['service_price'] = value.service_price;
+            }catch (e) {
+              console.log(e);
+            }
+          }).then(() => {
             res['user_info'] = user_res;
 
-            if (user_res['uid'] === thisComponent.props.navigation.getParam('uid')) {
-              temp.push(res);
-            }
-          }catch (e) {}
-
-          thisComponent.setState({items: temp});
-        });
+            let temp = thisComponent.state.items;
+            temp.push(res);
+            thisComponent.setState({items: temp});
+          });
+        }
       });
       let temp = thisComponent.state.items;
       temp.reverse();
       thisComponent.setState({items: temp});
     });
-    console.log('finish display');
   }
 
   refresh = () => {
@@ -262,4 +258,4 @@ const styles = StyleSheet.create({
     right: theme.sizes.base * 2,
   }
 
-})
+});
