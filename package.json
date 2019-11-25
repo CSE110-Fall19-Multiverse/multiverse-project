@@ -22,7 +22,10 @@
     "react-native-slider": "^0.11.0",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^3.11.0",
-    "stream-chat-expo": "0.3.5"
+    "stream-chat-expo": "0.3.5",
+    "expo-image-picker": "latest",
+    "expo-constants": "latest",
+    "expo-permissions": "latest"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"

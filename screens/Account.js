@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import {Alert, Image, StyleSheet, ScrollView, TextInput, ActivityIndicator} from 'react-native'
 import { withFirebase } from "../components/Firebase";
+import * as ImagePicker from 'expo-image-picker';
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
 
 import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
 import BottomBar from "./BottomBar";
+
 
 class AccountBase extends Component {
   state = {
@@ -25,6 +29,33 @@ class AccountBase extends Component {
       this.setState({profile: newProfile});
     })
   }
+
+  getPermissionAsync = async() => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Need camera permission');
+      }
+    }
+  }
+
+  _pickImage = async() => {
+    console.log('pick image called');
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      console.log(result.uri);
+    }
+  }
+
 
   // in the real time database
   updateDatabase(name, updateObject)
@@ -108,9 +139,9 @@ class AccountBase extends Component {
       <Block>
         <Block flex={false} row center space="between" style={styles.header}>
           <Text h1 bold>Account</Text>
-          <Button>
+          <Button onPress={() => this._pickImage()}>
             <Image
-              source={profile.avatar}
+              source={elements.profile.avatar}
               style={styles.avatar}
             />
           </Button>
