@@ -56,8 +56,11 @@ class Firebase {
         return this.db.ref(`posts/drafted/${type}/${pid}`);
     };
 
-    // reference to a post dir by uid
-    post_dir = (type, status, uid) => this.db.ref(`users/${uid}/history_posts/${status}/${type}`);
+    // reference to a history post dir by uid
+    history_post_dir = (type, status, uid) => this.db.ref(`users/${uid}/history_posts/${status}/${type}`);
+
+    // reference to a liked post dir by uid
+    liked_post_dir = (type, uid) => this.db.ref(`users/${uid}/liked_posts/${type}`);
 
     // reference to all users
     users = () => this.db.ref('users');
