@@ -26,6 +26,7 @@ class AccountBase extends Component {
       newProfile.lastname  = snapshot.val().lastname;
       newProfile.displayname = snapshot.val().displayname;
       newProfile.email = snapshot.val().email;
+      newProfile.avatar = elements.profile.avatar;
       this.setState({profile: newProfile});
     })
   }
@@ -39,20 +40,23 @@ class AccountBase extends Component {
     }
   }
 
+  // documentation: https://docs.expo.io/versions/latest/sdk/imagepicker/
   _pickImage = async() => {
-    console.log('pick image called');
-
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
-      console.log(result.uri);
+        const profile = this.state.profile;
+        console.log('profile was: ');
+        console.log(profile['avatar']);
+        profile['avatar'] = {uri: result.uri};
+        this.setState({profile: profile});
+        console.log('profile is: ');
+        console.log(this.state.profile['avatar']);
     }
   }
 
@@ -139,9 +143,9 @@ class AccountBase extends Component {
       <Block>
         <Block flex={false} row center space="between" style={styles.header}>
           <Text h1 bold>Account</Text>
-          <Button onPress={() => this._pickImage()}>
+          <Button onPress={() => this.getPermissionAsync().then(this._pickImage())}>
             <Image
-              source={elements.profile.avatar}
+              source={profile.avatar}
               style={styles.avatar}
             />
           </Button>
