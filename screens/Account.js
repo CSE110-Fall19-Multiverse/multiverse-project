@@ -9,7 +9,6 @@ import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
 import BottomBar from "./BottomBar";
 
-
 class AccountBase extends Component {
   state = {
     editing: null,
@@ -51,14 +50,60 @@ class AccountBase extends Component {
 
     if (!result.cancelled) {
         const profile = this.state.profile;
-        console.log('profile was: ');
-        console.log(profile['avatar']);
         profile['avatar'] = {uri: result.uri};
         this.setState({profile: profile});
-        console.log('profile is: ');
-        console.log(this.state.profile['avatar']);
+        this.uploadImage(result.uri).then( (imageRef) => {
+          console.log('upload success')
+        }).catch( (error) => {
+          console.log('ERROR!');
+          console.log(error)
+        });
     }
   }
+
+  uploadImage = async(uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const ref = this.props.firebase.avatar(this.state.profile['uid']).child("avatar");
+    return ref.put(blob);
+  }
+
+  /*
+  uploadImage = (uri, mime = 'application/octet-stream') => {
+    return (dispatch) => {
+      return new Promise((resolve, reject) => {
+        const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+        let uploadBlob = null;
+        const imageRef = this.props.firebase.avatar(this.state.profile['uid']);
+
+        fs.readFile(uploadUri, 'base64')
+            // Encode data with base 64
+            .then((data) => {
+              return Blob.build(data, `${mime};BASE64`)
+            })
+            // place the blob into firebase storage
+            .then((blob) => {
+              uploadBlob = blob;
+              return imageRef.set(blob, { contentType: mime })
+            })
+            // close blob, return url
+            .then(() => {
+              uploadBlob.close();
+              const downloadURL = imageRef.getDownloadURL();
+              console.log('image url is: ' + downloadURL);
+              return downloadURL;
+            })
+            .then((url) => {
+              resolve(url);
+              // optional: store the url somewhere
+            })
+            .catch((error) => {
+              alert('Something went wrong when uploading avatar');
+            })
+      })
+    }
+  }*/
 
 
   // in the real time database
