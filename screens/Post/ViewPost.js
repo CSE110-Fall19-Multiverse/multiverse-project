@@ -29,6 +29,7 @@ class ViewPostBase extends Component {
         pid: null,
         actor: null,
         user_info: {},
+        avatar: elements.profile.avatar,
     };
 
     componentDidMount(){
@@ -62,6 +63,12 @@ class ViewPostBase extends Component {
                     });
                 });
             });
+
+            // uid has to be ready before this line get called. so don't move it outside
+            that.props.firebase.avatar(that.state.uid).child("avatar").getDownloadURL().then(uri => {
+                console.log('load avatar success');
+                that.setState( {avatar: {uri: uri}});
+            }).catch(error => console.log('viewpost: avatar not found'))
         });
     }
 
@@ -79,7 +86,7 @@ class ViewPostBase extends Component {
                                         underlayColor={'purple'}
                                         activeOpacity={0.69}
                                     >
-                                        <Image source={elements.profile.avatar}/>
+                                        <Image source={this.state.avatar} style={styles.avatar}/>
                                     </TouchableHighlight>
                                     <Block style={{ margin: theme.sizes.base / 4}}>
                                         <TouchableHighlight
@@ -194,6 +201,10 @@ const styles = StyleSheet.create({
             height: 1,
             width: 1
         }
+    },
+    avatar: {
+        height: theme.sizes.base * 2.2,
+        width: theme.sizes.base * 2.2,
     },
     inputs: {
         marginTop: theme.sizes.base * 0.7,
