@@ -169,7 +169,13 @@ class AccountBase extends Component {
 
           <Block margin={[10, 0]} style={styles.history}>
             <Text darkBlue bold style={{ marginBottom: 10 }}
-                  onPress={() => this.props.navigation.navigate('PostHistory', {uid : profile['uid'], isDraft : false})}>
+                  onPress={() => this.props.navigation.navigate('PostHistory', {hist: false, uid : profile['uid'], isDraft : false})}>
+              My Favorite Posts
+            </Text>
+          </Block>
+          <Block margin={[10, 0]} style={styles.history}>
+            <Text darkBlue bold style={{ marginBottom: 10 }}
+                  onPress={() => this.props.navigation.navigate('PostHistory', {hist: true, uid : profile['uid'], isDraft : false})}>
               My History Posts
             </Text>
           </Block>
