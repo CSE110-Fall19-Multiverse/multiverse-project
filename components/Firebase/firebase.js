@@ -46,15 +46,25 @@ class Firebase {
     // reference to a user by uid
     user = uid => this.db.ref(`users/${uid}`);
 
+    // reference to a comment by uid
+    comment = cid => this.db.ref(`comments/${cid}`);
+
     // reference to a post by pid
     post  = (isBuying, pid) => {
         const type = isBuying ? 'buying_posts' : 'selling_posts';
         return this.db.ref(`posts/posted/${type}/${pid}`)
     };
+
     draft = (isBuying, pid) => {
         const type = isBuying ? 'buying_post_drafts' : 'selling_post_drafts';
         return this.db.ref(`posts/drafted/${type}/${pid}`);
     };
+
+    // reference all comments
+    comments = () =>this.db.ref('comments');
+
+    // reference a post's comments
+    comments_dir = (type, pid) =>this.db.ref(`posts/posted/${type}/${pid}/comments`);
 
     // reference to a history post dir by uid
     history_post_dir = (type, status, uid) => this.db.ref(`users/${uid}/history_posts/${status}/${type}`);

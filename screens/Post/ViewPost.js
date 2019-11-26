@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BottomBar from "../BottomBar";
+import CommentList from "../Comments/CommentList";
 //import Icon from "react-native-vector-icons/index";
 
 class ViewPostBase extends Component {
@@ -51,10 +52,12 @@ class ViewPostBase extends Component {
                     user_info['displayName'] = user.displayname;
                     user_info['email'] = user.email;
                     that.setState({user_info: user_info}, () => {
+                        console.log('display name: ' + user_info['displayName']);
                     });
                 });
             });
         });
+        console.log('inside ViewPost: '+this.state.pid);
     }
 
     handleFavorite(){
@@ -167,12 +170,9 @@ class ViewPostBase extends Component {
                             </View>
                         </Block>
                         <Divider />
-                        <Block>
-                            <Text caption gray style={{textAlign: 'center'}}> There is no comment here yet. </Text>
-                        </Block>
+                        <CommentList pid = {this.props.navigation.state.params.pid} type = {this.props.navigation.state.params.service_type}/>
                     </ScrollView>
                 </KeyboardAvoidingView>
-
                 <BottomBar navigation={this.props.navigation} active='ViewPost'/>
             </Block>
         )

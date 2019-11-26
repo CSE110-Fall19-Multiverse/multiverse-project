@@ -86,7 +86,7 @@ class NewPostBase extends Component{
         const user = this.props.firebase.get_current_user();
         const posts = this.props.firebase.history_post_dir(this.state.serviceType === 'Student' ? 'buying' : 'selling', draft ? 'drafted' : 'posted', user.uid);
         // push new post to the post object
-        ref.push({
+        ref.set({
                 'service_type': this.state.serviceType,
                 'select_1': this.state.Select1,
                 'select_2': this.state.Select2,
