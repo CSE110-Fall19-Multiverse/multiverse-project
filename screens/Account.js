@@ -28,6 +28,22 @@ class AccountBase extends Component {
       newProfile.avatar = elements.profile.avatar;
       this.setState({profile: newProfile});
     })
+
+    this.props.firebase.avatar(uid).child("avatar").getDownloadURL().then(uri => {
+      console.log('avatar found');
+
+      const profile = this.state.profile;
+      profile.avatar = {uri: uri};
+
+      this.setState({profile: profile});
+    }).catch(error => {
+      console.log('avatar not found');
+      console.log(error);
+
+      const profile = this.state.profile;
+      profile.avatar = elements.profile.avatar;
+      this.setState({profile: profile});
+    })
   }
 
   getPermissionAsync = async() => {
@@ -50,6 +66,8 @@ class AccountBase extends Component {
 
     if (!result.cancelled) {
         const profile = this.state.profile;
+
+        // now displaying using local uri. Alternatively, get url from ref
         profile['avatar'] = {uri: result.uri};
         this.setState({profile: profile});
         this.uploadImage(result.uri).then( (imageRef) => {
@@ -68,43 +86,6 @@ class AccountBase extends Component {
     const ref = this.props.firebase.avatar(this.state.profile['uid']).child("avatar");
     return ref.put(blob);
   }
-
-  /*
-  uploadImage = (uri, mime = 'application/octet-stream') => {
-    return (dispatch) => {
-      return new Promise((resolve, reject) => {
-        const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-        let uploadBlob = null;
-        const imageRef = this.props.firebase.avatar(this.state.profile['uid']);
-
-        fs.readFile(uploadUri, 'base64')
-            // Encode data with base 64
-            .then((data) => {
-              return Blob.build(data, `${mime};BASE64`)
-            })
-            // place the blob into firebase storage
-            .then((blob) => {
-              uploadBlob = blob;
-              return imageRef.set(blob, { contentType: mime })
-            })
-            // close blob, return url
-            .then(() => {
-              uploadBlob.close();
-              const downloadURL = imageRef.getDownloadURL();
-              console.log('image url is: ' + downloadURL);
-              return downloadURL;
-            })
-            .then((url) => {
-              resolve(url);
-              // optional: store the url somewhere
-            })
-            .catch((error) => {
-              alert('Something went wrong when uploading avatar');
-            })
-      })
-    }
-  }*/
-
 
   // in the real time database
   updateDatabase(name, updateObject)
