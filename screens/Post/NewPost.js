@@ -35,12 +35,10 @@ class NewPostBase extends Component{
             return;
         }
         const type = this.props.navigation.getParam('service_type') === 'buying' ? 'buying_post_drafts' : 'selling_post_drafts';
-        console.log('pid: ' + this.props.navigation.getParam('pid'));
         const ref = this.props.firebase.draft(type, this.props.navigation.getParam('pid'));
         const thisPost = this;
         ref.once('value', function (snap) {
             const post = snap.val();
-            console.log(post);
 
             thisPost.setState(
                 {
@@ -49,10 +47,7 @@ class NewPostBase extends Component{
                     uid: post.uid, post_date: post.post_date
                 },
                 () => {
-                    console.log('Summary: ' + thisPost.state.Summary);
-                    console.log('date: ' + thisPost.state.date);
                     const user_ref = thisPost.props.firebase.user(thisPost.state.uid);
-                    console.log('user is ' + thisPost.state.uid);
 
                     user_ref.once('value', function (snap) {
                         const user = snap.val();
@@ -61,8 +56,6 @@ class NewPostBase extends Component{
                         user_info['displayName'] = user.displayname;
                         user_info['email'] = user.email;
                         thisPost.setState({user_info: user_info}, () => {
-                            console.log('email: ' + user_info['email']);
-                            console.log('display name: ' + user_info['displayName']);
                         });
                     });
                 });
@@ -91,9 +84,9 @@ class NewPostBase extends Component{
             ref = this.state.serviceType === 'Tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
         }
         const user = this.props.firebase.get_current_user();
-        const posts = this.props.firebase.post_dir(this.state.serviceType === 'Student' ? 'buying' : 'selling', draft ? 'drafted' : 'posted', user.uid);
+        const posts = this.props.firebase.history_post_dir(this.state.serviceType === 'Student' ? 'buying' : 'selling', draft ? 'drafted' : 'posted', user.uid);
         // push new post to the post object
-        ref.push({
+        ref.set({
                 'service_type': this.state.serviceType,
                 'select_1': this.state.Select1,
                 'select_2': this.state.Select2,

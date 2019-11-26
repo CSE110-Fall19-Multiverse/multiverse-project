@@ -25,9 +25,14 @@ class PostRecordBase extends Component {
 
   componentDidMount(){
     this.setState({items: []});
-    let ref = this.props.firebase.post_dir(this.state.buying ? 'buying' : 'selling',
-        this.props.navigation.getParam('isDraft') ? 'drafted' : 'posted',
-        this.props.navigation.getParam('uid'));
+    let ref;
+    if(this.props.navigation.getParam('hist')){
+      ref = this.props.firebase.history_post_dir(this.state.buying ? 'buying' : 'selling',
+          this.props.navigation.getParam('isDraft') ? 'drafted' : 'posted',
+          this.props.navigation.getParam('uid'));
+    }else{
+      ref = this.props.firebase.liked_post_dir(this.state.buying ? 'buying' : 'selling', this.props.navigation.getParam('uid'));
+    }
     let thisComponent = this;
 
     // load posts from firebase once
@@ -49,7 +54,7 @@ class PostRecordBase extends Component {
       snapshot.forEach(function (childSnapshot) {
         let res = {};
         let pid = childSnapshot.val();
-        if(pid != '0'){
+        if(pid !== 0){
           const post_ref = post_ref_generator(thisComponent.state.buying, pid);
           post_ref.once("value", function(snap){
             // get post info
@@ -134,7 +139,8 @@ class PostRecordBase extends Component {
             style={{ paddingVertical: theme.sizes.base * 2}}
         >
           <Block flex={false} row space="between" style={styles.items}>
-            {items.map(item => (
+
+            {items.length === 0 ? null : items.map(item => (
                 <TouchableOpacity
                     key={item.id}
                     onPress= {

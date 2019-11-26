@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BottomBar from "../BottomBar";
+import CommentList from "../Comments/CommentList";
 //import Icon from "react-native-vector-icons/index";
 
 class ViewPostBase extends Component {
@@ -40,17 +41,11 @@ class ViewPostBase extends Component {
 
     process_info(){
         const that = this;
-        const type = this.state.actor === 'buying' ? 'buying_posts' : 'selling_posts';
-        console.log('actor: '+type);
-        console.log('pid: '+this.state.pid);
-        const ref = this.props.firebase.post(type, this.state.pid);
+        const ref = this.props.firebase.post(this.state.actor === 'buying', this.state.pid);
         ref.once('value', function(snap){
             const post = snap.val();
             that.setState({Select1: post.select_1, Select2: post.select_2, Summary: post.summary, Description: post.description, date: post.service_date, price: post.service_price, uid: post.uid, post_date: post.post_date}, () => {
-                console.log('Summary: ' + that.state.Summary);
-                console.log('date: ' + that.state.date);
                 const user_ref = that.props.firebase.user(that.state.uid);
-                console.log('user is '+that.state.uid);
                 user_ref.once('value', function(snap){
                     const user = snap.val();
                     let user_info = {};
@@ -58,7 +53,6 @@ class ViewPostBase extends Component {
                     user_info['displayName'] = user.displayname;
                     user_info['email'] = user.email;
                     that.setState({user_info: user_info}, () => {
-                        console.log('email: ' + user_info['email']);
                         console.log('display name: ' + user_info['displayName']);
                     });
                 });
@@ -70,6 +64,18 @@ class ViewPostBase extends Component {
                 that.setState( {avatar: {uri: uri}});
             }).catch(error => console.log('viewpost: avatar not found'))
         });
+        console.log('inside ViewPost: '+this.state.pid);
+    }
+
+    handleFavorite(){
+        let user = this.props.firebase.get_current_user();
+        let user_ref = this.props.firebase.liked_post_dir(this.state.actor === 'buying' ? 'buying' : 'selling', user.uid);
+        user_ref.push(this.state.pid);
+    }
+
+    addToFavorite(){
+        this.handleFavorite();
+        alert('Added to favorite.');
     }
 
     render(){
@@ -151,7 +157,7 @@ class ViewPostBase extends Component {
                                     />
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    onPress={() => alert('Add to favorite')}
+                                    onPress={() => this.addToFavorite()}
                                 >
                                     <Icon
                                         name={'star'}
@@ -171,12 +177,9 @@ class ViewPostBase extends Component {
                             </View>
                         </Block>
                         <Divider />
-                        <Block>
-                            <Text caption gray style={{textAlign: 'center'}}> There is no comment here yet. </Text>
-                        </Block>
+                        <CommentList pid = {this.props.navigation.state.params.pid} type = {this.props.navigation.state.params.service_type}/>
                     </ScrollView>
                 </KeyboardAvoidingView>
-
                 <BottomBar navigation={this.props.navigation} active='ViewPost'/>
             </Block>
         )
