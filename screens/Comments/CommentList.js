@@ -16,7 +16,6 @@ class CommentListBase extends Component {
     componentDidMount() {
         this.setState({comments: []});
         let that = this;
-        console.log('inside List: '+this.props.pid);
         this.setState({pid: this.props.pid});
         const com_dir = this.props.firebase.comments_dir(this.props.type === 'buying' ? 'buying_posts' : 'selling_posts', this.props.pid);
 
@@ -37,6 +36,35 @@ class CommentListBase extends Component {
         this.setState({refreshing: false});
     };
 
+    handleSubmit(content, type, pid, uid){
+        const com = this.props.firebase.comments();
+        const com_dir = this.props.firebase.comments_dir(type === 'buying' ? 'buying_posts' : 'selling_posts', pid);
+        com.push({
+            'uid': uid,
+            'content': content,
+            'created': this.get_time(),
+        }).then((snap) => {
+            com_dir.push( snap.key );
+        });
+        alert('Submitted!');
+        this.componentDidMount();
+    }
+
+    get_time(){
+        const da = new Date();
+        const date = da.getDate();
+        const month = da.getMonth() + 1;
+        const year = da.getFullYear();
+        const hour = da.getHours();
+        let min = da.getMinutes();
+        let sec = da.getSeconds();
+        if(min < 10) min = '0' + min;
+        if(sec < 10) sec = '0' + sec;
+        const time = year + '-' + month + '-' + date+'T'+hour+':'+min+':'+sec;
+        console.log(time);
+        return time;
+    }
+
     render() {
         const { comments } = this.state;
         return (
@@ -46,14 +74,14 @@ class CommentListBase extends Component {
                     refreshControl={
                         <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()} />
                     }
-                    showsVerticalScrollIndicator={false}
+                    showsVerticalScrollIndicator={true}
                     style={{ paddingVertical: theme.sizes.base * 2}}
                 >
                     {/* Render each comment with Comment component */}
                     {comments.map(comment => <Comment cid={comment} />)}
                 </ScrollView>
                 {/* Comment input box */}
-                <CommentInput pid = {this.props.pid} type = {this.props.type}/>
+                <CommentInput ref={input => this.comment_input = input} pid = {this.props.pid} type = {this.props.type} typing = {this.props.typing} parent={this}/>
             </View>
         );
     }

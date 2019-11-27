@@ -30,6 +30,7 @@ class ViewPostBase extends Component {
         pid: null,
         actor: null,
         user_info: {},
+        typing: false,
     };
 
     componentDidMount(){
@@ -57,7 +58,11 @@ class ViewPostBase extends Component {
                 });
             });
         });
-        console.log('inside ViewPost: '+this.state.pid);
+    }
+
+    addToFavorite(){
+        this.handleFavorite();
+        alert('Added to favorite.');
     }
 
     handleFavorite(){
@@ -66,9 +71,9 @@ class ViewPostBase extends Component {
         user_ref.push(this.state.pid);
     }
 
-    addToFavorite(){
-        this.handleFavorite();
-        alert('Added to favorite.');
+    handleComment(){
+        console.log('focus');
+        this.comment_list.comment_input.text_input._root.focus();
     }
 
     render(){
@@ -141,7 +146,7 @@ class ViewPostBase extends Component {
                         <Block padding={[0, theme.sizes.base * 2]}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                                 <TouchableOpacity
-                                    onPress={() => alert('Comment')}
+                                    onPress={() => this.handleComment()}
                                 >
                                     <Icon
                                         name={'comments'}
@@ -170,7 +175,7 @@ class ViewPostBase extends Component {
                             </View>
                         </Block>
                         <Divider />
-                        <CommentList pid = {this.props.navigation.state.params.pid} type = {this.props.navigation.state.params.service_type}/>
+                        <CommentList ref={ref => this.comment_list = ref} pid = {this.props.navigation.state.params.pid} type = {this.props.navigation.state.params.service_type} typing = {this.state.typing}/>
                     </ScrollView>
                 </KeyboardAvoidingView>
                 <BottomBar navigation={this.props.navigation} active='ViewPost'/>
