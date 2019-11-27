@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { TextInput, Text, View, ScrollView, TouchableOpacity, RefreshControl, StyleSheet,  KeyboardAvoidingView } from 'react-native';
 import {withFirebase} from "../../components/Firebase";
 import {Block} from "../../components";
+import {withFirebaseAndRef} from "../../components/Firebase/context";
 
 class CommentInputBase extends Component {
     state = {
@@ -66,7 +67,7 @@ class CommentInputBase extends Component {
     }
 }
 
-const CommentInput = withFirebase(CommentInputBase);
+const CommentInput = withFirebaseAndRef(CommentInputBase);
 export default CommentInput;
 
 const styles = StyleSheet.create({

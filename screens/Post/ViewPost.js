@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Card, Button, Block, Text, Divider} from '../../components';
 import { withFirebase } from "../../components/Firebase";
 import { theme, elements } from '../../constants';
+import TextInputState from 'react-native/lib/TextInputState';
+import { findNodeHandle } from 'react-native';
 import {
     Image,
     KeyboardAvoidingView,
@@ -73,7 +75,11 @@ class ViewPostBase extends Component {
 
     handleComment(){
         console.log('focus');
-        this.comment_list.comment_input.text_input._root.focus();
+        // According to https://stackoverflow.com/questions/32748718/react-native-how-to-select-the-next-textinput-after-pressing-the-next-keyboar
+        // .focus() method is no longer supported after React 0.36. Therefore adjustments made.
+        // this.comment_list.comment_input.text_input.focus();
+        TextInputState.focusTextInput(
+            findNodeHandle(this.comment_list.comment_input.text_input));
     }
 
     render(){

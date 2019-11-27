@@ -4,6 +4,7 @@ import {withFirebase} from "../../components/Firebase";
 import {theme} from "../../constants";
 import Comment from "../Comments/Comment";
 import CommentInput from "../Comments/CommentInput";
+import {withFirebaseAndRef} from "../../components/Firebase/context";
 
 class CommentListBase extends Component {
     state = {
@@ -66,6 +67,7 @@ class CommentListBase extends Component {
     }
 
     render() {
+        console.log("rendering CommentList");
         const { comments } = this.state;
         return (
             <View style={styles.container}>
@@ -87,7 +89,7 @@ class CommentListBase extends Component {
     }
 }
 
-const CommentList = withFirebase(CommentListBase);
+const CommentList = withFirebaseAndRef(CommentListBase);
 export default CommentList;
 
 const styles = StyleSheet.create({
