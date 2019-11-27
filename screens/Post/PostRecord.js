@@ -71,7 +71,7 @@ class PostRecordBase extends Component {
             }catch (e) {
               console.log(e);
             }
-          }).then(() => {
+          // }).then(() => {
             res['user_info'] = user_res;
 
             let temp = thisComponent.state.items;

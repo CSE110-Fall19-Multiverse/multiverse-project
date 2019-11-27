@@ -43,7 +43,7 @@ class OtherAccountBase extends Component {
 
           <Block margin={[10, 0]} style={styles.history}>
             <Text darkBlue bold style={{ marginBottom: 10 }}
-                  onPress={() => this.props.navigation.navigate('PostHistory', {uid : uid, isDraft : false})}>
+                  onPress={() => this.props.navigation.navigate('PostHistory', {hist : true, uid : uid, isDraft : false})}>
               View History Posts
             </Text>
           </Block>
