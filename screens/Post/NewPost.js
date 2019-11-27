@@ -24,6 +24,7 @@ class NewPostBase extends Component{
         serviceType: '',
         serviceDate: '',
         servicePrice: '',
+        textArray:[],
     };
 
     componentDidMount() {
@@ -84,13 +85,33 @@ class NewPostBase extends Component{
     handlePost(draft) {
         // create a post object will new post can be added
         let ref;
+        let cloud;
         if(draft){
             ref = this.state.serviceType === 'Tutor' ?  this.props.firebase.selling_post_drafts() : this.props.firebase.buying_post_drafts();
         }else {
             ref = this.state.serviceType === 'Tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
         }
         const user = this.props.firebase.get_current_user();
+        cloud = this.props.firebase.get_posts();
+        var array = `${this.state.Description} ${this.state.Summary} ${this.state.Select1} ${this.state.Select2}`; 
+        var text = array.split(" ");
+        console.log(text);
+        cloud.add({
+            'service_type': this.state.serviceType,
+            'select_1': this.state.Select1,
+            'select_2': this.state.Select2,
+            'summary': this.state.Summary,
+            'description': this.state.Description,
+            'service_date': this.state.serviceDate,
+            'service_price': this.state.servicePrice,
+            'post_status': draft ? 'drafted' : 'posted',
+            'post_date': this.ShowCurrentDate(),
+            'uid': user.uid,
+            'array':text,
+        });
         // push new post to the post object
+        //const [serviceType,select_1,select_2,summary,Description] = this.state;
+       // var array = `${serviceType}+${select_1}+${select_2}+${summary}+${Description}`;
         ref.push({
                 'service_type': this.state.serviceType,
                 'select_1': this.state.Select1,

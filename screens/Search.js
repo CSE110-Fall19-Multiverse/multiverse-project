@@ -18,17 +18,23 @@ class SearchBase extends Component {
   }
 
   handleSearchPost(e){
-    const a = e;
-    let ref = this.props.firebase.selling_posts();
     let that = this;
-    console.log(that);
-    let userQuery = ref.orderByChild('summary').startAt(a).endAt(a+"\uf8ff");
-    userQuery.once('value', function(snapshot){
-        snapshot.forEach(function(childSnapshot) {
+    let temp = this.props.firebase.get_posts();
+    /*
+    //var array_string = e.split(" ");
+      temp.where('array','array-contains', e).get().then((snapshot)=>{
+        snapshot.docs.forEach((doc) =>{
           let res = {};
           let user_res = {};
-          let value = childSnapshot.val();
-          res['id'] = childSnapshot.key;
+          let value = doc.data();
+          // get user
+          const user_ref = that.props.firebase.user(value.uid);
+          user_ref.once('value',function(snap){
+            user_res['username'] = user_ref.email;
+            user_res['displayname'] = user_ref.displayname;
+            user_res['uid'] = value.uid;
+          })
+          res['id'] = value.uid;
           res['summary'] = value.summary;
           res['description'] = value.description;
           res['select_1'] = value.select_1;
@@ -37,13 +43,34 @@ class SearchBase extends Component {
           res['service_date'] = value.service_date;
           res['service_price'] = value.service_price;
           res['user_info'] = user_res;
-          console.log("here is the"+childSnapshot.key);
+          res['pid'] = doc.id; 
           let temp = that.state.items;
           temp.push(res);
           that.setState({items: temp});
-          console.log(that.state.items);
-        });
-  });
+          let temporary = that.state.items;
+          console.log('temp is'+temporary[0].description);
+      });
+    }).catch((error)=>{
+      console.log("can't find data");
+    })
+  
+/*
+  let items = that.state.items;
+  console.log("the current is"+ items);
+  console.log("the items size"+items.length);
+  
+  var filteredArr = items.reduce(function(accumulator, currentValue){
+    console.log("accum is "+accumulator+" "+currentValue);
+    var temp = accumulator.filter((item) => item.pid === currentValue.pid);
+    if (temp.length == 0) {
+      accumulator.push(currentValue);
+    }
+    return accumulator;
+  }, []);
+  console.log("the item is "+filteredArr);
+  this.setState({items:filteredArr});
+  //this.setState({items: filteredArr});
+*/
 
 }
   handleSearchFocus(status) {
