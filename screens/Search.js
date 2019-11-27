@@ -20,7 +20,7 @@ class SearchBase extends Component {
   handleSearchPost(e){
     let that = this;
     let temp = this.props.firebase.get_posts();
-    /*
+    
     //var array_string = e.split(" ");
       temp.where('array','array-contains', e).get().then((snapshot)=>{
         snapshot.docs.forEach((doc) =>{
@@ -48,7 +48,6 @@ class SearchBase extends Component {
           temp.push(res);
           that.setState({items: temp});
           let temporary = that.state.items;
-          console.log('temp is'+temporary[0].description);
       });
     }).catch((error)=>{
       console.log("can't find data");
