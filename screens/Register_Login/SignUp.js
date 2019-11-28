@@ -55,6 +55,8 @@ class SignUpBase extends Component {
                   username,
                   email,
                   displayname,
+                  'history_posts': {'drafted': {'buying': [0], 'selling': [0]}, 'posted': {'buying': [0], 'selling': [0]}},
+                  'liked_posts': {'buying': [0], 'selling': [0]},
                 });
           })
           .then(() => {
