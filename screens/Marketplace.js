@@ -71,7 +71,11 @@ class MarketplaceBase extends Component {
     let that = this;
     // load posts from firebase once
     ref.once("value", function(snapshot) {
-      that.addToItems( Object.keys(snapshot.val()), snapshot.val(), [] );
+      try {
+        that.addToItems(Object.keys(snapshot.val()), snapshot.val(), []);
+      } catch (e) {
+        console.log(e);
+      }
     });
   }
 
