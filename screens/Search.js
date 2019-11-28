@@ -45,19 +45,21 @@ class SearchBase extends Component {
           console.log(keyword);
       }
       for(let doc of results.docs)
-    {
+      {
         console.log('The document id is: ' + doc.id);
         console.log('The post description is: ' + doc.get('description'));
         let res = {};
         let user_res = {};
         let value = doc.data();
+        console.log(value);
        
       const user_ref = this.props.firebase.user(value.uid);
-          user_ref.once('value',function(snap){
-          user_res['username'] = user_ref.email;
-          user_res['displayname'] = user_ref.displayname;
-          user_res['uid'] = value.uid;
+      user_ref.once('value').then(function(snap){
+        user_res['username'] = snap.val().email;
+        user_res['displayname'] = snap.val().displayname;
+        user_res['uid'] = value.uid;
       })
+      
           res['id'] = value.uid;
           res['summary'] = value.summary;
           res['description'] = value.description;
@@ -211,8 +213,10 @@ handleSearchFocus(status) {
 
   renderSearchPost(){
     const { items } = this.state;
+    //console.log("the length is"+items.length);
     const { searchString, viewSearch } = this.state;
     const inSearch = viewSearch && searchString;
+    const {navigation} = this.props;
     if(inSearch)
     return (
     <ScrollView
@@ -223,7 +227,7 @@ handleSearchFocus(status) {
       {items.map(item => (
           <TouchableOpacity
               key={item.id}
-              onPress={() => alert('Hi')}
+              onPress={() => navigation.navigate('ViewPost', {pid: item.id, service_type: (item.service_type == 'Student') ? 'buying' : 'selling'})}
           >
             <Card shadow style={styles.item}>
               <Block flex={false} row>
@@ -243,7 +247,7 @@ handleSearchFocus(status) {
                         activeOpacity={0.5}
                         // style={styles.textContainer}
                     >
-                      <Text bold caption>Author: {item.user_info.username}</Text>
+                      <Text bold caption>Author: {item.user_info.displayname}</Text>
                     </TouchableHighlight>
                     <Text caption gray>{item.service_date}</Text>
                   </Block>
