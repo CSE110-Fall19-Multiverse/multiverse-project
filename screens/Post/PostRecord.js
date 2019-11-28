@@ -23,16 +23,69 @@ class PostRecordBase extends Component {
     pageName: 'PostRecord'
   };
 
+  addToItems ( values, user_res, temp_items ){
+    // Base case
+    if (! (Array.isArray(values) && values.length) ) {
+      temp_items.reverse();
+      this.setState({items : temp_items});
+    } else {
+      // Recursive call
+      let pid = values[0];
+      let res = {};
+      const post_ref_generator = this.props.navigation.getParam('isDraft') ?
+          this.props.firebase.draft : this.props.firebase.post;
+      const post_ref = post_ref_generator(this.state.buying, pid);
+      let thisComponent = this;
+      post_ref.once("value", function (snap) {
+        // get post info
+        if (pid !== 0) {
+          const value = snap.val();
+          res['id'] = snap.key;
+          try {
+            res['summary'] = value.summary;
+            res['description'] = value.description;
+            res['select_1'] = value.select_1;
+            res['select_2'] = value.select_2;
+            res['service_type'] = value.service_type;
+            res['service_date'] = value.service_date;
+            res['service_price'] = value.service_price;
+          } catch (e) {
+            console.log(e);
+          }
+          res['user_info'] = user_res;
+          temp_items.push(res);
+        }
+        values.splice(0, 1);
+        thisComponent.addToItems(values, user_res, temp_items);
+      });
+    }
+  };
+
   componentDidMount(){
     this.setState({items: []});
     let ref;
-    if(this.props.navigation.getParam('hist')){
-      ref = this.props.firebase.history_post_dir(this.state.buying ? 'buying' : 'selling',
-          this.props.navigation.getParam('isDraft') ? 'drafted' : 'posted',
-          this.props.navigation.getParam('uid'));
-    }else{
-      ref = this.props.firebase.liked_post_dir(this.state.buying ? 'buying' : 'selling', this.props.navigation.getParam('uid'));
+    switch (this.props.navigation.getParam('type')) {
+      case 'liked' :
+        ref = this.props.firebase.liked_post_dir(this.state.buying ? 'buying' : 'selling', this.props.navigation.getParam('uid'));
+        break;
+      case 'history' :
+        ref = this.props.firebase.history_post_dir(this.state.buying ? 'buying' : 'selling', 'posted',
+            this.props.navigation.getParam('uid'));
+        break;
+      case 'drafts' :
+        ref = this.props.firebase.history_post_dir(this.state.buying ? 'buying' : 'selling', 'drafted',
+            this.props.navigation.getParam('uid'));
+        break;
+      default:
+        break;
     }
+    // if(this.props.navigation.getParam('hist')){
+    //   ref = this.props.firebase.history_post_dir(this.state.buying ? 'buying' : 'selling',
+    //       this.props.navigation.getParam('isDraft') ? 'drafted' : 'posted',
+    //       this.props.navigation.getParam('uid'));
+    // }else{
+    //   ref = this.props.firebase.liked_post_dir(this.state.buying ? 'buying' : 'selling', this.props.navigation.getParam('uid'));
+    // }
     let thisComponent = this;
 
     // load posts from firebase once
@@ -45,44 +98,12 @@ class PostRecordBase extends Component {
         try{
           user_res['username'] = user.email;
           user_res['displayname'] = user.displayname;
-          user_res['uid'] = value.uid;
-        }catch (e) { }
-      });
 
-      const post_ref_generator = thisComponent.props.navigation.getParam('isDraft') ?
-          thisComponent.props.firebase.draft : thisComponent.props.firebase.post;
-      snapshot.forEach(function (childSnapshot) {
-        let res = {};
-        let pid = childSnapshot.val();
-        if(pid !== 0){
-          const post_ref = post_ref_generator(thisComponent.state.buying, pid);
-          post_ref.once("value", function(snap){
-            // get post info
-            const value = snap.val();
-            res['id'] = snap.key;
-            try{
-              res['summary'] = value.summary;
-              res['description'] = value.description;
-              res['select_1'] = value.select_1;
-              res['select_2'] = value.select_2;
-              res['service_type'] = value.service_type;
-              res['service_date'] = value.service_date;
-              res['service_price'] = value.service_price;
-            }catch (e) {
-              console.log(e);
-            }
-          // }).then(() => {
-            res['user_info'] = user_res;
-
-            let temp = thisComponent.state.items;
-            temp.push(res);
-            thisComponent.setState({items: temp});
-          });
+          thisComponent.addToItems(Object.values(snapshot.val()), user_res, []);
+        }catch (e) {
+          console.log(e);
         }
       });
-      let temp = thisComponent.state.items;
-      temp.reverse();
-      thisComponent.setState({items: temp});
     });
   }
 
@@ -122,7 +143,7 @@ class PostRecordBase extends Component {
   }
 
   render() {
-    const { items } = this.state;
+    const { items }      = this.state;
     const { navigation } = this.props;
     const marketViews = ['Buying', 'Selling'];
     return (
@@ -193,7 +214,6 @@ class PostRecordBase extends Component {
                     <Text bold style={{ marginTop: theme.sizes.base}}>{item.summary}</Text>
                     <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
                     <TouchableOpacity
-                        //onPress={() => alert('Send message')}
                         onPress={() => navigation.navigate('ChatRoom')}
                         style={styles.messagingContainer}
                     >
@@ -216,8 +236,9 @@ class PostRecordBase extends Component {
 
 const PostHistory = withFirebase(PostRecordBase);
 const Drafts = withFirebase(PostRecordBase);
+const LikedPosts = withFirebase(PostRecordBase);
 
-export {PostHistory, Drafts};
+export {PostHistory, Drafts, LikedPosts};
 
 const styles = StyleSheet.create({
   header: {

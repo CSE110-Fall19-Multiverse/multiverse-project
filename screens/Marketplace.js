@@ -21,6 +21,45 @@ class MarketplaceBase extends Component {
     first: true,
   };
 
+  addToItems ( keys, posts, temp_items ){
+    if (! (Array.isArray(keys) && keys.length) ) {
+      temp_items.reverse();
+      this.setState({items : temp_items});
+    } else{
+      let res = {};
+      let user_res = {};
+      let key = keys[0];
+      let value = posts[key];
+
+      // get user info
+      const user_ref = this.props.firebase.user(value.uid);
+      let thisComponent = this;
+      user_ref.once('value', function(snap){
+        const user = snap.val();
+        try{
+          user_res['username'] = user.email;
+          user_res['displayname'] = user.displayname;
+          user_res['uid'] = value.uid;
+        }catch (e) {}
+
+        // get post info
+        res['id'] = key;
+        res['summary'] = value.summary;
+        res['description'] = value.description;
+        res['select_1'] = value.select_1;
+        res['select_2'] = value.select_2;
+        res['service_type'] = value.service_type;
+        res['service_date'] = value.service_date;
+        res['service_price'] = value.service_price;
+        res['user_info'] = user_res;
+
+        temp_items.push(res);
+        keys.splice(0, 1);
+        thisComponent.addToItems( keys, posts, temp_items );
+      });
+    }
+  }
+
   componentDidMount(){
     this.setState({items: []});
     let ref;
@@ -32,40 +71,7 @@ class MarketplaceBase extends Component {
     let that = this;
     // load posts from firebase once
     ref.once("value", function(snapshot) {
-      snapshot.forEach(function (childSnapshot) {
-        let res = {};
-        let user_res = {};
-        let value = childSnapshot.val();
-
-        // get user info
-        const user_ref = that.props.firebase.user(value.uid);
-        user_ref.once('value', function(snap){
-          const user = snap.val();
-          try{
-            user_res['username'] = user.email;
-            user_res['displayname'] = user.displayname;
-            user_res['uid'] = value.uid;
-          }catch (e) {}
-
-          // get post info
-          res['id'] = childSnapshot.key;
-          res['summary'] = value.summary;
-          res['description'] = value.description;
-          res['select_1'] = value.select_1;
-          res['select_2'] = value.select_2;
-          res['service_type'] = value.service_type;
-          res['service_date'] = value.service_date;
-          res['service_price'] = value.service_price;
-          res['user_info'] = user_res;
-
-          let temp = that.state.items;
-          temp.push(res);
-          that.setState({items: temp});
-        });
-      });
-      let temp = that.state.items;
-      temp.reverse();
-      that.setState({items: temp});
+      that.addToItems( Object.keys(snapshot.val()), snapshot.val(), [] );
     });
   }
 
