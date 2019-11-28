@@ -79,13 +79,6 @@ class PostRecordBase extends Component {
       default:
         break;
     }
-    // if(this.props.navigation.getParam('hist')){
-    //   ref = this.props.firebase.history_post_dir(this.state.buying ? 'buying' : 'selling',
-    //       this.props.navigation.getParam('isDraft') ? 'drafted' : 'posted',
-    //       this.props.navigation.getParam('uid'));
-    // }else{
-    //   ref = this.props.firebase.liked_post_dir(this.state.buying ? 'buying' : 'selling', this.props.navigation.getParam('uid'));
-    // }
     let thisComponent = this;
 
     // load posts from firebase once
@@ -254,9 +247,6 @@ const styles = StyleSheet.create({
     paddingBottom: theme.sizes.base / 2,
   },
   tabpic: {
-    // flex: 1, 
-    // height: undefined, 
-    // width: undefined,  
     height: 20, 
     width: 20,
   },
@@ -272,7 +262,6 @@ const styles = StyleSheet.create({
     minHeight: (width - (theme.sizes.padding * 2) - theme.sizes.base) / 1.5,
   },
   item_avi: {
-    //justifyContent: ''
   },
   textContainer: {
   }, 
