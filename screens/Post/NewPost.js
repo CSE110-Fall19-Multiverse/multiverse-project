@@ -96,6 +96,7 @@ class NewPostBase extends Component{
         var array = `${this.state.Description} ${this.state.Summary} ${this.state.Select1} ${this.state.Select2}`; 
         var text = array.split(" ");
         console.log(text);
+        let keywordsMapToAdd = this.generateKeywords(this.state.Summary, true);
         cloud.add({
             'service_type': this.state.serviceType,
             'select_1': this.state.Select1,
@@ -107,7 +108,8 @@ class NewPostBase extends Component{
             'post_status': draft ? 'drafted' : 'posted',
             'post_date': this.ShowCurrentDate(),
             'uid': user.uid,
-            'array':text,
+            'keyword': keywordsMapToAdd,
+            //'array':text,
         });
         // push new post to the post object
         //const [serviceType,select_1,select_2,summary,Description] = this.state;
@@ -126,7 +128,41 @@ class NewPostBase extends Component{
             });
         console.log('today is ' + this.ShowCurrentDate())
     }
+    
+ generateKeywords(content, isPost) 
+    {
+    // store lower case letters to enable case-insensitive search
+    console.log("content is "+content);
+    content = content.toLowerCase();
+    // strip the string off with special characters
+    content = content.replace(/[^\w\s]/gi, '');
 
+    // split by space and keep those words
+    let keywords = [content];
+    if (isPost) 
+    {
+        keywords = content.split(' ');
+    }
+    let oldKeywords = keywords.slice();
+
+    for(let word of oldKeywords) 
+    {
+        let temp = '';
+        for(let char of word)
+        {
+            temp += char;
+            keywords.push(temp);
+        }
+    }
+
+    // create a map so we can use query chaining
+    let keywordsMap = {};
+    for(let keyword of keywords) {
+        keywordsMap[keyword] = true;
+    }
+    console.log("finish");
+    return keywordsMap;
+}
     ShowCurrentDate(){
         const date = new Date().getDate();
         const month = new Date().getMonth() + 1;

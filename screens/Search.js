@@ -17,16 +17,107 @@ class SearchBase extends Component {
     viewSearch: false
   }
 
-  handleSearchPost(e){
-    let that = this;
-    let temp = this.props.firebase.get_posts();
+  async handleSearchPost(e){
+      var keywords = ['python'];
+      let temp = [];
+      for(let keyword of keywords)
+      {
+          temp.push(keyword.toLowerCase().replace(/[^\w\s]/gi, ''));
+      } 
+   
+      // chain '==' queries in a loop to effectively obtain the intersection
+      const ref = this.props.firebase.get_posts();
+      let partialQueryResult = ref; // after the loop finish this will contain results
+      for(let keyword of temp)
+      {
+           partialQueryResult = partialQueryResult.where(`keyword.${keyword}`, '==', true);
+      } // type of partialQueryResult: Query
+   
+      // use get() which returns Promise<QuerySnapshot>
+      let results = await partialQueryResult.get().catch(e => {
+          console.log('Error thrown at get() in searchWithMultipleKeywords(): ');
+          console.log(e);
+      }); // now results should be a QuerySnapshot
+   
+      if(results.empty)
+      {
+          console.log('Did not find any results when searching for keywords:');
+          console.log(keyword);
+      }
+      for(let doc of results.docs)
+    {
+        console.log('The document id is: ' + doc.id);
+        console.log('The post description is: ' + doc.get('description'));
+        let res = {};
+        let user_res = {};
+        let value = doc.data();
+       
+      const user_ref = this.props.firebase.user(value.uid);
+          user_ref.once('value',function(snap){
+          user_res['username'] = user_ref.email;
+          user_res['displayname'] = user_ref.displayname;
+          user_res['uid'] = value.uid;
+      })
+          res['id'] = value.uid;
+          res['summary'] = value.summary;
+          res['description'] = value.description;
+          res['select_1'] = value.select_1;
+          res['select_2'] = value.select_2;
+          res['service_type'] = value.service_type;
+          res['service_date'] = value.service_date;
+          res['service_price'] = value.service_price;
+          res['user_info'] = user_res;
+          res['pid'] = doc.id; 
+          let temp = this.state.items;
+          temp.push(res);
+          this.setState({items: temp});
+    }
+      
     
-    //var array_string = e.split(" ");
-      temp.where('array','array-contains', e).get().then((snapshot)=>{
+    /*
+    let that = this;
+    let temp = this.props.firebase.get_posts(); 
+    var a = e.split(" ");
+    console.log(a);
+    for(var s of a){
+    const snapshot = await temp.where('array', 'array-contains',s).get().catch(e=>{
+      console.log("cannot find data");
+      return;
+    });
+    console.log("this is"+s);
+    snapshot.forEach(doc=>{
+      let res = {};
+      let user_res = {};
+      let value = doc.data();
+       
+      const user_ref = that.props.firebase.user(value.uid);
+          user_ref.once('value',function(snap){
+          user_res['username'] = user_ref.email;
+          user_res['displayname'] = user_ref.displayname;
+          user_res['uid'] = value.uid;
+      })
+          res['id'] = value.uid;
+          res['summary'] = value.summary;
+          res['description'] = value.description;
+          res['select_1'] = value.select_1;
+          res['select_2'] = value.select_2;
+          res['service_type'] = value.service_type;
+          res['service_date'] = value.service_date;
+          res['service_price'] = value.service_price;
+          res['user_info'] = user_res;
+          res['pid'] = doc.id; 
+          let temp = that.state.items;
+          temp.push(res);
+          that.setState({items: temp});
+    })
+  }
+/*
+    temp.where('array','array-contains', e).get().then((snapshot)=>{
         snapshot.docs.forEach((doc) =>{
           let res = {};
           let user_res = {};
           let value = doc.data();
+         
           // get user
           const user_ref = that.props.firebase.user(value.uid);
           user_ref.once('value',function(snap){
@@ -47,32 +138,15 @@ class SearchBase extends Component {
           let temp = that.state.items;
           temp.push(res);
           that.setState({items: temp});
-          let temporary = that.state.items;
       });
     }).catch((error)=>{
       console.log("can't find data");
     })
-  
-/*
-  let items = that.state.items;
-  console.log("the current is"+ items);
-  console.log("the items size"+items.length);
-  
-  var filteredArr = items.reduce(function(accumulator, currentValue){
-    console.log("accum is "+accumulator+" "+currentValue);
-    var temp = accumulator.filter((item) => item.pid === currentValue.pid);
-    if (temp.length == 0) {
-      accumulator.push(currentValue);
-    }
-    return accumulator;
-  }, []);
-  console.log("the item is "+filteredArr);
-  this.setState({items:filteredArr});
-  //this.setState({items: filteredArr});
 */
 
 }
-  handleSearchFocus(status) {
+ 
+handleSearchFocus(status) {
     Animated.timing(
       this.state.searchFocus,
       {
