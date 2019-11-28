@@ -18,8 +18,10 @@ class SearchBase extends Component {
   }
 
   async handleSearchPost(e){
-      var keywords = ['python'];
+      var removed_ = e.replace(/\s{2,}/g," ");
+      var keywords = removed_.split(' ');
       let temp = [];
+      let that = this;
       for(let keyword of keywords)
       {
           temp.push(keyword.toLowerCase().replace(/[^\w\s]/gi, ''));
@@ -32,7 +34,6 @@ class SearchBase extends Component {
       {
            partialQueryResult = partialQueryResult.where(`keyword.${keyword}`, '==', true);
       } // type of partialQueryResult: Query
-   
       // use get() which returns Promise<QuerySnapshot>
       let results = await partialQueryResult.get().catch(e => {
           console.log('Error thrown at get() in searchWithMultipleKeywords(): ');
@@ -53,13 +54,15 @@ class SearchBase extends Component {
         let value = doc.data();
         console.log(value);
        
-      const user_ref = this.props.firebase.user(value.uid);
-      user_ref.once('value').then(function(snap){
-        user_res['username'] = snap.val().email;
-        user_res['displayname'] = snap.val().displayname;
-        user_res['uid'] = value.uid;
-      })
-      
+        const user_ref = that.props.firebase.user(value.uid);
+        user_ref.once('value', function(snap){
+          const user = snap.val();
+          try{
+            user_res['username'] = user.email;
+            user_res['displayname'] = user.displayname;
+            user_res['uid'] = value.uid;
+          }catch (e) {}
+    
           res['id'] = value.uid;
           res['summary'] = value.summary;
           res['description'] = value.description;
@@ -70,12 +73,11 @@ class SearchBase extends Component {
           res['service_price'] = value.service_price;
           res['user_info'] = user_res;
           res['pid'] = doc.id; 
-          let temp = this.state.items;
+          let temp = that.state.items;
           temp.push(res);
-          this.setState({items: temp});
-    }
-      
-    
+          that.setState({items: temp});
+        })
+      }
     /*
     let that = this;
     let temp = this.props.firebase.get_posts(); 
@@ -227,7 +229,7 @@ handleSearchFocus(status) {
       {items.map(item => (
           <TouchableOpacity
               key={item.id}
-              onPress={() => navigation.navigate('ViewPost', {pid: item.id, service_type: (item.service_type == 'Student') ? 'buying' : 'selling'})}
+              onPress={() => alert('Enter person\'s profile')}
           >
             <Card shadow style={styles.item}>
               <Block flex={false} row>

@@ -93,10 +93,8 @@ class NewPostBase extends Component{
         }
         const user = this.props.firebase.get_current_user();
         cloud = this.props.firebase.get_posts();
-        var array = `${this.state.Description} ${this.state.Summary} ${this.state.Select1} ${this.state.Select2}`; 
-        var text = array.split(" ");
-        console.log(text);
-        let keywordsMapToAdd = this.generateKeywords(this.state.Summary, true);
+        var combined_text = `${this.state.Description} ${this.state.Summary} ${this.state.Select1} ${this.state.Select2}`; 
+        let keywordsMapToAdd = this.generateKeywords(combined_text, true);
         cloud.add({
             'service_type': this.state.serviceType,
             'select_1': this.state.Select1,
