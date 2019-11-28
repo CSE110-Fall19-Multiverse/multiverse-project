@@ -5,6 +5,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import 'firebase/storage';
 
 // firebase database for development
 const devFirebaseConfig = {
@@ -24,6 +25,7 @@ class Firebase {
 
         this.auth = app.auth();
         this.db = app.database();
+        this.storage = app.storage();
     }
 
     // *** Auth API ***
@@ -45,6 +47,9 @@ class Firebase {
 
     // reference to a user by uid
     user = uid => this.db.ref(`users/${uid}`);
+
+    // reference to avatar
+    avatar = uid => this.storage.ref(`avatar/${uid}`);
 
     // reference to a comment by uid
     comment = cid => this.db.ref(`comments/${cid}`);

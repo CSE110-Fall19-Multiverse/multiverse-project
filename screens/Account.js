@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import {Alert, Image, StyleSheet, ScrollView, TextInput, ActivityIndicator} from 'react-native'
 import { withFirebase } from "../components/Firebase";
+import * as ImagePicker from 'expo-image-picker';
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
 
 import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
@@ -22,8 +25,66 @@ class AccountBase extends Component {
       newProfile.lastname  = snapshot.val().lastname;
       newProfile.displayname = snapshot.val().displayname;
       newProfile.email = snapshot.val().email;
+      newProfile.avatar = elements.profile.avatar;
       this.setState({profile: newProfile});
     })
+
+    this.props.firebase.avatar(uid).child("avatar").getDownloadURL().then(uri => {
+      console.log('avatar found');
+
+      const profile = this.state.profile;
+      profile.avatar = {uri: uri};
+
+      this.setState({profile: profile});
+    }).catch(error => {
+      console.log('avatar not found');
+      console.log(error);
+
+      const profile = this.state.profile;
+      profile.avatar = elements.profile.avatar;
+      this.setState({profile: profile});
+    })
+  }
+
+  getPermissionAsync = async() => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Need camera permission');
+      }
+    }
+  }
+
+  // documentation: https://docs.expo.io/versions/latest/sdk/imagepicker/
+  _pickImage = async() => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+
+    if (!result.cancelled) {
+        const profile = this.state.profile;
+
+        // now displaying using local uri. Alternatively, get url from ref
+        profile['avatar'] = {uri: result.uri};
+        this.setState({profile: profile});
+        this.uploadImage(result.uri).then( (imageRef) => {
+          console.log('upload success')
+        }).catch( (error) => {
+          console.log('ERROR!');
+          console.log(error)
+        });
+    }
+  }
+
+  uploadImage = async(uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const ref = this.props.firebase.avatar(this.state.profile['uid']).child("avatar");
+    return ref.put(blob);
   }
 
   // in the real time database
@@ -108,7 +169,7 @@ class AccountBase extends Component {
       <Block>
         <Block flex={false} row center space="between" style={styles.header}>
           <Text h1 bold>Account</Text>
-          <Button>
+          <Button onPress={() => this.getPermissionAsync().then(this._pickImage())}>
             <Image
               source={profile.avatar}
               style={styles.avatar}
