@@ -85,7 +85,6 @@ class Firebase {
     
     buying_post_drafts = () =>this.db.ref('posts/drafted/buying_post_drafts');
     selling_post_drafts = () =>this.db.ref('posts/drafted/selling_post_drafts');
-<<<<<<< HEAD
 
     get_user_by_id = uid =>this.db.ref(`users/${uid}`);
     get_post_by_id = uid =>this.db.ref(`posts/buying_posts/${uid}`);
@@ -93,8 +92,7 @@ class Firebase {
     //firestore
     get_posts = () => this.cloud.collection('posts');
 
-=======
->>>>>>> ed88360b72945dc59cd945a31431a1feed149e5d
+
 }
 
 export default Firebase;
