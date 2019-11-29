@@ -36,6 +36,8 @@ class ViewPostBase extends Component {
     componentDidMount(){
         const post_id = this.props.navigation.state.params.pid;
         const service_type = this.props.navigation.state.params.service_type;
+        console.log(post_id);
+        console.log(service_type);
         this.setState({pid: post_id, actor: service_type}, () => {this.process_info()})
     }
 

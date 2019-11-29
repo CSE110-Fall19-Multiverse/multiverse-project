@@ -24,6 +24,7 @@ class NewPostBase extends Component{
         serviceType: '',
         serviceDate: '',
         servicePrice: '',
+        textArray:[],
     };
 
     componentDidMount() {
@@ -78,6 +79,7 @@ class NewPostBase extends Component{
     handlePost(draft) {
         // create a post object will new post can be added
         let ref;
+        let cloud;
         if(draft){
             ref = this.state.serviceType === 'Tutor' ?  this.props.firebase.selling_post_drafts() : this.props.firebase.buying_post_drafts();
         }else {
@@ -85,22 +87,84 @@ class NewPostBase extends Component{
         }
         const user = this.props.firebase.get_current_user();
         const posts = this.props.firebase.history_post_dir(this.state.serviceType === 'Student' ? 'buying' : 'selling', draft ? 'drafted' : 'posted', user.uid);
+        const get_user = this.props.firebase.get_user_by_id(user.uid);
+
+
         // push new post to the post object
         ref.push({
-                'service_type': this.state.serviceType,
-                'select_1': this.state.Select1,
-                'select_2': this.state.Select2,
-                'summary': this.state.Summary,
-                'description': this.state.Description,
-                'service_date': this.state.serviceDate,
-                'service_price': this.state.servicePrice,
-                'post_status': draft ? 'drafted' : 'posted',
-                'post_date': this.ShowCurrentDate(),
-                'uid': user.uid,
-            })
-            .then((snap) => {
-                posts.push( snap.key );
+            'service_type': this.state.serviceType,
+            'select_1': this.state.Select1,
+            'select_2': this.state.Select2,
+            'summary': this.state.Summary,
+            'description': this.state.Description,
+            'service_date': this.state.serviceDate,
+            'service_price': this.state.servicePrice,
+            'post_status': draft ? 'drafted' : 'posted',
+            'post_date': this.ShowCurrentDate(),
+            'uid': user.uid,
+        }).then((snap) => {
+            posts.push( snap.key );
+
+            //get data from firestore
+            cloud = this.props.firebase.get_posts();
+            let displayname;
+            let that = this;
+            get_user.once('value',function(snapshot) {
+                const users = snapshot.val();
+                displayname = users.displayname;
+
+                console.log("The object inside is "+displayname);
+                const combined_text = `${that.state.Description} ${that.state.Summary} ${that.state.Select1} ${that.state.Select2} ${displayname}`;
+                let keywordsMapToAdd = that.generateKeywords(combined_text, true);
+                cloud.add({
+                    'service_type': that.state.serviceType,
+                    'select_1': that.state.Select1,
+                    'select_2': that.state.Select2,
+                    'summary': that.state.Summary,
+                    'description': that.state.Description,
+                    'service_date': that.state.serviceDate,
+                    'service_price': that.state.servicePrice,
+                    'post_status': draft ? 'drafted' : 'posted',
+                    'post_date': that.ShowCurrentDate(),
+                    'uid': user.uid,
+                    'keyword': keywordsMapToAdd,
+                    'pid' : snap.key,
+                });
             });
+        });
+    }
+
+    generateKeywords(content, isPost)
+        {
+        // store lower case letters to enable case-insensitive search
+        console.log("content is "+content);
+        content = content.toLowerCase();
+
+        // split by space and keep those words
+        let keywords = [content];
+        if (isPost)
+        {
+            keywords = content.split(' ');
+        }
+        let oldKeywords = keywords.slice();
+
+        for(let word of oldKeywords)
+        {
+            let temp = '';
+            for(let char of word)
+            {
+                temp += char;
+                keywords.push(temp);
+            }
+        }
+
+        // create a map so we can use query chaining
+        let keywordsMap = {};
+        for(let keyword of keywords) {
+            keywordsMap[keyword] = true;
+        }
+        console.log("finish");
+        return keywordsMap;
     }
 
     ShowCurrentDate(){

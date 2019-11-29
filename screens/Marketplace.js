@@ -116,7 +116,6 @@ class MarketplaceBase extends Component {
 
   render() {
     const { items } = this.state;
-    const tabs = ['Marketplace', 'Search', 'Add', 'Chat', 'Account'];
     const marketViews = ['Buying', 'Selling'];
     const { navigation } = this.props;
     return (
@@ -181,7 +180,6 @@ class MarketplaceBase extends Component {
                     <Text bold style={{ marginTop: theme.sizes.base}}>{item.summary}</Text>
                     <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
                     <TouchableOpacity
-                        //onPress={() => alert('Send message')}
                         onPress={() => navigation.navigate('ChatRoom')}
                         style={styles.messagingContainer}
                     >

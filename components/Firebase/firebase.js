@@ -6,6 +6,7 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/storage';
+import 'firebase/firestore';
 
 // firebase database for development
 const devFirebaseConfig = {
@@ -26,6 +27,7 @@ class Firebase {
         this.auth = app.auth();
         this.db = app.database();
         this.storage = app.storage();
+        this.cloud = app.firestore();
     }
 
     // *** Auth API ***
@@ -84,8 +86,18 @@ class Firebase {
 
     selling_posts = () => this.db.ref(`posts/posted/selling_posts`);
 
+    posted = () => this.db.ref(`posts/posted/`);
+
     buying_post_drafts = () =>this.db.ref('posts/drafted/buying_post_drafts');
     selling_post_drafts = () =>this.db.ref('posts/drafted/selling_post_drafts');
+
+    get_user_by_id = uid =>this.db.ref(`users/${uid}`);
+    get_post_by_id = uid =>this.db.ref(`posts/buying_posts/${uid}`);
+
+    //firestore
+    get_posts = () => this.cloud.collection('posts');
+
+
 }
 
 export default Firebase;

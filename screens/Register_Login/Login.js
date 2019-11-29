@@ -5,8 +5,8 @@ import { Button, Block, Input, Text } from '../../components';
 import { theme } from '../../constants';
 import { withFirebase } from "../../components/Firebase";
 
-const VALID_EMAIL = "BadError@do.com";
-const VALID_PASSWORD = "666666";
+const VALID_EMAIL = "1234@gmail.com";
+const VALID_PASSWORD = "jiubugaosuni";
 
 const INITIAL_STATE = {
   email: VALID_EMAIL,
