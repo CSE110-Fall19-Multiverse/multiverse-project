@@ -43,7 +43,7 @@ class SearchBase extends Component {
       if(results.empty)
       {
           console.log('Did not find any results when searching for keywords:');
-          console.log(keyword);
+          //console.log(keyword);
       }
       for(let doc of results.docs)
       {
@@ -77,77 +77,7 @@ class SearchBase extends Component {
           temp.push(res);
           that.setState({items: temp});
         })
-      }
-    /*
-    let that = this;
-    let temp = this.props.firebase.get_posts(); 
-    var a = e.split(" ");
-    console.log(a);
-    for(var s of a){
-    const snapshot = await temp.where('array', 'array-contains',s).get().catch(e=>{
-      console.log("cannot find data");
-      return;
-    });
-    console.log("this is"+s);
-    snapshot.forEach(doc=>{
-      let res = {};
-      let user_res = {};
-      let value = doc.data();
-       
-      const user_ref = that.props.firebase.user(value.uid);
-          user_ref.once('value',function(snap){
-          user_res['username'] = user_ref.email;
-          user_res['displayname'] = user_ref.displayname;
-          user_res['uid'] = value.uid;
-      })
-          res['id'] = value.uid;
-          res['summary'] = value.summary;
-          res['description'] = value.description;
-          res['select_1'] = value.select_1;
-          res['select_2'] = value.select_2;
-          res['service_type'] = value.service_type;
-          res['service_date'] = value.service_date;
-          res['service_price'] = value.service_price;
-          res['user_info'] = user_res;
-          res['pid'] = doc.id; 
-          let temp = that.state.items;
-          temp.push(res);
-          that.setState({items: temp});
-    })
-  }
-/*
-    temp.where('array','array-contains', e).get().then((snapshot)=>{
-        snapshot.docs.forEach((doc) =>{
-          let res = {};
-          let user_res = {};
-          let value = doc.data();
-         
-          // get user
-          const user_ref = that.props.firebase.user(value.uid);
-          user_ref.once('value',function(snap){
-            user_res['username'] = user_ref.email;
-            user_res['displayname'] = user_ref.displayname;
-            user_res['uid'] = value.uid;
-          })
-          res['id'] = value.uid;
-          res['summary'] = value.summary;
-          res['description'] = value.description;
-          res['select_1'] = value.select_1;
-          res['select_2'] = value.select_2;
-          res['service_type'] = value.service_type;
-          res['service_date'] = value.service_date;
-          res['service_price'] = value.service_price;
-          res['user_info'] = user_res;
-          res['pid'] = doc.id; 
-          let temp = that.state.items;
-          temp.push(res);
-          that.setState({items: temp});
-      });
-    }).catch((error)=>{
-      console.log("can't find data");
-    })
-*/
-
+      }   
 }
  
 handleSearchFocus(status) {

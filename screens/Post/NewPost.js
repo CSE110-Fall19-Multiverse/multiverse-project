@@ -92,26 +92,34 @@ class NewPostBase extends Component{
             ref = this.state.serviceType === 'Tutor' ? this.props.firebase.selling_posts() : this.props.firebase.buying_posts();
         }
         const user = this.props.firebase.get_current_user();
+        const get_user = this.props.firebase.get_user_by_id(user.uid);
+        
+        //get data from firestore
         cloud = this.props.firebase.get_posts();
-        var combined_text = `${this.state.Description} ${this.state.Summary} ${this.state.Select1} ${this.state.Select2}`; 
-        let keywordsMapToAdd = this.generateKeywords(combined_text, true);
-        cloud.add({
-            'service_type': this.state.serviceType,
-            'select_1': this.state.Select1,
-            'select_2': this.state.Select2,
-            'summary': this.state.Summary,
-            'description': this.state.Description,
-            'service_date': this.state.serviceDate,
-            'service_price': this.state.servicePrice,
-            'post_status': draft ? 'drafted' : 'posted',
-            'post_date': this.ShowCurrentDate(),
-            'uid': user.uid,
-            'keyword': keywordsMapToAdd,
-            //'array':text,
+        var displayname;
+        let that = this;
+        get_user.once('value',function(snapshot) {
+            var users = snapshot.val();
+            displayname = users.displayname;  
+
+            console.log("The object inside is "+displayname);
+            var combined_text = `${that.state.Description} ${that.state.Summary} ${that.state.Select1} ${that.state.Select2} ${displayname}`; 
+            let keywordsMapToAdd = that.generateKeywords(combined_text, true);
+            cloud.add({
+                'service_type': that.state.serviceType,
+                'select_1': that.state.Select1,
+                'select_2': that.state.Select2,
+                'summary': that.state.Summary,
+                'description': that.state.Description,
+                'service_date': that.state.serviceDate,
+                'service_price': that.state.servicePrice,
+                'post_status': draft ? 'drafted' : 'posted',
+                'post_date': that.ShowCurrentDate(),
+                'uid': user.uid,
+                'keyword': keywordsMapToAdd,
+            });
         });
-        // push new post to the post object
-        //const [serviceType,select_1,select_2,summary,Description] = this.state;
-       // var array = `${serviceType}+${select_1}+${select_2}+${summary}+${Description}`;
+             
         ref.push({
                 'service_type': this.state.serviceType,
                 'select_1': this.state.Select1,
