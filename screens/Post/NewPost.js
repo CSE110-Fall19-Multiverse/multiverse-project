@@ -140,9 +140,7 @@ class NewPostBase extends Component{
     // store lower case letters to enable case-insensitive search
     console.log("content is "+content);
     content = content.toLowerCase();
-    // strip the string off with special characters
-    content = content.replace(/[^\w\s]/gi, '');
-
+    
     // split by space and keep those words
     let keywords = [content];
     if (isPost) 

@@ -18,15 +18,20 @@ class SearchBase extends Component {
   }
 
   async handleSearchPost(e){
-      var removed_ = e.replace(/\s{2,}/g," ");
-      var keywords = removed_.split(' ');
+      var sign =/[!"$%&'()*,-.:/;<=>?@[\]^_`{|}~]/g;    
+      //var test = "C#  is ?! good?";
+      //var removed = e.replace(sign,"").replace(/\s{2,}/g," ");;
+      //console.log(removed);
+      //var removed_ = e.replace(/\s{2,}/g," ");
+      var keywords = e.split(' ');
+      console.log(keywords);
       let temp = [];
       let that = this;
       for(let keyword of keywords)
       {
-          temp.push(keyword.toLowerCase().replace(/[^\w\s]/gi, ''));
+          temp.push(keyword.toLowerCase());
       } 
-   
+      console.log("temp array is "+temp)
       // chain '==' queries in a loop to effectively obtain the intersection
       const ref = this.props.firebase.get_posts();
       let partialQueryResult = ref; // after the loop finish this will contain results
