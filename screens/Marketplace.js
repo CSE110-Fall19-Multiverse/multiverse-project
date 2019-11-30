@@ -6,8 +6,15 @@ import { Card, Button, Block, Text } from '../components';
 import { theme } from '../constants';
 import {withFirebase} from "../components/Firebase";
 import BottomBar from "./BottomBar";
+import {StreamChat} from "stream-chat";
 
 const { width } = Dimensions.get('window');
+export const clientInfo = {
+  chatClient : new StreamChat('rc6yxksd5uam',
+      {timeout: 3000,}),
+  uid : '',
+  token: ''
+};
 
 class MarketplaceBase extends Component {
   state = {
@@ -56,6 +63,37 @@ class MarketplaceBase extends Component {
         keys.splice(0, 1);
         thisComponent.addToItems( keys, posts, temp_items );
       });
+    }
+  }
+
+  async componentWillMount(){
+    const uid = this.props.firebase.auth.currentUser.uid;
+    let chatToken = '';
+    // get user info
+    const user_ref = await this.props.firebase.user(uid);
+    await user_ref.once('value', function(snap){
+      const user = snap.val();
+      chatToken  = user.chattoken;
+
+      console.log(user.chattoken);
+      console.log(user.displayname);
+    });
+
+    try {
+      // Disconnect before loggin in
+      await clientInfo.chatClient.disconnect();
+      await clientInfo.chatClient.setUser(
+          {
+            id: uid,
+            image: 'https://getstream.io/random_svg/?name=John',
+          },
+          chatToken,
+      );
+      clientInfo.uid = uid;
+      clientInfo.token = chatToken;
+      console.log('client initialized');
+    } catch ( e ){
+      console.log(e);
     }
   }
 

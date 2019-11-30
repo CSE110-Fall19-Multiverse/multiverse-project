@@ -15,22 +15,21 @@ import BottomBar from "./BottomBar";
 import {Block} from "../components";
 import {Avatar, IconBadge} from "stream-chat-react-native-core";
 import {withFirebase} from "../components/Firebase";
-
-const chatClient = new StreamChat('rc6yxksd5uam');
-
-// Following information should be fetched from firebase dynamically when user logs in.
-const smallGooseToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOVBDeDc3NjdxaGJSOTd5b2NnRUFYbEZ1Mk1nMiJ9.8IHEpehxq1ZUWCAEye_hfkWb3M07s99nM3t5Sk114IM";
-const smallGooseUid   = "9PCx7767qhbR97yocgEAXlFu2Mg2";
-const littleGooseToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiWk01THBZb0hSSlc5OHpTWGZqT2RWVE02WjlUMiJ9.40wEvTO1_lPQHeJfbXoCtUgGB2NJ-IEC0L6UmB6XTmk";
-const littleGooseUid  = "ZM5LpYoHRJW98zSXfjOdVTM6Z9T2";
-
-chatClient.setUser(
-    {
-      id: littleGooseUid,
-      image: 'https://getstream.io/random_svg/?name=John',
-    },
-    littleGooseToken,
-);
+import { clientInfo } from "./Marketplace";
+//
+// // Following information should be fetched from firebase dynamically when user logs in.
+// const smallGooseToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOVBDeDc3NjdxaGJSOTd5b2NnRUFYbEZ1Mk1nMiJ9.8IHEpehxq1ZUWCAEye_hfkWb3M07s99nM3t5Sk114IM";
+// const smallGooseUid   = "9PCx7767qhbR97yocgEAXlFu2Mg2";
+// const littleGooseToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiWk01THBZb0hSSlc5OHpTWGZqT2RWVE02WjlUMiJ9.40wEvTO1_lPQHeJfbXoCtUgGB2NJ-IEC0L6UmB6XTmk";
+// const littleGooseUid  = "ZM5LpYoHRJW98zSXfjOdVTM6Z9T2";
+//
+// chatClient.setUser(
+//     {
+//       id: littleGooseUid,
+//       image: 'https://getstream.io/random_svg/?name=John',
+//     },
+//     littleGooseToken,
+// );
 
 // Codes to generate channel between users.
 // const conversation = chatClient.channel('messaging', '9PCx7767qhbR97yocgEAXlFu2Mg2_ZM5LpYoHRJW98zSXfjOdVTM6Z9T2',
@@ -42,6 +41,7 @@ chatClient.setUser(
 //     });
 // conversation.create();
 
+const { chatClient } = clientInfo;
 
 class ChannelListScreen extends PureComponent {
   static navigationOptions = () => ({
@@ -59,7 +59,7 @@ class ChannelListScreen extends PureComponent {
         <Chat client={chatClient}>
           <View style={{ display: 'flex', height: '100%', padding: 10 }}>
             <ChannelList
-              filters={{ type: 'messaging', members: { $in: [littleGooseUid]}  }}
+              filters={{ type: 'messaging', members: { $in: [clientInfo.uid]}  }}
               sort={{ last_message_at: -1 }}
               Preview={ ChannelPreviewMessenger }
               onSelect={(channel) => {
