@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, SafeAreaView, Text } from 'react-native';
+import { View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { StreamChat } from 'stream-chat';
 import {
   Chat,
@@ -13,19 +13,35 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import BottomBar from "./BottomBar";
 import {Block} from "../components";
+import {Avatar, IconBadge} from "stream-chat-react-native-core";
+import {withFirebase} from "../components/Firebase";
 
-const chatClient = new StreamChat('f8wwud5et5jd');
-const userToken =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZGl2aW5lLWZvZy0wIn0.Tn6VtnfgXOEpwEgjpB5jfyYRqy6jjHhXp8fGNATkZ-E';
+const chatClient = new StreamChat('rc6yxksd5uam');
 
-const user = {
-  id: 'divine-fog-0',
-  name: 'Divine fog',
-  image:
-    'https://stepupandlive.files.wordpress.com/2014/09/3d-animated-frog-image.jpg',
-};
+// Following information should be fetched from firebase dynamically when user logs in.
+const smallGooseToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOVBDeDc3NjdxaGJSOTd5b2NnRUFYbEZ1Mk1nMiJ9.8IHEpehxq1ZUWCAEye_hfkWb3M07s99nM3t5Sk114IM";
+const smallGooseUid   = "9PCx7767qhbR97yocgEAXlFu2Mg2";
+const littleGooseToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiWk01THBZb0hSSlc5OHpTWGZqT2RWVE02WjlUMiJ9.40wEvTO1_lPQHeJfbXoCtUgGB2NJ-IEC0L6UmB6XTmk";
+const littleGooseUid  = "ZM5LpYoHRJW98zSXfjOdVTM6Z9T2";
 
-chatClient.setUser(user, userToken);
+chatClient.setUser(
+    {
+      id: littleGooseUid,
+      image: 'https://getstream.io/random_svg/?name=John',
+    },
+    littleGooseToken,
+);
+
+// Codes to generate channel between users.
+// const conversation = chatClient.channel('messaging', '9PCx7767qhbR97yocgEAXlFu2Mg2_ZM5LpYoHRJW98zSXfjOdVTM6Z9T2',
+//     {
+//       name: 'Founder Chat',
+//       image: 'http://bit.ly/2O35mws',
+//       members: ['9PCx7767qhbR97yocgEAXlFu2Mg2',
+//         'ZM5LpYoHRJW98zSXfjOdVTM6Z9T2'],
+//     });
+// conversation.create();
+
 
 class ChannelListScreen extends PureComponent {
   static navigationOptions = () => ({
@@ -34,15 +50,18 @@ class ChannelListScreen extends PureComponent {
     ),
   });
 
+  async componentWillMount() {
+  }
+
   render() {
     return (
       <SafeAreaView>
         <Chat client={chatClient}>
           <View style={{ display: 'flex', height: '100%', padding: 10 }}>
             <ChannelList
-              filters={{ type: 'messaging', members: { $in: ['divine-fog-0'] } }}
+              filters={{ type: 'messaging', members: { $in: [littleGooseUid]}  }}
               sort={{ last_message_at: -1 }}
-              Preview={ChannelPreviewMessenger}
+              Preview={ ChannelPreviewMessenger }
               onSelect={(channel) => {
                 this.props.navigation.navigate('Channel', {
                   channel,
@@ -104,7 +123,7 @@ const RootStack = createStackNavigator(
 
 const AppContainer = createAppContainer(RootStack);
 
-export default class ChatRoom extends React.Component {
+class ChatRoomBase extends React.Component {
   render() {
     return(
     <Block>
@@ -114,3 +133,6 @@ export default class ChatRoom extends React.Component {
     );
   }
 }
+
+const ChatRoom = withFirebase(ChatRoomBase);
+export default ChatRoom;

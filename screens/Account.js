@@ -27,7 +27,7 @@ class AccountBase extends Component {
       newProfile.email = snapshot.val().email;
       newProfile.avatar = elements.profile.avatar;
       this.setState({profile: newProfile});
-    })
+    });
 
     this.props.firebase.avatar(uid).child("avatar").getDownloadURL().then(uri => {
       console.log('avatar found');
@@ -53,7 +53,7 @@ class AccountBase extends Component {
         alert('Need camera permission');
       }
     }
-  }
+  };
 
   // documentation: https://docs.expo.io/versions/latest/sdk/imagepicker/
   _pickImage = async() => {
@@ -77,7 +77,7 @@ class AccountBase extends Component {
           console.log(error)
         });
     }
-  }
+  };
 
   uploadImage = async(uri) => {
     const response = await fetch(uri);
@@ -85,7 +85,7 @@ class AccountBase extends Component {
 
     const ref = this.props.firebase.avatar(this.state.profile['uid']).child("avatar");
     return ref.put(blob);
-  }
+  };
 
   // in the real time database
   updateDatabase(name, updateObject)
@@ -115,14 +115,14 @@ class AccountBase extends Component {
         }
       ],
       { cancelable: true }
-    )
+    );
 
     this.toggleEdit(name);
   }
 
   updateField(name, newValue)
   {
-    var updateObj = {}
+    var updateObj = {};
     updateObj[name] = newValue;
     this.updateDatabase(name, updateObj);
   }

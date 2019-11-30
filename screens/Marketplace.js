@@ -7,7 +7,6 @@ import { theme } from '../constants';
 import {withFirebase} from "../components/Firebase";
 import BottomBar from "./BottomBar";
 
-
 const { width } = Dimensions.get('window');
 
 class MarketplaceBase extends Component {
