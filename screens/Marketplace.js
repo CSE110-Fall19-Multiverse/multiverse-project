@@ -73,11 +73,13 @@ class MarketplaceBase extends Component {
     async componentWillMount() {
         const uid = this.props.firebase.auth.currentUser.uid;
         let chatToken = '';
+        let userName  = '';
         // get user info
         const user_ref = await this.props.firebase.user(uid);
         await user_ref.once('value', function (snap) {
             const user = snap.val();
             chatToken = user.chattoken;
+            userName  = user.displayname;
 
             console.log(user.chattoken);
             console.log(user.displayname);
@@ -88,7 +90,8 @@ class MarketplaceBase extends Component {
             await clientInfo.chatClient.disconnect();
             await clientInfo.chatClient.setUser(
                 {
-                    id: uid,
+                    id   : uid,
+                    name : userName,
                     image: 'https://getstream.io/random_svg/?name=John',
                 },
                 chatToken,
