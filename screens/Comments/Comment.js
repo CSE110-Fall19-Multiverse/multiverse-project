@@ -34,13 +34,16 @@ class CommentBase extends Component {
        let that = this;
        user_ref.once('value', function(snap){
            const user = snap.val();
-           that.setState({avatar: user.avatar, username: user.displayname});
+           that.setState({username: user.displayname});
        });
+       this.props.firebase.avatar(this.state.uid).child("avatar").getDownloadURL().then(uri => {
+           const avatar = {uri: uri};
+           this.setState({avatar: avatar});
+       }).catch(e => this.setState({avatar: require('../../assets/images/default_avatar.jpg')}))
    }
 
    render(){
-       const { content, username, created} = this.state;
-       const avatar = require('../../assets/images/madeline.png');
+       const { content, username, created, avatar} = this.state;
 
        return (
            <View style={styles.container}>
@@ -48,7 +51,7 @@ class CommentBase extends Component {
                    {avatar && <Image
                        resizeMode='contain'
                        style={styles.avatar}
-                       source={require('../../assets/images/madeline.png')}
+                       source={avatar}
                    />}
                </View>
                <View style={styles.contentContainer}>

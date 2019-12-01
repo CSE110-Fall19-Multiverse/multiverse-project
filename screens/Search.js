@@ -57,6 +57,12 @@ class SearchBase extends Component {
             let user_res = {};
             let value = doc.data();
 
+            // uid has to be ready before this line get called. so don't move it outside
+            this.props.firebase.avatar(value.uid).child("avatar").getDownloadURL().then(uri => {
+                console.log('load avatar success');
+                user_res['avatar'] = {uri: uri};
+            }).catch(error => user_res['avatar'] = require('../assets/images/default_avatar.jpg'));
+
             const user_ref = that.props.firebase.user(value.uid);
             user_ref.once('value', function (snap) {
                 const user = snap.val();
@@ -168,8 +174,7 @@ class SearchBase extends Component {
                                                 underlayColor={'purple'}
                                                 activeOpacity={0.69}
                                             >
-                                                <Image source={item.avi}/>
-
+                                                <Image source={item.user_info['avatar']} style={styles.avatar}/>
                                             </TouchableHighlight>
                                             <Block style={{margin: theme.sizes.base / 4}}>
                                                 <TouchableHighlight
@@ -177,7 +182,7 @@ class SearchBase extends Component {
                                                     underlayColor={'white'}
                                                     activeOpacity={0.5}
                                                 >
-                                                    <Text bold caption>Author: {item.user_info.displayname}</Text>
+                                                    <Text bold caption>{item.user_info.displayname}</Text>
                                                 </TouchableHighlight>
                                                 <Text caption gray>{item.service_date}</Text>
                                             </Block>
@@ -303,9 +308,13 @@ const styles = StyleSheet.create({
     messaging: {
         color: theme.colors.lightBlue,
     },
+    avatar: {
+        height: theme.sizes.base * 2.2,
+        width: theme.sizes.base * 2.2,
+    },
     messagingContainer: {
         position: 'absolute',
         bottom: theme.sizes.base * 2,
         right: theme.sizes.base * 2,
-    }
-})
+    },
+});
