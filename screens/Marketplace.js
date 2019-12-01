@@ -261,7 +261,6 @@ class MarketplaceBase extends Component {
     }
 }
 
-
 const Marketplace = withFirebase(MarketplaceBase);
 export default Marketplace;
 
