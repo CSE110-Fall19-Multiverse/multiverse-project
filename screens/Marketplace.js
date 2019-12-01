@@ -91,7 +91,7 @@ class MarketplaceBase extends Component {
         } catch (e) {
             console.log(e);
         } finally {
-            console.log(avatarURL);
+            if (avatarURL === undefined) avatarURL = '';
             // Disconnect before logging in
             await clientInfo.chatClient.disconnect();
             await clientInfo.chatClient.setUser(
