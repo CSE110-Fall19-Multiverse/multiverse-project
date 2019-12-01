@@ -1,116 +1,136 @@
-import React, { PureComponent } from 'react';
-import { View, SafeAreaView, Text } from 'react-native';
-import { StreamChat } from 'stream-chat';
+import React, {PureComponent} from 'react';
+import {View, SafeAreaView, Text, TouchableOpacity} from 'react-native';
+import {StreamChat} from 'stream-chat';
 import {
-  Chat,
-  Channel,
-  MessageList,
-  MessageInput,
-  ChannelPreviewMessenger,
-  ChannelList,
+    Chat,
+    Channel,
+    MessageList,
+    MessageInput,
+    ChannelPreviewMessenger,
+    ChannelList,
 } from 'stream-chat-expo';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 import BottomBar from "./BottomBar";
 import {Block} from "../components";
+import {Avatar, IconBadge} from "stream-chat-react-native-core";
+import {withFirebase} from "../components/Firebase";
 
-const chatClient = new StreamChat('f8wwud5et5jd');
-const userToken =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZGl2aW5lLWZvZy0wIn0.Tn6VtnfgXOEpwEgjpB5jfyYRqy6jjHhXp8fGNATkZ-E';
-
-const user = {
-  id: 'divine-fog-0',
-  name: 'Divine fog',
-  image:
-    'https://stepupandlive.files.wordpress.com/2014/09/3d-animated-frog-image.jpg',
+export const clientInfo = {
+    chatClient: new StreamChat('rc6yxksd5uam',
+        {timeout: 3000,}),
+    uid: '',
+    token: ''
 };
 
-chatClient.setUser(user, userToken);
+const {chatClient} = clientInfo;
 
 class ChannelListScreen extends PureComponent {
-  static navigationOptions = () => ({
-    headerTitle: (
-      <Text style={{ fontWeight: 'bold' }}>Awesome Conversations</Text>
-    ),
-  });
+    static navigationOptions = () => ({
+        headerTitle: (
+            <Text style={{fontWeight: 'bold'}}>Awesome Conversations</Text>
+        ),
+    });
 
-  render() {
-    return (
-      <SafeAreaView>
-        <Chat client={chatClient}>
-          <View style={{ display: 'flex', height: '100%', padding: 10 }}>
-            <ChannelList
-              filters={{ type: 'messaging', members: { $in: ['divine-fog-0'] } }}
-              sort={{ last_message_at: -1 }}
-              Preview={ChannelPreviewMessenger}
-              onSelect={(channel) => {
-                this.props.navigation.navigate('Channel', {
-                  channel,
-                });
-              }}
-            />
-          </View>
-        </Chat>
-      </SafeAreaView>
-    );
-  }
+    async componentWillMount() {
+    }
+
+    render() {
+        return (
+            <SafeAreaView>
+                <Chat client={chatClient}>
+                    <View style={{display: 'flex', height: '100%', padding: 10}}>
+                        <ChannelList
+                            filters={{type: 'messaging', members: {$in: [clientInfo.uid]}}}
+                            sort={{last_message_at: -1}}
+                            Preview={ChannelPreviewMessenger}
+                            onSelect={(channel) => {
+                                this.props.navigation.navigate('Channel', {
+                                    channel,
+                                });
+                            }}
+                        />
+                    </View>
+                </Chat>
+            </SafeAreaView>
+        );
+    }
 }
 
 class ChannelScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const channel = navigation.getParam('channel');
-    return {
-      headerTitle: (
-        <Text style={{ fontWeight: 'bold' }}>{channel.data.name}</Text>
-      ),
+    static navigationOptions = ({navigation}) => {
+        const channel = navigation.getParam('channel');
+        return {
+            // headerTitle: (
+            //   <Text style={{ fontWeight: 'bold' }}>{channel.data.name}</Text>
+            // ),
+        };
     };
-  };
 
-  render() {
-    const { navigation } = this.props;
-    const channel = navigation.getParam('channel');
+    render() {
+        const {navigation} = this.props;
+        const channel = navigation.getParam('channel');
 
-    return (
-      <Block>
-        <SafeAreaView>
-          <Chat client={chatClient}>
-            <Channel client={chatClient} channel={channel}>
-              <View style={{ display: 'flex', height: '100%' }}>
-                <MessageList />
-                <MessageInput />
-              </View>
-            </Channel>
-          </Chat>
-        </SafeAreaView>
-
-      </Block>
-    );
-  }
+        return (
+            <Block>
+                <Block>
+                    <SafeAreaView>
+                        <Chat client={chatClient}>
+                            <Channel client={chatClient} channel={channel}>
+                                <View style={{display: 'flex', height: '100%'}}>
+                                    <MessageList/>
+                                    <MessageInput/>
+                                </View>
+                            </Channel>
+                        </Chat>
+                    </SafeAreaView>
+                </Block>
+                {navigation.getParam('directMessage') &&
+                <BottomBar navigation={this.props.navigation} active='ChatRoom'/>}
+            </Block>
+        );
+    }
 }
 
 const RootStack = createStackNavigator(
-  {
-    ChannelList: {
-      screen: ChannelListScreen,
+    {
+        ChannelList: {
+            screen: ChannelListScreen,
+        },
+        Channel: {
+            screen: ChannelScreen,
+        },
     },
-    Channel: {
-      screen: ChannelScreen,
+    {
+        initialRouteName: 'ChannelList',
     },
-  },
-  {
-    initialRouteName: 'ChannelList',
-  },
 );
 
 const AppContainer = createAppContainer(RootStack);
 
-export default class ChatRoom extends React.Component {
-  render() {
-    return(
-    <Block>
-      <AppContainer />
-      <BottomBar navigation={this.props.navigation} active='ChatRoom'/>
-    </Block>
-    );
-  }
+class ChatRoomBase extends React.Component {
+    render() {
+        return (
+            <Block>
+                <AppContainer/>
+                <BottomBar navigation={this.props.navigation} active='ChatRoom'/>
+            </Block>
+        );
+    }
 }
+
+function createChannel(selfUid, otherUid) {
+    // Codes to generate channel between users.
+    const conversation = clientInfo.chatClient.channel('messaging', null,
+        {
+            name: 'Chat',
+            image: 'http://bit.ly/2O35mws',
+            // Sorting to make sure only one channel between every two users
+            members: [selfUid, otherUid].sort(),
+        });
+    return conversation;
+}
+
+const ChatRoom = withFirebase(ChatRoomBase);
+export default ChatRoom;
+export {createChannel, ChannelScreen};

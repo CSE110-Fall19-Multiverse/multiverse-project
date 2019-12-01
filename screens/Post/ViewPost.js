@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Card, Button, Block, Text, Divider} from '../../components';
 import { withFirebase } from "../../components/Firebase";
 import { theme, elements } from '../../constants';
@@ -17,6 +17,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BottomBar from "../BottomBar";
 import CommentList from "../Comments/CommentList";
+import {clientInfo, createChannel} from "../ChatRoom";
+
 //import Icon from "react-native-vector-icons/index";
 
 class ViewPostBase extends Component {
@@ -36,20 +38,29 @@ class ViewPostBase extends Component {
         typing: false,
     };
 
-    componentDidMount(){
+    componentDidMount() {
         const post_id = this.props.navigation.state.params.pid;
         const service_type = this.props.navigation.state.params.service_type;
         this.setState({pid: post_id, actor: service_type}, () => {this.process_info()})
     }
 
-    process_info(){
+    process_info() {
         const that = this;
         const ref = this.props.firebase.post(this.state.actor === 'buying', this.state.pid);
-        ref.once('value', function(snap){
+        ref.once('value', function (snap) {
             const post = snap.val();
-            that.setState({Select1: post.select_1, Select2: post.select_2, Summary: post.summary, Description: post.description, date: post.service_date, price: post.service_price, uid: post.uid, post_date: post.post_date}, () => {
+            that.setState({
+                Select1: post.select_1,
+                Select2: post.select_2,
+                Summary: post.summary,
+                Description: post.description,
+                date: post.service_date,
+                price: post.service_price,
+                uid: post.uid,
+                post_date: post.post_date
+            }, () => {
                 const user_ref = that.props.firebase.user(that.state.uid);
-                user_ref.once('value', function(snap){
+                user_ref.once('value', function (snap) {
                     const user = snap.val();
                     let user_info = {};
                     user_info['username'] = user.username;
@@ -64,7 +75,7 @@ class ViewPostBase extends Component {
             // uid has to be ready before this line get called. so don't move it outside
             that.props.firebase.avatar(that.state.uid).child("avatar").getDownloadURL().then(uri => {
                 console.log('load avatar success');
-                that.setState( {avatar: {uri: uri}});
+                that.setState({avatar: {uri: uri}});
             }).catch(error => console.log('viewpost: avatar not found'))
         });
     }
@@ -74,7 +85,7 @@ class ViewPostBase extends Component {
         alert('Added to favorite.');
     }
 
-    handleFavorite(){
+    handleFavorite() {
         let user = this.props.firebase.get_current_user();
         let user_ref = this.props.firebase.liked_post_dir(this.state.actor === 'buying' ? 'buying' : 'selling', user.uid);
         user_ref.push(this.state.pid);
@@ -89,11 +100,11 @@ class ViewPostBase extends Component {
             findNodeHandle(this.comment_list.comment_input.text_input));
     }
 
-    render(){
-        const { navigation } = this.props;
-        return(
+    render() {
+        const {navigation} = this.props;
+        return (
             <Block>
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior={"position"} >
+                <KeyboardAvoidingView style={{flex: 1}} behavior={"position"}>
                     <ScrollView showsVerticalScrollIndicator={true}>
                         <Block style={styles.inputs}>
                             <Block flex={false} row>
@@ -105,14 +116,15 @@ class ViewPostBase extends Component {
                                     >
                                         <Image source={this.state.avatar} style={styles.avatar}/>
                                     </TouchableHighlight>
-                                    <Block style={{ margin: theme.sizes.base / 4}}>
+                                    <Block style={{margin: theme.sizes.base / 4}}>
                                         <TouchableHighlight
-                                            onPress={() => this.props.navigation.navigate('OtherAccount', {uid : this.state.uid})}
+                                            onPress={() => this.props.navigation.navigate('OtherAccount', {uid: this.state.uid})}
                                             underlayColor={'white'}
                                             activeOpacity={0.5}
                                             // style={styles.textContainer}
                                         >
-                                            <Text bold caption styles={{fontSize: 13}}>{'\n'} {this.state.user_info.displayName}</Text>
+                                            <Text bold caption
+                                                  styles={{fontSize: 13}}>{'\n'} {this.state.user_info.displayName}</Text>
                                         </TouchableHighlight>
                                         <Text caption gray>{this.state.post_date}</Text>
                                     </Block>
@@ -123,7 +135,8 @@ class ViewPostBase extends Component {
                                         underlayColor={'white'}
                                         activeOpacity={0.5}
                                     >
-                                        <Text right semibold secondary style={{fontSize: 12}}> {`${this.state.Select1}\n${this.state.Select2}`} </Text>
+                                        <Text right semibold secondary
+                                              style={{fontSize: 12}}> {`${this.state.Select1}\n${this.state.Select2}`} </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight
                                         onPress={() => alert('item.price_negotiable ? {alert(\'price non-negotiable\')} : popup counteroffer screen')}
@@ -136,24 +149,29 @@ class ViewPostBase extends Component {
                             </Block>
                             <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                                 <Block>
-                                    <Text style={{marginTop: 14, marginBottom: 14, fontSize:22, fontWeight: "800"}}>{this.state.Summary}</Text>
+                                    <Text style={{
+                                        marginTop: 14,
+                                        marginBottom: 14,
+                                        fontSize: 22,
+                                        fontWeight: "800"
+                                    }}>{this.state.Summary}</Text>
                                 </Block>
                             </Block>
                             <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                                 <Block>
-                                    <Text style={{ marginBottom: 14 }}>{this.state.Description}</Text>
+                                    <Text style={{marginBottom: 14}}>{this.state.Description}</Text>
                                 </Block>
                             </Block>
                         </Block>
 
-                        <Divider margin={[theme.sizes.base, theme.sizes.base * 2]} />
+                        <Divider margin={[theme.sizes.base, theme.sizes.base * 2]}/>
 
                         <Block margin={[10, 0]} style={styles.history}>
-                            <Text gray style={{ marginBottom: 13 }}>Service Date</Text>
+                            <Text gray style={{marginBottom: 13}}>Service Date</Text>
                             <Text> {this.state.date} </Text>
                         </Block>
                         <Block margin={[10, 0]} style={styles.messaging}>
-                            <Text gray style={{ marginBottom: 13 }}>Service Price</Text>
+                            <Text gray style={{marginBottom: 13}}>Service Price</Text>
                             <Text> ${this.state.price} </Text>
                         </Block>
                         <Block padding={[0, theme.sizes.base * 2]}>
@@ -177,7 +195,17 @@ class ViewPostBase extends Component {
                                     />
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    onPress={() => alert('Message the post maker')}
+                                    onPress={() => {
+                                        const channel = createChannel(clientInfo.uid, this.state.uid);
+                                        channel.create().then(() => {
+                                            console.log('channel created');
+                                        });
+
+                                        this.props.navigation.navigate('ChannelScreen', {
+                                            channel,
+                                            directMessage: true
+                                        })
+                                    }}
                                 >
                                     <Icon
                                         name={'comment'}
@@ -188,7 +216,9 @@ class ViewPostBase extends Component {
                             </View>
                         </Block>
                         <Divider />
-                        <CommentList ref={ref => this.comment_list = ref} pid = {this.props.navigation.state.params.pid} type = {this.props.navigation.state.params.service_type} typing = {this.state.typing}/>
+                        <CommentList ref={ref => this.comment_list = ref} pid = {this.props.navigation.state.params.pid} 
+                          type = {this.props.navigation.state.params.service_type} typing = {this.state.typing}/>
+
                     </ScrollView>
                 </KeyboardAvoidingView>
                 <BottomBar navigation={this.props.navigation} active='ViewPost'/>
@@ -204,9 +234,9 @@ const styles = StyleSheet.create({
     header: {
         paddingHorizontal: theme.sizes.base * 2,
     },
-    container:{
+    container: {
         padding: 7,
-        backgroundColor:'white',
+        backgroundColor: 'white',
         borderColor: 'gray',
         shadowColor: "gray",
         shadowOpacity: 0.8,
@@ -225,7 +255,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: theme.sizes.base * 2,
         textAlign: 'left',
     },
-    border:{
+    border: {
         borderColor: '#e8e8e8',
         borderWidth: 1,
         shadowColor: 'gray',
@@ -239,7 +269,7 @@ const styles = StyleSheet.create({
     summary: {
         height: 70,
     },
-    description:{
+    description: {
         height: 180,
     },
     inputRow: {
