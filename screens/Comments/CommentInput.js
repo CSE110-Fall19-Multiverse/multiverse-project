@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { TextInput, Text, View, ScrollView, TouchableOpacity, RefreshControl, StyleSheet,  KeyboardAvoidingView } from 'react-native';
-import {withFirebase} from "../../components/Firebase";
-import {Block} from "../../components";
+import { Text, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import {withFirebaseAndRef} from "../../components/Firebase/context";
+import { Animated, Dimensions, Keyboard, StyleSheet, TextInput, UIManager } from 'react-native';
+
+const { State: TextInputState } = TextInput;
 
 class CommentInputBase extends Component {
     state = {
@@ -11,11 +12,55 @@ class CommentInputBase extends Component {
         type: null,
         content: '',
         created: null,
+        shift: new Animated.Value(0),
     };
 
     componentDidMount() {
         const user_ref = this.props.firebase.get_current_user();
         this.setState({pid: this.props.pid, uid: user_ref.uid, type: this.props.type});
+    }
+
+    componentWillMount() {
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
+        this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide);
+    }
+
+    handleKeyboardDidShow = (event) => {
+        const { height: windowHeight } = Dimensions.get('window');
+        const keyboardHeight = event.endCoordinates.height;
+        const currentlyFocusedField = TextInputState.currentlyFocusedField();
+        UIManager.measure(currentlyFocusedField, (originX, originY, width, height, pageX, pageY) => {
+            const fieldHeight = height;
+            const fieldTop = pageY;
+            const gap = (windowHeight - keyboardHeight) - (fieldTop + fieldHeight);
+            if (gap >= 0) {
+                return;
+            }
+            Animated.timing(
+                this.state.shift,
+                {
+                    toValue: gap,
+                    duration: 0,
+                    useNativeDriver: true,
+                }
+            ).start();
+        });
+    };
+
+    handleKeyboardDidHide = () => {
+        Animated.timing(
+            this.state.shift,
+            {
+                toValue: 0,
+                duration: 0,
+                useNativeDriver: true,
+            }
+        ).start();
+    };
+
+    componentWillUnmount() {
+        this.keyboardDidShowSub.remove();
+        this.keyboardDidHideSub.remove();
     }
 
     // Update state when input changes
@@ -35,18 +80,19 @@ class CommentInputBase extends Component {
     };
 
     render(){
+        const { shift } = this.state;
         return (
             // This moves children view with input field and submit button
             // up above the keyboard when it's active
             <KeyboardAvoidingView
-                behavior={'position'}
+                style={{position: 'absolute', left: 0, right: 0, bottom: 0}}
+                behavior="position"
             >
-                <View style={styles.container}>
+                <Animated.View style={[styles.container, { transform: [{translateY: shift}] }]}>
                     {/* Comment input field */}
                     <TextInput
                         ref={input => this.text_input = input}
                         placeholder="Add a comment..."
-                        keyboardType="twitter" // keyboard with no return button
                         autoFocus = {false}// focus and show the keyboard
                         style={styles.input}
                         value={this.state.text}
@@ -61,7 +107,7 @@ class CommentInputBase extends Component {
                         {/* Apply inactive style if no input */}
                         <Text style={[styles.text, !this.state.text ? styles.inactive : []]}>Post</Text>
                     </TouchableOpacity>
-                </View>
+                </Animated.View>
             </KeyboardAvoidingView>
         );
     }
