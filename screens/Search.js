@@ -16,6 +16,7 @@ import {Block, Card, Input, Text} from '../components';
 import {theme} from '../constants';
 import {withFirebase} from "../components/Firebase"
 import BottomBar from "./BottomBar";
+import {clientInfo, createChannel} from "./ChatRoom";
 
 const {width, height} = Dimensions.get('window');
 
@@ -136,13 +137,19 @@ class SearchBase extends Component {
             return (
                 <Block>
                     <Block style={styles.category}>
-                        <Text bold lightBlue style={{marginBottom: theme.sizes.base * 1.5}}>CATEGORY</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Learning and Skills</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Career</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Food Delivery</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Transportation</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Social</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Other</Text>
+                    <Text bold lightBlue style={{ marginBottom: theme.sizes.base * 1.5}} >CATEGORY</Text>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'CSE Course Tutoring',viewSearch:true}), this.handleSearchPost('CSE Course Tutoring'),this.setState({items:[]}))}> 
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}} >CSE Course Tutoring </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'Language Tutoring',viewSearch:true}), this.handleSearchPost('Language Tutoring'),this.setState({items:[]}))}> 
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Language Tutoring</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'Interview Preparation',viewSearch:true}), this.handleSearchPost('Interview Preparation'),this.setState({items:[]}))}> 
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Interview Preparation</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'Java',viewSearch:true}), this.handleSearchPost('Java'),this.setState({items:[]}))}> 
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Java</Text>
+                    </TouchableOpacity>
                     </Block>
                 </Block>
             );
@@ -164,7 +171,7 @@ class SearchBase extends Component {
                             <TouchableOpacity
                                 key={item.id}
                                 onPress={() => navigation.navigate('ViewPost',
-                                    {pid: item.id, service_type: item.service_type === 'Student' ? 'buying' : selling})}
+                                    {pid: item.id, service_type: item.service_type === 'Student' ? 'buying' : 'selling'})}
                             >
                                 <Card shadow style={styles.item}>
                                     <Block flex={false} row>
@@ -208,7 +215,22 @@ class SearchBase extends Component {
                                     <Text bold style={{marginTop: theme.sizes.base}}>{item.summary}</Text>
                                     <Text style={{marginTop: theme.sizes.base}}>{item.description}</Text>
                                     <TouchableOpacity
-                                        onPress={() => alert('Send message')}
+                                        onPress={() => {
+                                            const channel = createChannel(clientInfo.uid, item.user_info['uid']);
+                                            try {
+                                                channel.create().then(() => {
+                                                    console.log('channel created');
+                                                });
+
+                                                this.props.navigation.navigate('ChannelScreen', {
+                                                    channel,
+                                                    directMessage: true
+                                                })
+                                            } catch (e) {
+                                                console.log(e);
+                                                this.props.navigation.navigate('ChatRoom');
+                                            }
+                                        }}
                                         style={styles.messagingContainer}
                                     >
                                         <Icon
