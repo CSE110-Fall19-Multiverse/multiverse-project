@@ -183,5 +183,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 2.5,
   },
-})
+});
  

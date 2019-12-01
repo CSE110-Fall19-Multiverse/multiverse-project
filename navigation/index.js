@@ -11,7 +11,7 @@ import Forgot from '../screens/Register_Login/Forgot';
 import Marketplace from '../screens/Marketplace';
 import Search from '../screens/Search';
 import Account from '../screens/Account';
-import ChatRoom from '../screens/ChatRoom';
+import ChatRoom, {ChannelScreen} from '../screens/ChatRoom';
 import NewPost from '../screens/Post/NewPost';
 import OtherAccount from "../screens/OtherAccount";
 import {Drafts, PostHistory, LikedPosts} from "../screens/Post/PostRecord";
@@ -29,6 +29,7 @@ const screens = createStackNavigator({
   Account,
   NewPost,
   ChatRoom,
+  ChannelScreen,
   OtherAccount,
   PostHistory,
   Drafts,
