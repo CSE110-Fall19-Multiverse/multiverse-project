@@ -16,6 +16,7 @@ import {Block, Card, Input, Text} from '../components';
 import {theme} from '../constants';
 import {withFirebase} from "../components/Firebase"
 import BottomBar from "./BottomBar";
+import {clientInfo, createChannel} from "./ChatRoom";
 
 const {width, height} = Dimensions.get('window');
 
@@ -214,7 +215,22 @@ class SearchBase extends Component {
                                     <Text bold style={{marginTop: theme.sizes.base}}>{item.summary}</Text>
                                     <Text style={{marginTop: theme.sizes.base}}>{item.description}</Text>
                                     <TouchableOpacity
-                                        onPress={() => alert('Send message')}
+                                        onPress={() => {
+                                            const channel = createChannel(clientInfo.uid, item.user_info['uid']);
+                                            try {
+                                                channel.create().then(() => {
+                                                    console.log('channel created');
+                                                });
+
+                                                this.props.navigation.navigate('ChannelScreen', {
+                                                    channel,
+                                                    directMessage: true
+                                                })
+                                            } catch (e) {
+                                                console.log(e);
+                                                this.props.navigation.navigate('ChatRoom');
+                                            }
+                                        }}
                                         style={styles.messagingContainer}
                                     >
                                         <Icon
