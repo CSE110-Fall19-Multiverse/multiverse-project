@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { TextInput, Text, View, ScrollView, TouchableOpacity, RefreshControl, StyleSheet,Image } from 'react-native';
+import { Text, View, StyleSheet,Image } from 'react-native';
 import {withFirebase} from "../../components/Firebase";
-import {Block} from "../../components";
 import moment from 'moment';
-import {elements} from "../../constants";
 
 
 class CommentBase extends Component {
