@@ -9,4 +9,12 @@ export const withFirebase = Component => props => (
     </FirebaseContext.Consumer>
 );
 
+export const withFirebaseAndRef = Component => (
+    React.forwardRef((props, ref) =>
+        <FirebaseContext.Consumer>
+            {firebase => <Component {...props} firebase={firebase} ref={ref} />}
+        </FirebaseContext.Consumer>
+    )
+);
+
 export default FirebaseContext;

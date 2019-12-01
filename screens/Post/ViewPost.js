@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Card, Button, Block, Text, Divider} from '../../components';
 import { withFirebase } from "../../components/Firebase";
 import { theme, elements } from '../../constants';
+import TextInputState from 'react-native/lib/TextInputState';
+import { findNodeHandle } from 'react-native';
 import {
     Image,
     KeyboardAvoidingView,
@@ -31,13 +33,12 @@ class ViewPostBase extends Component {
         actor: null,
         user_info: {},
         avatar: elements.profile.avatar,
+        typing: false,
     };
 
     componentDidMount(){
         const post_id = this.props.navigation.state.params.pid;
         const service_type = this.props.navigation.state.params.service_type;
-        console.log(post_id);
-        console.log(service_type);
         this.setState({pid: post_id, actor: service_type}, () => {this.process_info()})
     }
 
@@ -66,7 +67,11 @@ class ViewPostBase extends Component {
                 that.setState( {avatar: {uri: uri}});
             }).catch(error => console.log('viewpost: avatar not found'))
         });
-        console.log('inside ViewPost: '+this.state.pid);
+    }
+
+    addToFavorite(){
+        this.handleFavorite();
+        alert('Added to favorite.');
     }
 
     handleFavorite(){
@@ -75,9 +80,13 @@ class ViewPostBase extends Component {
         user_ref.push(this.state.pid);
     }
 
-    addToFavorite(){
-        this.handleFavorite();
-        alert('Added to favorite.');
+    handleComment(){
+        console.log('focus');
+        // According to https://stackoverflow.com/questions/32748718/react-native-how-to-select-the-next-textinput-after-pressing-the-next-keyboar
+        // .focus() method is no longer supported after React 0.36. Therefore adjustments made.
+        // this.comment_list.comment_input.text_input.focus();
+        TextInputState.focusTextInput(
+            findNodeHandle(this.comment_list.comment_input.text_input));
     }
 
     render(){
@@ -150,7 +159,7 @@ class ViewPostBase extends Component {
                         <Block padding={[0, theme.sizes.base * 2]}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                                 <TouchableOpacity
-                                    onPress={() => alert('Comment')}
+                                    onPress={() => this.handleComment()}
                                 >
                                     <Icon
                                         name={'comments'}
@@ -179,7 +188,7 @@ class ViewPostBase extends Component {
                             </View>
                         </Block>
                         <Divider />
-                        <CommentList pid = {this.props.navigation.state.params.pid} type = {this.props.navigation.state.params.service_type}/>
+                        <CommentList ref={ref => this.comment_list = ref} pid = {this.props.navigation.state.params.pid} type = {this.props.navigation.state.params.service_type} typing = {this.state.typing}/>
                     </ScrollView>
                 </KeyboardAvoidingView>
                 <BottomBar navigation={this.props.navigation} active='ViewPost'/>
