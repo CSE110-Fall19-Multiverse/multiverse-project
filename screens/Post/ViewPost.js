@@ -76,7 +76,7 @@ class ViewPostBase extends Component {
             that.props.firebase.avatar(that.state.uid).child("avatar").getDownloadURL().then(uri => {
                 console.log('load avatar success');
                 that.setState({avatar: {uri: uri}});
-            }).catch(error => console.log('viewpost: avatar not found'))
+            }).catch(error => that.setState({avatar: require('../../assets/images/default_avatar.jpg')}));
         });
     }
 

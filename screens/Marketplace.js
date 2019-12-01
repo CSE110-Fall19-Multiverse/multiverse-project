@@ -43,6 +43,13 @@ class MarketplaceBase extends Component {
             // get user info
             const user_ref = this.props.firebase.user(value.uid);
             let thisComponent = this;
+
+            // uid has to be ready before this line get called. so don't move it outside
+            this.props.firebase.avatar(value.uid).child("avatar").getDownloadURL().then(uri => {
+                console.log('load avatar success');
+                user_res['avatar'] = {uri: uri};
+            }).catch(error => user_res['avatar'] = require('../assets/images/default_avatar.jpg'));
+
             user_ref.once('value', function (snap) {
                 const user = snap.val();
                 try {
@@ -192,8 +199,7 @@ class MarketplaceBase extends Component {
                                                 underlayColor={'purple'}
                                                 activeOpacity={0.69}
                                             >
-                                                <Image source={item.avi}/>
-
+                                                <Image source={item.user_info['avatar']} style={styles.avatar}/>
                                             </TouchableHighlight>
                                             <Block style={{margin: theme.sizes.base / 4}}>
                                                 <TouchableHighlight
@@ -202,7 +208,7 @@ class MarketplaceBase extends Component {
                                                     activeOpacity={0.5}
                                                     // style={styles.textContainer}
                                                 >
-                                                    <Text bold caption>Author: {item.user_info.displayname}</Text>
+                                                    <Text bold caption>{item.user_info.displayname}</Text>
                                                 </TouchableHighlight>
                                                 <Text caption gray>{item.service_date}</Text>
                                             </Block>
@@ -294,8 +300,9 @@ const styles = StyleSheet.create({
         maxWidth: (width - (theme.sizes.padding * 2) - theme.sizes.base),
         minHeight: (width - (theme.sizes.padding * 2) - theme.sizes.base) / 1.5,
     },
-    item_avi: {
-        //justifyContent: ''
+    avatar: {
+        height: theme.sizes.base * 2.2,
+        width: theme.sizes.base * 2.2,
     },
     textContainer: {},
     messaging: {
