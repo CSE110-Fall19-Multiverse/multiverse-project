@@ -3,6 +3,7 @@ import { TextInput, Text, View, ScrollView, TouchableOpacity, RefreshControl, St
 import {withFirebase} from "../../components/Firebase";
 import {Block} from "../../components";
 import moment from 'moment';
+import {elements} from "../../constants";
 
 
 class CommentBase extends Component {
@@ -16,7 +17,6 @@ class CommentBase extends Component {
    };
 
    componentDidMount() {
-        console.log('inside comment componentdidmount: '+this.props.cid);
         this.setState({cid: this.props.cid}, () => {this.process_info()});
    }
 
@@ -39,7 +39,8 @@ class CommentBase extends Component {
    }
 
    render(){
-       const {avatar, content, username, created} = this.state;
+       const { content, username, created} = this.state;
+       const avatar = require('../../assets/images/madeline.png');
 
        return (
            <View style={styles.container}>
@@ -47,7 +48,7 @@ class CommentBase extends Component {
                    {avatar && <Image
                        resizeMode='contain'
                        style={styles.avatar}
-                       source={{ uri: avatar }}
+                       source={require('../../assets/images/madeline.png')}
                    />}
                </View>
                <View style={styles.contentContainer}>
