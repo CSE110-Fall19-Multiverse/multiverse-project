@@ -70,12 +70,17 @@ class ChannelScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const channel = navigation.getParam('channel');
+        const theme = {
+            colors: {
+              primary: 'purple',
+            },
+        };
 
         return (
             <Block>
                 <Block>
                     <SafeAreaView>
-                        <Chat client={chatClient}>
+                        <Chat client={chatClient} style={theme}>
                             <Channel client={chatClient} channel={channel}>
                                 <View style={{display: 'flex', height: '100%'}}>
                                     <MessageList/>
@@ -123,6 +128,20 @@ function createChannel(selfUid, otherUid) {
     if (selfUid === otherUid){
       return null;
     }
+
+    // Does not have chat functionality
+    const other_user = this.props.firebase.user(otherUid);
+    if(other_user.chattoken == null){
+        Alert.alert(
+            'Chatroom Error',
+            'Sorry! You cannot chat with this user since he or she does not have the chatroom functionality',
+            [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+          );
+        return null;
+    }
+
     // Codes to generate channel between users.
     const conversation = clientInfo.chatClient.channel('messaging', null,
         {
