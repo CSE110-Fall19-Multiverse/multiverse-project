@@ -6,6 +6,7 @@ import { Card, Block, Text } from '../../components';
 import { theme } from '../../constants';
 import {withFirebase} from "../../components/Firebase";
 import BottomBar from "../BottomBar";
+import Post from "./Post";
 
 
 const { width } = Dimensions.get('window');
@@ -155,70 +156,8 @@ class PostRecordBase extends Component {
           <Block flex={false} row space="between" style={styles.items}>
 
             {items.length === 0 ? null : items.map(item => (
-                <TouchableOpacity
-                    key={item.id}
-                    onPress= {
-                      this.props.navigation.getParam('isDraft')
-                          ?
-                          () => this.props.navigation.navigate('NewPost', {pid: item.id, service_type: this.state.type})
-                          :
-                          () => navigation.navigate('ViewPost', {pid: item.id, service_type: this.state.type})
-                    }
-                >
-                  <Card shadow style={styles.item}>
-                    <Block flex={false} row>
-                      <Block row>
-                        <TouchableHighlight
-                            onPress={() => alert('Enter screen of person\'s pic')}
-                            underlayColor={'purple'}
-                            activeOpacity={0.69}
-                        >
-                          <Image source={item.avi}/>
-                        </TouchableHighlight>
-                        <Block style={{ margin: theme.sizes.base / 4}}>
-                          <TouchableHighlight
-                              onPress={() => this.props.navigation.navigate('OtherAccount', {uid : item.user_info['uid']})}
-                              underlayColor={'white'}
-                              activeOpacity={0.5}
-                              // style={styles.textContainer}
-                          >
-                            <Text bold caption>Author: {item.user_info.displayname}</Text>
-                          </TouchableHighlight>
-                          <Text caption gray>{item.service_date}</Text>
-                        </Block>
-                      </Block>
-                      <Block>
-                        <TouchableHighlight
-                            onPress={() => alert('Filter by this category')}
-                            underlayColor={'white'}
-                            activeOpacity={0.5}
-                        >
-                          <Text right semibold secondary style={{fontSize: 12}}> {`${item.select_1}\n${item.select_2}`} </Text>
-                        </TouchableHighlight>
-                        <TouchableHighlight
-                            onPress={() => alert('item.price_negotiable ? {alert(\'price non-negotiable\')} : popup counteroffer screen')}
-                            underlayColor={'white'}
-                            activeOpacity={0.5}
-                        >
-                          <Text right semibold>${item.service_price}</Text>
-                        </TouchableHighlight>
-                      </Block>
-                    </Block>
-                    <Text bold style={{ marginTop: theme.sizes.base}}>{item.summary}</Text>
-                    <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('ChatRoom')}
-                        style={styles.messagingContainer}
-                    >
-                      <Icon
-                          name={'comment'}
-                          size={theme.sizes.base * 1.7}
-                          style={styles.messaging}
-                      />
-                    </TouchableOpacity>
-                  </Card>
-                </TouchableOpacity>
-            ))}
+                <Post item={item} navigation={this.props.navigation} />
+              ))}
           </Block>
         </ScrollView>
         <BottomBar  navigation={this.props.navigation} active={ this.state.pageName }/>
