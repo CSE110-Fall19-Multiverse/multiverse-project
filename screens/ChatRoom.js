@@ -120,11 +120,14 @@ class ChatRoomBase extends React.Component {
 }
 
 function createChannel(selfUid, otherUid) {
+    if (selfUid === otherUid){
+      return null;
+    }
     // Codes to generate channel between users.
     const conversation = clientInfo.chatClient.channel('messaging', null,
         {
             name: 'Chat',
-            image: 'http://bit.ly/2O35mws',
+            image: 'https://cdn.pixabay.com/photo/2019/02/05/07/52/pixel-cells-3976298_960_720.png',
             // Sorting to make sure only one channel between every two users
             members: [selfUid, otherUid].sort(),
         });

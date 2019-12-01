@@ -8,6 +8,7 @@ import * as Permissions from "expo-permissions";
 import { Divider, Button, Block, Text, Switch } from '../components';
 import { theme, elements } from '../constants';
 import BottomBar from "./BottomBar";
+import { clientInfo } from "./ChatRoom";
 
 class AccountBase extends Component {
   state = {
@@ -83,7 +84,8 @@ class AccountBase extends Component {
     const response = await fetch(uri);
     const blob = await response.blob();
 
-    const ref = this.props.firebase.avatar(this.state.profile['uid']).child("avatar");
+    const ref = await this.props.firebase.avatar(this.state.profile['uid']).child("avatar");
+
     return ref.put(blob);
   };
 
