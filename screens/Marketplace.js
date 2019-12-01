@@ -80,31 +80,38 @@ class MarketplaceBase extends Component {
     async componentWillMount() {
         const uid = this.props.firebase.auth.currentUser.uid;
         let chatToken = '';
+        let userName = '';
         // get user info
         const user_ref = await this.props.firebase.user(uid);
         await user_ref.once('value', function (snap) {
             const user = snap.val();
             chatToken = user.chattoken;
+            userName = user.displayname;
 
             console.log(user.chattoken);
             console.log(user.displayname);
         });
 
+        let avatarURL = '';
         try {
+            avatarURL = await this.props.firebase.avatar(uid).child("avatar").getDownloadURL();
+        } catch (e) {
+            console.log(e);
+        } finally {
+            if (avatarURL === undefined) avatarURL = '';
             // Disconnect before logging in
             await clientInfo.chatClient.disconnect();
             await clientInfo.chatClient.setUser(
                 {
                     id: uid,
-                    image: 'https://getstream.io/random_svg/?name=John',
+                    name: userName,
+                    image: avatarURL,
                 },
                 chatToken,
             );
             clientInfo.uid = uid;
             clientInfo.token = chatToken;
             console.log('client initialized');
-        } catch (e) {
-            console.log(e);
         }
     }
 
@@ -236,14 +243,19 @@ class MarketplaceBase extends Component {
                                     <TouchableOpacity
                                         onPress={() => {
                                             const channel = createChannel(clientInfo.uid, item.user_info['uid']);
-                                            channel.create().then(() => {
-                                                console.log('channel created');
-                                            });
+                                            try {
+                                                channel.create().then(() => {
+                                                    console.log('channel created');
+                                                });
 
-                                            this.props.navigation.navigate('ChannelScreen', {
-                                                channel,
-                                                directMessage: true
-                                            })
+                                                this.props.navigation.navigate('ChannelScreen', {
+                                                    channel,
+                                                    directMessage: true
+                                                })
+                                            } catch (e) {
+                                                console.log(e);
+                                                this.props.navigation.navigate('ChatRoom');
+                                            }
                                         }}
                                         style={styles.messagingContainer}
                                     >
@@ -263,7 +275,6 @@ class MarketplaceBase extends Component {
         )
     }
 }
-
 
 const Marketplace = withFirebase(MarketplaceBase);
 export default Marketplace;
