@@ -54,6 +54,7 @@ const BigCate = [
     { value: 'CSE Course Tutoring' },
     { value: 'Interview Preparation' },
     { value: 'Languages Tutoring' },
+    { value: 'Other'}
 ];
 
 const CSECourse = [
@@ -68,12 +69,14 @@ const CSECourse = [
     { value: 'CSE 110' },
     { value: 'CSE 140' },
     { value: 'CSE 158' },
+    { value: 'Other'}
 ];
 
 const InterviewPrep = [
     { value: 'Resume rewrite' },
     { value: 'Mock interview' },
     { value: 'Referral' },
+    { value: 'Other'}
 ];
 
 const Languages = [
@@ -88,10 +91,16 @@ const Languages = [
     { value: 'R' },
     { value: 'HTML' },
     { value: 'CSS' },
+    { value: 'Other'}
+];
+
+const Others = [
+    { value: 'Other'}
 ];
 
 const dict = {
     'CSE Course Tutoring': CSECourse,
     'Interview Preparation': InterviewPrep,
     'Languages Tutoring': Languages,
+    'Other' : Others
 };

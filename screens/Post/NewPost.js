@@ -204,13 +204,13 @@ class NewPostBase extends Component{
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>Select 1</Text>
+                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>Category</Text>
                             </Block>
                             <DropDownList parent={this}  label='Big Category' small={false} stype={false}/>
                         </Block>
                         <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
                             <Block>
-                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>Select 2</Text>
+                                <Text style={{ marginBottom: 13, fontWeight: '600', fontSize: 17 }}>Subject</Text>
                             </Block>
                             <DropDownList parent={this} label={this.state.Select1} small={true} stype={false}/>
                         </Block>
