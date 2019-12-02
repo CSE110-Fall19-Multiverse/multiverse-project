@@ -7,6 +7,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/storage';
 import 'firebase/firestore';
+import 'firebase/functions';
 
 // firebase database for development
 const devFirebaseConfig = {
@@ -28,6 +29,7 @@ class Firebase {
         this.db = app.database();
         this.storage = app.storage();
         this.cloud = app.firestore();
+        this.functions = app.functions();
     }
 
     // *** Auth API ***

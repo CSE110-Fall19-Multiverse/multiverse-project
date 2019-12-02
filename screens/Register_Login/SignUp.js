@@ -46,9 +46,12 @@ class SignUpBase extends Component {
     } else {
       const displayname = username;
 
+      let uid = '';
+      let firebase = this.props.firebase;
       this.props.firebase
           .doCreateUserWithEmailAndPassword(email, password)
           .then(authUser => {
+            uid = authUser.user.uid;
             return this.props.firebase
                 .user(authUser.user.uid)
                 .set({
@@ -61,8 +64,11 @@ class SignUpBase extends Component {
           })
           .then(() => {
             this.setState({...INITIAL_STATE});
-            navigation.navigate('Marketplace');
-            console.log('success');
+
+            this.props.firebase.functions.httpsCallable('generateTokenOnClient')(uid)
+                .then(({data}) => {
+                  navigation.navigate('Marketplace', {chatToken : data.token});
+                });
           })
           .catch(error => {
             errors.push(error);

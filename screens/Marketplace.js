@@ -105,10 +105,12 @@ class MarketplaceBase extends Component {
                     name: userName,
                     image: avatarURL,
                 },
-                chatToken,
+                chatToken === undefined ?
+                    this.props.navigation.getParam('chatToken') : chatToken
             );
             clientInfo.uid = uid;
             clientInfo.token = chatToken;
+            console.log("client initialized");
         }
     }
 
