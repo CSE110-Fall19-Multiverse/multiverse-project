@@ -67,7 +67,6 @@ class ViewPostBase extends Component {
                     user_info['displayName'] = user.displayname;
                     user_info['email'] = user.email;
                     that.setState({user_info: user_info}, () => {
-                        console.log('display name: ' + user_info['displayName']);
                     });
                 });
             });
