@@ -4,6 +4,7 @@ import {theme} from "../../constants";
 import {withFirebase} from "../../components/Firebase";
 import {Block, Card, Text} from "../../components";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {clientInfo, createChannel} from "../ChatRoom";
 const {width} = Dimensions.get('window');
 
 class PostBase extends Component {
@@ -68,8 +69,22 @@ class PostBase extends Component {
                     <Text bold style={{ marginTop: theme.sizes.base}}>{item.summary}</Text>
                     <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('ChatRoom')}
-                        style={styles.messagingContainer}
+                        onPress={() => {
+                        const channel = createChannel(clientInfo.uid, item.user_info['uid']);
+                        try {
+                            channel.create().then(() => {
+                                console.log('channel created');
+                            });
+                            this.props.navigation.navigate('ChannelScreen', {
+                                channel,
+                                directMessage: true
+                            })
+                        } catch (e) {
+                            console.log(e);
+                            this.props.navigation.navigate('ChatRoom');
+                        }
+                    }}
+                     style={styles.messagingContainer}
                     >
                         <Icon
                             name={'comment'}

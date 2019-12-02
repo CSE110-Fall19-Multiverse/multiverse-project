@@ -109,7 +109,6 @@ class MarketplaceBase extends Component {
             );
             clientInfo.uid = uid;
             clientInfo.token = chatToken;
-            console.log('client initialized');
         }
     }
 
@@ -173,7 +172,7 @@ class MarketplaceBase extends Component {
     render() {
         const {items} = this.state;
         const marketViews = ['Buying', 'Selling'];
-        const {navigation} = this.props;
+        //const {navigation} = this.props;
         return (
             <Block>
                 <Block flex={false} row style={styles.tabs}>
