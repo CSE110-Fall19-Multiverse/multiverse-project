@@ -1,15 +1,23 @@
-import React, { Component } from 'react'
-import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, RefreshControl } from 'react-native'
+import React, {Component} from 'react'
+import {
+    Dimensions,
+    Image,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    TouchableHighlight,
+    RefreshControl
+} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Card, Block, Text } from '../../components';
-import { theme } from '../../constants';
+import {Card, Block, Text} from '../../components';
+import {theme} from '../../constants';
 import {withFirebase} from "../../components/Firebase";
 import BottomBar from "../BottomBar";
 import Post from "./Post";
 
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class PostRecordBase extends Component {
   state = {
@@ -24,43 +32,59 @@ class PostRecordBase extends Component {
     pageName: 'PostRecord'
   };
 
-  addToItems ( values, user_res, temp_items ){
-    // Base case
-    if (! (Array.isArray(values) && values.length) ) {
-      temp_items.reverse();
-      this.setState({items : temp_items});
-    } else {
-      // Recursive call
-      let pid = values[0];
-      let res = {};
-      const post_ref_generator = this.props.navigation.getParam('isDraft') ?
-          this.props.firebase.draft : this.props.firebase.post;
-      const post_ref = post_ref_generator(this.state.buying, pid);
-      let thisComponent = this;
-      post_ref.once("value", function (snap) {
-        // get post info
-        if (pid !== 0) {
-          const value = snap.val();
-          res['id'] = snap.key;
-          try {
-            res['summary'] = value.summary;
-            res['description'] = value.description;
-            res['select_1'] = value.select_1;
-            res['select_2'] = value.select_2;
-            res['service_type'] = value.service_type;
-            res['service_date'] = value.service_date;
-            res['service_price'] = value.service_price;
-          } catch (e) {
-            console.log(e);
-          }
-          res['user_info'] = user_res;
-          temp_items.push(res);
+    addToItems(values, temp_items) {
+        console.log(temp_items);
+        // Base case
+        if (!(Array.isArray(values) && values.length)) {
+            temp_items.reverse();
+            this.setState({items: temp_items});
+        } else {
+          // Recursive call
+          let pid = values[0];
+          let res = {};
+          const post_ref_generator = this.props.navigation.getParam('isDraft') ?
+              this.props.firebase.draft : this.props.firebase.post;
+          const post_ref = post_ref_generator(this.state.buying, pid);
+          let thisComponent = this;
+          post_ref.once("value", function (snap) {
+            // get post info
+            let user_res = {};
+            let value = snap.val();
+            const user_ref = thisComponent.props.firebase.user(value ? value.uid : 0);
+            user_ref.once('value', function (snap) {
+              if (pid !== 0) {
+                const user = snap.val();
+                try {
+                  user_res['username'] = user.email;
+                  user_res['displayname'] = user.displayname;
+                  user_res['uid'] = value.uid;
+                } catch (e) {
+                }
+
+                res['id'] = pid;
+                try {
+                  res['summary'] = value.summary;
+                  res['description'] = value.description;
+                  res['select_1'] = value.select_1;
+                  res['select_2'] = value.select_2;
+                  res['service_type'] = value.service_type;
+                  res['service_date'] = value.service_date;
+                  res['service_price'] = value.service_price;
+                } catch (e) {
+                  console.log(e);
+                }
+                res['user_info'] = user_res;
+                temp_items.push(res);
+                console.log(temp_items);
+              }
+
+              values.splice(0, 1);
+              thisComponent.addToItems(values, temp_items);
+            });
+
+          });
         }
-        values.splice(0, 1);
-        thisComponent.addToItems(values, user_res, temp_items);
-      });
-    }
-  };
+    };
 
   componentDidMount(){
     this.setState({items: []});
@@ -82,24 +106,24 @@ class PostRecordBase extends Component {
     }
     let thisComponent = this;
 
-    // load posts from firebase once
-    ref.once("value", function(snapshot) {
-      // get user info
-      const user_ref = thisComponent.props.firebase.user(thisComponent.props.navigation.getParam('uid'));
-      let user_res = {};
-      user_ref.once('value', function(snap) {
-        const user = snap.val();
-        try{
-          user_res['username'] = user.email;
-          user_res['displayname'] = user.displayname;
+        // load posts from firebase once
+        ref.once("value", function (snapshot) {
+            // get user info
+            const user_ref = thisComponent.props.firebase.user(thisComponent.props.navigation.getParam('uid'));
+            let user_res = {};
+            user_ref.once('value', function (snap) {
+                const user = snap.val();
+                try {
+                    user_res['username'] = user.email;
+                    user_res['displayname'] = user.displayname;
 
-          thisComponent.addToItems(Object.values(snapshot.val()), user_res, []);
-        }catch (e) {
-          console.log(e);
-        }
-      });
-    });
-  }
+                    thisComponent.addToItems(Object.values(snapshot.val()), []);
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+        });
+    }
 
   refresh = () => {
     this.setState({refreshing: true});

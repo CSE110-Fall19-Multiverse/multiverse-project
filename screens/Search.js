@@ -2,9 +2,12 @@ import React, {Component} from 'react'
 import {
     Animated,
     Dimensions,
+    Image,
     Keyboard,
     ScrollView,
     StyleSheet,
+    TouchableHighlight,
+    TouchableOpacity,
     TouchableWithoutFeedback
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -133,13 +136,19 @@ class SearchBase extends Component {
             return (
                 <Block>
                     <Block style={styles.category}>
-                        <Text bold lightBlue style={{marginBottom: theme.sizes.base * 1.5}}>CATEGORY</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Learning and Skills</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Career</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Food Delivery</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Transportation</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Social</Text>
-                        <Text bold secondary style={{marginBottom: theme.sizes.base * 1.5}}>Other</Text>
+                    <Text bold lightBlue style={{ marginBottom: theme.sizes.base * 1.5}} >CATEGORY</Text>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'CSE Course Tutoring',viewSearch:true}), this.handleSearchPost('CSE Course Tutoring'),this.setState({items:[]}))}>
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}} >CSE Course Tutoring </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'Language Tutoring',viewSearch:true}), this.handleSearchPost('Language Tutoring'),this.setState({items:[]}))}>
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Language Tutoring</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'Interview Preparation',viewSearch:true}), this.handleSearchPost('Interview Preparation'),this.setState({items:[]}))}>
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Interview Preparation</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() =>(this.setState({searchString: 'Java',viewSearch:true}), this.handleSearchPost('Java'),this.setState({items:[]}))}>
+                        <Text bold secondary style={{ marginBottom: theme.sizes.base * 1.5}}>Java</Text>
+                    </TouchableOpacity>
                     </Block>
                 </Block>
             );
