@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Multiverse",
+    "name": "Multiversity",
     "slug": "Multiverse",
     "privacy": "public",
     "sdkVersion": "33.0.0",
@@ -23,7 +23,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aufish.multiversity",
     }
   }
 }
