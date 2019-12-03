@@ -196,14 +196,19 @@ class ViewPostBase extends Component {
                                 <TouchableOpacity
                                     onPress={() => {
                                         const channel = createChannel(clientInfo.uid, this.state.uid);
-                                        channel.create().then(() => {
-                                            console.log('channel created');
-                                        });
+                                        try {
+                                            channel.create().then(() => {
+                                                console.log('channel created');
+                                            });
 
-                                        this.props.navigation.navigate('ChannelScreen', {
-                                            channel,
-                                            directMessage: true
-                                        })
+                                            this.props.navigation.navigate('ChannelScreen', {
+                                                channel,
+                                                directMessage: true
+                                            })
+                                        } catch (e) {
+                                            console.log(e);
+                                            this.props.navigation.navigate('ChatRoom');
+                                        }
                                     }}
                                 >
                                     <Icon
