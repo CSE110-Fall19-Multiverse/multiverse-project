@@ -1,19 +1,69 @@
-import {Dimensions, Image, StyleSheet, TouchableHighlight, TouchableOpacity} from "react-native";
+import {
+    Dimensions,
+    Image,
+    StyleSheet,
+    TouchableHighlight,
+    TouchableOpacity
+} from "react-native";
+import {AsyncStorage} from 'react-native';
 import React, { Component } from 'react';
 import {theme} from "../../constants";
 import {withFirebase} from "../../components/Firebase";
 import {Block, Card, Text} from "../../components";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {clientInfo, createChannel} from "../ChatRoom";
+import Typography from "../../components/Text";
 const {width} = Dimensions.get('window');
 
 class PostBase extends Component {
     state = {
         item: null,
+        uid: null,
+        avatar: null,
     };
 
     componentDidMount() {
-        this.setState({item: this.props.item});
+        this.setState({item: this.props.item, uid: this.props.item.user_info['uid']},
+            () => {
+                this.retrieveData();
+            });
+    }
+
+    retrieveData() {
+        this.retrieveItem(this.state.uid).then((result) => {
+            //this callback is executed when your Promise is resolved
+            if(result === null) throw TypeError;
+            this.setState({avatar: result});
+        }).catch((error) => {
+            //this callback is executed when your Promise is rejected
+            console.log('Promise is rejected');
+            let avatarData;
+            this.props.firebase.avatar(this.state.uid).child("avatar").getDownloadURL().then(uri => {
+                avatarData = {uri: uri};
+                AsyncStorage.setItem(this.state.uid, JSON.stringify(avatarData),
+                    () => console.log('save avatar data for user: '+this.state.uid));
+                this.setState({avatar: avatarData});
+            }).catch(error => {
+                avatarData = require('../../assets/images/default_avatar.jpg');
+                AsyncStorage.setItem(this.state.uid, JSON.stringify(avatarData),
+                    () => console.log('save avatar data for user: '+this.state.uid));
+                this.setState({avatar: avatarData});
+            });
+        });
+    }
+
+    //the functionality of the retrieveItem is shown below
+    async retrieveItem(key) {
+        try {
+            console.log('inside retireveitem, uid:' +key);
+            const retrievedItem =  await AsyncStorage.getItem(key);
+            const item = JSON.parse(retrievedItem);
+            console.log('item: '+item);
+            return item;
+        } catch (error) {
+            console.log(error.message);
+            throw error;
+        }
     }
 
     render() {
@@ -23,9 +73,9 @@ class PostBase extends Component {
                 key={item.id}
                 onPress={() => {
                     navigation.navigate('ViewPost', {
-                    pid: item.id,
-                    service_type: item.service_type === 'Student' ? 'buying' : 'selling',
-                })}}
+                        pid: item.id,
+                        service_type: item.service_type === 'Student' ? 'buying' : 'selling',
+                    })}}
             >
                 <Card shadow style={styles.item}>
                     <Block flex={false} row>
@@ -35,7 +85,7 @@ class PostBase extends Component {
                                 underlayColor={'purple'}
                                 activeOpacity={0.69}
                             >
-                                <Image source={item.user_info['avatar']} style={styles.avatar}/>
+                                <Image source={this.state.avatar} style={styles.avatar}/>
                             </TouchableHighlight>
                             <Block style={{ margin: theme.sizes.base / 4}}>
                                 <TouchableHighlight
@@ -70,21 +120,21 @@ class PostBase extends Component {
                     <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
                     <TouchableOpacity
                         onPress={() => {
-                        const channel = createChannel(clientInfo.uid, item.user_info['uid']);
-                        try {
-                            channel.create().then(() => {
-                                console.log('channel created');
-                            });
-                            this.props.navigation.navigate('ChannelScreen', {
-                                channel,
-                                directMessage: true
-                            })
-                        } catch (e) {
-                            console.log(e);
-                            this.props.navigation.navigate('ChatRoom');
-                        }
-                    }}
-                     style={styles.messagingContainer}
+                            const channel = createChannel(clientInfo.uid, item.user_info['uid']);
+                            try {
+                                channel.create().then(() => {
+                                    console.log('channel created');
+                                });
+                                this.props.navigation.navigate('ChannelScreen', {
+                                    channel,
+                                    directMessage: true
+                                })
+                            } catch (e) {
+                                console.log(e);
+                                this.props.navigation.navigate('ChatRoom');
+                            }
+                        }}
+                        style={styles.messagingContainer}
                     >
                         <Icon
                             name={'comment'}

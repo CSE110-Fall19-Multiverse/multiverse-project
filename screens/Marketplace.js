@@ -5,7 +5,7 @@ import {
     StyleSheet,
     ScrollView,
     TouchableOpacity,
-    TouchableHighlight,
+    AsyncStorage,
     RefreshControl
 } from 'react-native'
 import Post from "./Post/Post"
