@@ -195,7 +195,9 @@ class ViewPostBase extends Component {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        const channel = createChannel(clientInfo.uid, this.state.uid);
+                                        const channel =
+                                            createChannel(clientInfo.uid, this.state.uid,
+                                                clientInfo.displayName, this.state.user_info.displayName);
                                         try {
                                             channel.create().then(() => {
                                                 console.log('channel created');

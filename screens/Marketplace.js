@@ -14,7 +14,7 @@ import {theme} from '../constants';
 import {withFirebase} from "../components/Firebase";
 import BottomBar from "./BottomBar";
 import {StreamChat} from "stream-chat";
-import {createChannel, clientInfo} from "./ChatRoom";
+import {clientInfo} from "./ChatRoom";
 
 const {width} = Dimensions.get('window');
 
@@ -109,6 +109,7 @@ class MarketplaceBase extends Component {
                     this.props.navigation.getParam('chatToken') : chatToken
             );
             clientInfo.uid = uid;
+            clientInfo.displayName = userName;
             clientInfo.token = chatToken;
             console.log("client initialized");
         }

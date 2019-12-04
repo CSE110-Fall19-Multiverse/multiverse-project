@@ -120,21 +120,23 @@ class PostBase extends Component {
                     <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            const channel = createChannel(clientInfo.uid, item.user_info['uid']);
-                            try {
-                                channel.create().then(() => {
-                                    console.log('channel created');
-                                });
-                                this.props.navigation.navigate('ChannelScreen', {
-                                    channel,
-                                    directMessage: true
-                                })
-                            } catch (e) {
-                                console.log(e);
-                                this.props.navigation.navigate('ChatRoom');
-                            }
-                        }}
-                        style={styles.messagingContainer}
+                        const channel =
+                            createChannel(clientInfo.uid, item.user_info['uid'], clientInfo.displayName, item.user_info.displayname);
+                        console.log(channel);
+                        try {
+                            channel.create().then(() => {
+                                console.log('channel created');
+                            });
+                            this.props.navigation.navigate('ChannelScreen', {
+                                channel,
+                                directMessage: true
+                            })
+                        } catch (e) {
+                            console.log(e);
+                            this.props.navigation.navigate('ChatRoom');
+                        }
+                    }}
+                     style={styles.messagingContainer}
                     >
                         <Icon
                             name={'comment'}

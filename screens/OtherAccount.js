@@ -62,7 +62,8 @@ render() {
                     <Block margin={[10, 0]} style={styles.messaging}>
                         <Text darkBlue bold style={{marginBottom: 10}}
                               onPress={() => {
-                                  const channel = createChannel(clientInfo.uid, uid);
+                                  const channel =
+                                      createChannel(clientInfo.uid, uid, clientInfo.displayName, this.state.profile.displayname);
                                   channel.create().then(() => {
                                       console.log('channel created');
                                   });
