@@ -125,7 +125,7 @@ class ViewPostBase extends Component {
                                             <Text bold caption
                                                   styles={{fontSize: 13}}>{'\n'} {this.state.user_info.displayName}</Text>
                                         </TouchableHighlight>
-                                        <Text caption gray>{this.state.post_date}</Text>
+                                        <Text caption gray> {this.state.post_date}</Text>
                                     </Block>
                                 </Block>
                                 <Block>
@@ -251,8 +251,8 @@ const styles = StyleSheet.create({
         }
     },
     avatar: {
-        height: theme.sizes.base * 2.2,
-        width: theme.sizes.base * 2.2,
+        height: theme.sizes.base * 2.8,
+        width: theme.sizes.base * 2.8,
     },
     inputs: {
         marginTop: theme.sizes.base * 0.7,

@@ -11,9 +11,17 @@ class OtherAccountBase extends Component {
     state = {
         editing: null,
         profile: {},
+        avatar: null,
     };
+    componentDidMount() {
+        const uid = this.props.navigation.getParam('uid');
+        this.props.firebase.avatar(uid).child("avatar").getDownloadURL().then(uri => {
+            console.log('other account load avatar success');
+            this.setState({avatar: {uri: uri}});
+        }).catch(error => this.setState({avatar: require('../assets/images/default_avatar.jpg')}));
+    }
 
-    render() {
+render() {
         const {profile, editing} = this.state;
 
         const {navigation} = this.props;
@@ -30,7 +38,7 @@ class OtherAccountBase extends Component {
                     <Text h1 bold> {profile['displayname']} </Text>
                     <Button>
                         <Image
-                            source={profile.avatar}
+                            source={this.state.avatar}
                             style={styles.avatar}
                         />
                     </Button>
@@ -68,6 +76,10 @@ class OtherAccountBase extends Component {
                     <Block margin={[10, 0]} style={styles.messaging}>
                         <Text gray style={{marginBottom: 10}}>Certificates</Text>
                     </Block>
+
+                    <Block margin={[10, 0]} style={styles.messaging}>
+                        <Text gray style={{marginBottom: 10}}>Reviews</Text>
+                    </Block>
                     <Divider/>
 
                 </ScrollView>
@@ -91,8 +103,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: theme.sizes.base * 2,
     },
     avatar: {
-        height: theme.sizes.base * 2.2,
-        width: theme.sizes.base * 2.2,
+        height: theme.sizes.base * 3.2,
+        width: theme.sizes.base * 3.2,
     },
     history: {
         marginTop: theme.sizes.base * 0.7,

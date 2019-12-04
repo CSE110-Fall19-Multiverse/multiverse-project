@@ -70,7 +70,7 @@ export default BottomBar;
 const styles = StyleSheet.create({
     tabs: {
         flexDirection: 'row',
-        height: iconSize + 2*iconPadding,
+        height: iconSize + 3*iconPadding,
         justifyContent: 'space-around',
         alignItems: 'flex-end',
         borderTopColor: theme.colors.secondary,
