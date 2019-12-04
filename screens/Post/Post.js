@@ -70,7 +70,9 @@ class PostBase extends Component {
                     <Text style={{ marginTop: theme.sizes.base}}>{item.description}</Text>
                     <TouchableOpacity
                         onPress={() => {
-                        const channel = createChannel(clientInfo.uid, item.user_info['uid']);
+                        const channel =
+                            createChannel(clientInfo.uid, item.user_info['uid'], clientInfo.displayName, item.user_info.displayname);
+                        console.log(channel);
                         try {
                             channel.create().then(() => {
                                 console.log('channel created');
