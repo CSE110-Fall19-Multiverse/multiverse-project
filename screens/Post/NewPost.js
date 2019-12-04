@@ -5,7 +5,7 @@ import {
     View,
     TextInput,
     ScrollView,
-    KeyboardAvoidingView,
+    KeyboardAvoidingView, Image,
 } from 'react-native';
 import {Block, Button, Divider} from "../../components";
 import {theme} from "../../constants";
@@ -178,12 +178,12 @@ class NewPostBase extends Component{
     upload(navigation){
         this.handlePost(false);
         alert('Upload successfully!');
-        navigation.navigate('Marketplace');
+        navigation.goBack();
     }
     saveAsDraft(navigation){
         this.handlePost(true);
         alert('Saved as draft');
-        navigation.navigate('Marketplace');
+        navigation.goBack();
     }
 
     render() {
@@ -192,6 +192,9 @@ class NewPostBase extends Component{
             <Block >
                 <Block flex={false} row space="between" style={styles.header}>
                     <Text style={{fontSize: 25, fontWeight: 'bold'}}>New Post</Text>
+                    <Button style={{marginTop: 0, paddingTop: 0}} onPress={() => this.props.navigation.goBack()}>
+                        <Text style={{marginTop: 0, paddingTop: 0,fontWeight: 600, color: theme.colors.secondary}}> Cancel </Text>
+                    </Button>
                 </Block>
                 <KeyboardAvoidingView style={{ flex: 1 }} behavior={"position"} >
                 <ScrollView showsVerticalScrollIndicator={true}>
@@ -275,7 +278,6 @@ class NewPostBase extends Component{
                 </ScrollView>
                 </KeyboardAvoidingView>
 
-                <BottomBar navigation={this.props.navigation} active='NewPost'/>
             </Block>
         );
     }

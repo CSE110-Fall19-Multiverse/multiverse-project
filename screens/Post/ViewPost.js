@@ -4,6 +4,7 @@ import { withFirebase } from "../../components/Firebase";
 import { theme, elements } from '../../constants';
 import TextInputState from 'react-native/lib/TextInputState';
 import { findNodeHandle } from 'react-native';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import {
     Image,
     KeyboardAvoidingView,
@@ -103,6 +104,11 @@ class ViewPostBase extends Component {
         const {navigation} = this.props;
         return (
             <Block>
+                <View>
+                    <TouchableOpacity onPress={() => {navigation.goBack()}}>
+                        <Icons name={'arrow-back'} size={30} color='#000000' style={{marginLeft: '6%', marginBottom: '4%'}}/>
+                    </TouchableOpacity>
+                </View>
                 <KeyboardAvoidingView style={{flex: 1}} behavior={"position"}>
                     <ScrollView showsVerticalScrollIndicator={true}>
                         <Block style={styles.inputs}>
@@ -227,7 +233,6 @@ class ViewPostBase extends Component {
 
                     </ScrollView>
                 </KeyboardAvoidingView>
-                <BottomBar navigation={this.props.navigation} active='ViewPost'/>
             </Block>
         )
     }

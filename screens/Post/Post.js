@@ -12,7 +12,6 @@ import {withFirebase} from "../../components/Firebase";
 import {Block, Card, Text} from "../../components";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {clientInfo, createChannel} from "../ChatRoom";
-import Typography from "../../components/Text";
 const {width} = Dimensions.get('window');
 
 class PostBase extends Component {
@@ -55,13 +54,10 @@ class PostBase extends Component {
     //the functionality of the retrieveItem is shown below
     async retrieveItem(key) {
         try {
-            console.log('inside retireveitem, uid:' +key);
             const retrievedItem =  await AsyncStorage.getItem(key);
             const item = JSON.parse(retrievedItem);
-            console.log('item: '+item);
             return item;
         } catch (error) {
-            console.log(error.message);
             throw error;
         }
     }
