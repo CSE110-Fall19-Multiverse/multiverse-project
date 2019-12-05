@@ -7,8 +7,8 @@ import { withFirebase } from "../../components/Firebase";
 
 
 const INITIAL_STATE = {
-  email: 'littlegoose@aufish.com',
-  password: '666666',
+  email: '',
+  password: '',
   errors: [],
   loading: false,
 };

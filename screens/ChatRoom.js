@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {StreamChat} from 'stream-chat';
 import {Channel, ChannelList, ChannelPreviewMessenger, Chat, MessageInput, MessageList,} from 'stream-chat-expo';
 import {createAppContainer} from 'react-navigation';
@@ -7,6 +7,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import BottomBar from "./BottomBar";
 import {Block} from "../components";
 import {withFirebase} from "../components/Firebase";
+import Icons from "react-native-vector-icons/MaterialIcons";
 
 export const clientInfo = {
     chatClient: new StreamChat('rc6yxksd5uam',
@@ -66,6 +67,11 @@ class ChannelScreen extends React.Component {
 
         return (
             <Block>
+                <View>
+                    <TouchableOpacity onPress={() => {navigation.goBack()}}>
+                        <Icons name={'arrow-back'} size={30} color='#000000' style={{marginLeft: '6%', marginBottom: '4%'}}/>
+                    </TouchableOpacity>
+                </View>
                 <Block>
                     <SafeAreaView>
                         <Chat client={chatClient}>
@@ -78,8 +84,7 @@ class ChannelScreen extends React.Component {
                         </Chat>
                     </SafeAreaView>
                 </Block>
-                {navigation.getParam('directMessage') &&
-                <BottomBar navigation={this.props.navigation} active='ChatRoom'/>}
+                <Text> {'\n'} </Text>
             </Block>
         );
     }
