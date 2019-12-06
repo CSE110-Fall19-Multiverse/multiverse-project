@@ -7,7 +7,7 @@
 * So far, Multiverse code base does not use any native iOS code (i.e it is fully React Native) so neither macOS nor Xcode is required. You can use any machine/OS or IDE/text editor of your choice.
 
 ### MacOS
-1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
+1. Install [Node Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
 2. Install Expo CLI command line interface
    - `npm install -g expo-cli`
 3. Install [Homebrew](https://brew.sh/)
@@ -15,7 +15,7 @@
    - `brew install yarn`
 
 ### Windows
-1. Install [Node Latest LTS Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
+1. Install [Node Version: 10.16.3 (includes npm 6.9.0)](https://nodejs.org/en/download/)
 2. Install Expo CLI command line interface
    - `npm install -g expo-cli`
 3. Install [Chocolatey](https://chocolatey.org/install#installing-chocolatey)
@@ -54,4 +54,5 @@
   4. You can shake your device to switch to developer window
     - Select ***Enable Live Reload*** to allow automatic app reloading whenever changes in code are saved
 
-
+## Public libraries used in our code
+Credit to [React-UI-Kit](https://github.com/react-ui-kit). [Here](https://github.com/react-ui-kit/dribbble2react/blob/master/LICENSE.md) is its copyright and license notice. Also see our [`LICENSE.md`](/LICENSE.md) which demonstrates our compliance with its copyright and license notice.  
