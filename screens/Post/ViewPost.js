@@ -4,6 +4,7 @@ import { withFirebase } from "../../components/Firebase";
 import { theme, elements } from '../../constants';
 import TextInputState from 'react-native/lib/TextInputState';
 import { findNodeHandle } from 'react-native';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import {
     Image,
     KeyboardAvoidingView,
@@ -103,6 +104,11 @@ class ViewPostBase extends Component {
         const {navigation} = this.props;
         return (
             <Block>
+                <View>
+                    <TouchableOpacity onPress={() => {navigation.goBack()}}>
+                        <Icons name={'arrow-back'} size={30} color='#000000' style={{marginLeft: '6%', marginBottom: '4%'}}/>
+                    </TouchableOpacity>
+                </View>
                 <KeyboardAvoidingView style={{flex: 1}} behavior={"position"}>
                     <ScrollView showsVerticalScrollIndicator={true}>
                         <Block style={styles.inputs}>
@@ -125,7 +131,7 @@ class ViewPostBase extends Component {
                                             <Text bold caption
                                                   styles={{fontSize: 13}}>{'\n'} {this.state.user_info.displayName}</Text>
                                         </TouchableHighlight>
-                                        <Text caption gray>{this.state.post_date}</Text>
+                                        <Text caption gray> {this.state.post_date}</Text>
                                     </Block>
                                 </Block>
                                 <Block>
@@ -195,7 +201,9 @@ class ViewPostBase extends Component {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        const channel = createChannel(clientInfo.uid, this.state.uid);
+                                        const channel =
+                                            createChannel(clientInfo.uid, this.state.uid,
+                                                clientInfo.displayName, this.state.user_info.displayName);
                                         try {
                                             channel.create().then(() => {
                                                 console.log('channel created');
@@ -225,7 +233,6 @@ class ViewPostBase extends Component {
 
                     </ScrollView>
                 </KeyboardAvoidingView>
-                <BottomBar navigation={this.props.navigation} active='ViewPost'/>
             </Block>
         )
     }
@@ -251,8 +258,8 @@ const styles = StyleSheet.create({
         }
     },
     avatar: {
-        height: theme.sizes.base * 2.2,
-        width: theme.sizes.base * 2.2,
+        height: theme.sizes.base * 2.8,
+        width: theme.sizes.base * 2.8,
     },
     inputs: {
         marginTop: theme.sizes.base * 0.7,

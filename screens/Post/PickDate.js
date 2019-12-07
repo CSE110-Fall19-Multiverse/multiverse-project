@@ -19,7 +19,7 @@ export default class PickDate extends Component {
                 style={{width: 200}}
                 date={this.state.date}
                 mode="date"
-                placeholder="select date"
+                placeholder="select a service date"
                 format="YYYY-MM-DD"
                 minDate={moment().format("YYYY-MM-DD")}
                 maxDate="2050-06-01"

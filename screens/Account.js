@@ -280,8 +280,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.sizes.base * 2,
   },
   avatar: {
-    height: theme.sizes.base * 2.2,
-    width: theme.sizes.base * 2.2,
+    height: theme.sizes.base * 2.8,
+    width: theme.sizes.base * 2.8,
   },
   inputs: {
     marginTop: theme.sizes.base * 0.7,

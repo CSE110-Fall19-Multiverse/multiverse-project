@@ -1,25 +1,19 @@
 import React, {PureComponent} from 'react';
-import {View, SafeAreaView, Text, TouchableOpacity} from 'react-native';
+import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {StreamChat} from 'stream-chat';
-import {
-    Chat,
-    Channel,
-    MessageList,
-    MessageInput,
-    ChannelPreviewMessenger,
-    ChannelList,
-} from 'stream-chat-expo';
+import {Channel, ChannelList, ChannelPreviewMessenger, Chat, MessageInput, MessageList,} from 'stream-chat-expo';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import BottomBar from "./BottomBar";
 import {Block} from "../components";
-import {Avatar, IconBadge} from "stream-chat-react-native-core";
 import {withFirebase} from "../components/Firebase";
+import Icons from "react-native-vector-icons/MaterialIcons";
 
 export const clientInfo = {
     chatClient: new StreamChat('rc6yxksd5uam',
         {timeout: 3000,}),
     uid: '',
+    displayName: '',
     token: ''
 };
 
@@ -73,6 +67,11 @@ class ChannelScreen extends React.Component {
 
         return (
             <Block>
+                <View>
+                    <TouchableOpacity onPress={() => {navigation.goBack()}}>
+                        <Icons name={'arrow-back'} size={30} color='#000000' style={{marginLeft: '6%', marginBottom: '4%'}}/>
+                    </TouchableOpacity>
+                </View>
                 <Block>
                     <SafeAreaView>
                         <Chat client={chatClient}>
@@ -85,8 +84,7 @@ class ChannelScreen extends React.Component {
                         </Chat>
                     </SafeAreaView>
                 </Block>
-                {navigation.getParam('directMessage') &&
-                <BottomBar navigation={this.props.navigation} active='ChatRoom'/>}
+                <Text> {'\n'} </Text>
             </Block>
         );
     }
@@ -119,19 +117,20 @@ class ChatRoomBase extends React.Component {
     }
 }
 
-function createChannel(selfUid, otherUid) {
+function createChannel(selfUid, otherUid, selfDisplayName, otherDisplayName) {
     if (selfUid === otherUid){
       return null;
     }
+
     // Codes to generate channel between users.
-    const conversation = clientInfo.chatClient.channel('messaging', null,
+    const channel = clientInfo.chatClient.channel('messaging', null,
         {
-            name: 'Chat',
+            name: selfDisplayName + ' | ' + otherDisplayName,
             image: 'https://cdn.pixabay.com/photo/2019/02/05/07/52/pixel-cells-3976298_960_720.png',
             // Sorting to make sure only one channel between every two users
             members: [selfUid, otherUid].sort(),
         });
-    return conversation;
+    return channel;
 }
 
 const ChatRoom = withFirebase(ChatRoomBase);

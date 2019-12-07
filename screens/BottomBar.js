@@ -70,22 +70,24 @@ export default BottomBar;
 const styles = StyleSheet.create({
     tabs: {
         flexDirection: 'row',
-        height: iconSize + 2*iconPadding,
+        height: iconSize + 3.1*iconPadding,
         justifyContent: 'space-around',
         alignItems: 'flex-end',
-        borderTopColor: theme.colors.secondary,
-        borderTopWidth: 0.75
+        borderTopColor: theme.colors.gray2,
+        borderTopWidth: 0.45
     },
     tab: {
         flexGrow: 1,
         paddingBottom: iconPadding
     },
     active: {
-        borderBottomColor: theme.colors.secondary,
-        borderBottomWidth: 2,
+        borderTopColor: theme.colors.secondary,
+        borderTopWidth: 2.3,
+        paddingTop: 0.68*iconSize,
     },
     icons: {
         alignSelf: 'center',
         color: theme.colors.secondary,
-    }
+        height: iconSize + 1*iconPadding,
+    },
 });
