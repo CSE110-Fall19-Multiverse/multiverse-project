@@ -1,3 +1,5 @@
+React-UI-Kit Copyright and License Notice
+
 MIT License
 
 Copyright (c) 2019 React-UI-Kit

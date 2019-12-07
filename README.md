@@ -54,6 +54,6 @@
   4. You can shake your device to switch to developer window
     - Select ***Enable Live Reload*** to allow automatic app reloading whenever changes in code are saved
 
-## Public libraries & APIs used in our code
-* [React-UI-Kit](https://github.com/react-ui-kit). [Here](https://github.com/react-ui-kit/dribbble2react/blob/master/LICENSE.md) is its copyright and license notice. Also see our [`LICENSE.md`](/LICENSE.md) which demonstrates our compliance with its copyright and license notice. 
+## Public Libraries & APIs used in our code
+* [React-UI-Kit](https://github.com/react-ui-kit). [Here](https://github.com/react-ui-kit/dribbble2react/blob/master/LICENSE.md) is its copyright and license notice. Also see [here](React-UI-Kit/LICENSE.md) which demonstrates our compliance with its copyright and license notice. 
 * [Stream’s React Native Chat SDK library](https://getstream.io/chat/react-native-chat/tutorial/)
