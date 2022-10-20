@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
-    "expo": "^33.0.0",
+    "expo": "^46.0.16",
     "expo-asset": "^6.0.0",
     "expo-constants": "latest",
     "expo-image-picker": "latest",
